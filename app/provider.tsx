@@ -1,5 +1,6 @@
 "use client";
 
+import { TooltipProvider } from "@/components/ui/tooltip";
 // import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
 
@@ -10,8 +11,8 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
     // <QueryClientProvider client={queryClient}>
     <div>
       <Toaster position="top-center" reverseOrder={false} gutter={8}></Toaster>
-
-      {children}
+      <TooltipProvider>{children}</TooltipProvider>
+      {/* {children} */}
     </div>
 
     // </QueryClientProvider>
