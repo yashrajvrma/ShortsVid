@@ -14,11 +14,12 @@ export default function SignInWithGoogleButton() {
 
       await signIn.social({
         provider: "google",
-        callbackURL: "/", // redirect url after the user signs in
+        callbackURL: "/app", // redirect url after the user signs in
         errorCallbackURL: "/error",
         fetchOptions: {
           onSuccess: () => {
             console.log("signin successful");
+            toast.success("Signed in successfully");
           },
           onError: (error) => {
             // display error message
