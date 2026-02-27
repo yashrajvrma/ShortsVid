@@ -22,12 +22,19 @@ import {
   Settings2Icon,
   LifeBuoyIcon,
   SendIcon,
-  FrameIcon,
   PieChartIcon,
+  HomeIcon,
   MapIcon,
-  TerminalIcon,
+  PencilLineIcon,
+  Gamepad,
+  Gamepad2Icon,
+  PlusIcon,
 } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
+import Image from "next/image";
+import ShortsVidLogo from "@/public/shortsVid-logo.svg";
+import Link from "next/link";
+import { NavShorts } from "./nav-shorts";
 
 const data = {
   // user: {
@@ -136,19 +143,21 @@ const data = {
   ],
   projects: [
     {
-      name: "Design Engineering",
-      url: "#",
-      icon: <FrameIcon />,
+      name: "Home",
+      url: "/app",
+      icon: <HomeIcon />,
+    },
+  ],
+  shorts: [
+    {
+      name: "Faceless Shorts",
+      url: "/app/shorts/faceless-shorts",
+      icon: <PencilLineIcon />,
     },
     {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: <PieChartIcon />,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: <MapIcon />,
+      name: "Gameplay Videos",
+      url: "/app/shorts/gameplay-videos",
+      icon: <Gamepad2Icon />,
     },
   ],
 };
@@ -162,23 +171,32 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+              <Link href="/app">
+                {/* <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   <TerminalIcon className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">Acme Inc</span>
                   <span className="truncate text-xs">Enterprise</span>
+                </div> */}
+                <div className="flex text-xl font-medium leading-tight">
+                  {/* Shorts Vid */}
+                  <Image
+                    src={ShortsVidLogo}
+                    alt="shortsVid-logo"
+                    className="w-[150]"
+                  />
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
-        <NavMain items={data.navMain} />
+      <SidebarContent className="gap-0">
+        {/* <NavMain items={data.navMain} /> */}
         <NavProjects projects={data.projects} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavShorts shorts={data.shorts} />
+        {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
         <NavUser

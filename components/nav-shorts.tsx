@@ -22,14 +22,15 @@ import {
   ShareIcon,
   Trash2Icon,
   PlusIcon,
+  HomeIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export function NavProjects({
-  projects,
+export function NavShorts({
+  shorts,
 }: {
-  projects: {
+  shorts: {
     name: string;
     url: string;
     icon: React.ReactNode;
@@ -40,21 +41,13 @@ export function NavProjects({
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      {/* <SidebarGroupLabel>Projects</SidebarGroupLabel> */}
+      <SidebarGroupLabel className="text-sm">
+        Shorts Templates
+      </SidebarGroupLabel>
       <SidebarMenu>
-        {/* Create New Video  */}
-        <SidebarMenuItem>
-          <SidebarMenuButton className="border-2 border-double py-4 rounded-lg ">
-            <Link className="flex items-center gap-x-2" href="/app/shorts">
-              <PlusIcon />
-              <span>Create Viral Shorts</span>
-            </Link>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-
         {/* Nav Menu */}
-        {projects.map((item) => (
-          <SidebarMenuItem className="pt-1" key={item.name}>
+        {shorts.map((item) => (
+          <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild isActive={pathname === item.url}>
               <Link href={item.url}>
                 {item.icon}
