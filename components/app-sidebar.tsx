@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-
 import { NavMain } from "@/components/nav-main";
 import { NavProjects } from "@/components/nav-projects";
 import { NavSecondary } from "@/components/nav-secondary";
@@ -32,7 +31,7 @@ import {
 } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
 import Image from "next/image";
-import ShortsVidLogo from "@/public/shortsVid-logo.svg";
+import ShortsVidLogo from "../public/logo.svg";
 import Link from "next/link";
 import { NavShorts } from "./nav-shorts";
 
