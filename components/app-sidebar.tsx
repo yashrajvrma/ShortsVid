@@ -31,7 +31,7 @@ import {
 } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
 import Image from "next/image";
-import ShortsVidLogo from "../public/logo.svg";
+import ShortsVidLogo from "../public/new-logo.svg";
 import Link from "next/link";
 import { NavShorts } from "./nav-shorts";
 
@@ -165,14 +165,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: session, isPending, error } = useSession();
 
   return (
-    <Sidebar variant="inset" {...props}>
+    <Sidebar variant="sidebar" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              className="hover:bg-background"
-              size="lg"
-              asChild
+            <div
+              className="flex justify-start py-2 hover:bg-transparent md:block hidden"
+              // size="lg"
+              // asChild
             >
               <Link href="/app">
                 {/* <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
@@ -182,20 +182,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <span className="truncate font-medium">Acme Inc</span>
                   <span className="truncate text-xs">Enterprise</span>
                 </div> */}
-                <div className="flex text-xl font-medium leading-tight">
+                <div className="flex text-xl font-medium leading-tight ">
                   {/* Shorts Vid */}
                   <Image
                     src={ShortsVidLogo}
                     alt="shortsVid-logo"
-                    className="w-[150]"
+                    className="w-[130]"
                   />
                 </div>
               </Link>
-            </SidebarMenuButton>
+            </div>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent className="gap-0">
+      <SidebarContent className="gap-0 md:mt-0 mt-10">
         {/* <NavMain items={data.navMain} /> */}
         <NavProjects projects={data.projects} />
         <NavShorts shorts={data.shorts} />

@@ -44,7 +44,7 @@ export function NavProjects({
       <SidebarMenu>
         {/* Create New Video  */}
         <SidebarMenuItem>
-          <SidebarMenuButton className="border-2 border-double py-4 rounded-lg ">
+          <SidebarMenuButton className="flex justify-center py-4 bg-sidebar-primary text-sidebar-primary-foreground rounded-lg hover:bg-sidebar-primary hover:text-sidebar-primary-foreground ">
             <Link className="flex items-center gap-x-2" href="/app/shorts">
               <PlusIcon />
               <span>Create Viral Shorts</span>

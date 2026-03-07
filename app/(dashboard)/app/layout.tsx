@@ -13,8 +13,9 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
-
+import ShortsVidLogo from "@/public/new-logo.svg";
 import React from "react";
+import Image from "next/image";
 
 export default function Layout({
   children,
@@ -25,26 +26,31 @@ export default function Layout({
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
-            <Separator
+        <header className="flex h-16 shrink-0 z-900 sticky top-0 items-center gap-2 visible md:hidden">
+          <div className="flex justify-between gap-2 px-4  w-full">
+            {/* <SidebarTrigger className="-ml-1" /> */}
+            {/* <Separator
               orientation="vertical"
               className="mr-2 data-vertical:h-4 data-vertical:self-auto"
-            />
+            /> */}
             <Breadcrumb>
               <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Build Your Application
+                <BreadcrumbItem className="">
+                  <BreadcrumbLink href="/app">
+                    <Image
+                      src={ShortsVidLogo}
+                      alt="shortsVid-logo"
+                      className="w-[130]"
+                    />
                   </BreadcrumbLink>
                 </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
+                {/* <BreadcrumbSeparator className="" />
+                <BreadcrumbItem className="">
                   <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
+                </BreadcrumbItem> */}
               </BreadcrumbList>
             </Breadcrumb>
+            <SidebarTrigger className="-ml-1" />
           </div>
         </header>
         {/* <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
@@ -55,7 +61,7 @@ export default function Layout({
           </div>
           <div className="bg-muted/50 min-h-screen flex-1 rounded-xl md:min-h-min" />
         </div> */}
-        <div className="flex h-full p-4 pt-0">{children}</div>
+        <div className="flex h-full p-4">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

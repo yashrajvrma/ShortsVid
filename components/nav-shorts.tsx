@@ -41,7 +41,7 @@ export function NavShorts({
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel className="text-sm">
+      <SidebarGroupLabel className="text-xs px-0">
         Shorts Templates
       </SidebarGroupLabel>
       <SidebarMenu>
