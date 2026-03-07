@@ -41,6 +41,7 @@ export default function Layout({
                       src={ShortsVidLogo}
                       alt="shortsVid-logo"
                       className="w-[130]"
+                      loading="eager"
                     />
                   </BreadcrumbLink>
                 </BreadcrumbItem>

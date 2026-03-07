@@ -188,6 +188,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     src={ShortsVidLogo}
                     alt="shortsVid-logo"
                     className="w-[130]"
+                    loading="eager"
                   />
                 </div>
               </Link>
