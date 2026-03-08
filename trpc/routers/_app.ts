@@ -1,19 +1,9 @@
-import { promise, z } from "zod";
+import { z } from "zod";
+
 import { baseProcedure, createTRPCRouter } from "../init";
-import { resolve } from "path";
+import { videoRouter } from "./video";
 export const appRouter = createTRPCRouter({
-  hello: baseProcedure
-    .input(
-      z.object({
-        text: z.string(),
-      }),
-    )
-    .query(async (opts) => {
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-      return {
-        greeting: `hello ${opts.input.text}`,
-      };
-    }),
+  voices: videoRouter,
 });
 // export type definition of API
 export type AppRouter = typeof appRouter;

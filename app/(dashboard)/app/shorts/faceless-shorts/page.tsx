@@ -1,14 +1,13 @@
-import { ClientGreeting } from "@/components/client-greeting";
 import { HydrateClient, prefetch, trpc } from "@/trpc/server";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 export default async function FacelessShorts() {
-  prefetch(
-    trpc.hello.queryOptions({
-      text: "hitler",
-    }),
-  );
+  // prefetch(
+  //   trpc.hello.queryOptions({
+  //     text: "hitler",
+  //   }),
+  // );
 
   return (
     <HydrateClient>
@@ -16,7 +15,7 @@ export default async function FacelessShorts() {
       {/** ... */}
       <ErrorBoundary fallback={<div>Something went wrong</div>}>
         <Suspense fallback={<div>Loading...</div>}>
-          <ClientGreeting />
+          {/* <ClientGreeting /> */}
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>
