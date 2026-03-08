@@ -184,7 +184,7 @@ model Voice {
 
   voiceId      String
   modelId      String
-  languageCode String
+  languageCode String[]
   gender       String
 
   tags String[] // for filtering voices based on tags like accent, style, etc.
