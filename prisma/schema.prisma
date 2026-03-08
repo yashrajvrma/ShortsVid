@@ -183,7 +183,7 @@ model Voice {
   voiceVariant VoiceVariant // system or user generated
 
   voiceId      String
-  modelId      String
+  modelId      String   @unique
   languageCode String[]
   gender       String
 
