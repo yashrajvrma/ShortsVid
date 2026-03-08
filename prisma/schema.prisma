@@ -105,6 +105,11 @@ enum StockVariant {
   USER
 }
 
+enum VoiceVariant {
+  SYSTEM
+  USER
+}
+
 enum StockType {
   VOICE
   VIDEO
@@ -171,13 +176,18 @@ model Stock {
 model Voice {
   id String @id @default(cuid())
 
-  name         String
-  description  String?
-  service      VoiceService // tts service used to generate the voice (e.g. fish audio, elevenlabs, etc.)
+  name        String
+  description String?
+  service     VoiceService // tts service used to generate the voice (e.g. fish audio, elevenlabs, etc.)
+
+  voiceVariant VoiceVariant // system or user generated
+
   voiceId      String
   modelId      String
   languageCode String
   gender       String
+
+  tags String[] // for filtering voices based on tags like accent, style, etc.
 
   r2ObjectKey String?
 
