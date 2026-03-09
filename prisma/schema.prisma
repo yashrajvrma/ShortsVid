@@ -91,8 +91,8 @@ enum Topic {
 }
 
 enum VideoStyle {
-  REALISTIC
-  CLIPART
+  PHOTO_REALISTIC
+  CARTOON
   ANIME
   CYBERPUNK
   CINEMATIC
