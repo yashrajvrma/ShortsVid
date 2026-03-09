@@ -193,3 +193,18 @@ export const DURATIONS = [
   { value: "60-90", label: "60-90s" },
   { value: "90-120", label: "90-120s" },
 ];
+
+export const SYSTEM_BG_MUSIC = [
+  "Children",
+  "Cinematic",
+  "Cinematic 1",
+  "Comedy",
+  "Comic",
+  "Explainer",
+  "Futuristic",
+  "Horror",
+  "Khamzat",
+  "Motivational",
+  "Romantic",
+  "Viral",
+] as const;
