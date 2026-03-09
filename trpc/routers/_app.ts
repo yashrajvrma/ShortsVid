@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { baseProcedure, createTRPCRouter } from "../init";
-import { videoRouter } from "./video";
+import { videoRouter } from "./voices";
 export const appRouter = createTRPCRouter({
   voices: videoRouter,
 });
