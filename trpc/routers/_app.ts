@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 import { baseProcedure, createTRPCRouter } from "../init";
-import { videoRouter } from "./voices";
+import { voiceRouter } from "./voices";
 export const appRouter = createTRPCRouter({
-  voices: videoRouter,
+  voices: voiceRouter,
 });
 // export type definition of API
 export type AppRouter = typeof appRouter;
