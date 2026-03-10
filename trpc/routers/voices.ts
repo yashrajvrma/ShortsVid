@@ -4,6 +4,7 @@ import { prisma } from "@/db";
 import { authProcedure, createTRPCRouter } from "../init";
 import { Prisma } from "@prisma/client";
 import { getSignedAudioUrl } from "@/lib/r2-bucket";
+// import { getSignedAudioUrl } from "@/lib/r2-bucket";
 
 export const voiceRouter = createTRPCRouter({
   //   getAll : authProcedure.input(z.object({
@@ -15,7 +16,7 @@ export const voiceRouter = createTRPCRouter({
   //     // });
   //     return { videos: [] };
   //   }
-  getAllSystemVoice: authProcedure
+  getSystemVoice: authProcedure
     .input(
       z.object({
         languageCode: z.string().min(1),

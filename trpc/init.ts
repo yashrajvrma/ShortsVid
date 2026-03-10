@@ -34,7 +34,10 @@ export const authProcedure = t.procedure.use(async ({ next }) => {
   });
 
   if (!session || !session.user) {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Authorization failed",
+    });
   }
   // return next middleware with userId in context
   return next({
