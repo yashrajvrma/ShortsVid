@@ -17,13 +17,13 @@ export function VideoStylePicker({
       <label className="text-sm font-semibold text-foreground">
         5. Video Style
       </label>
-      <div className="grid grid-cols-4 gap-2 sm:grid-cols-5">
+      <div className="grid grid-cols-4 gap-2 sm:grid-cols-4">
         {VIDEO_STYLES.map((style) => (
           <button
             key={`${style.id}-${style.label}`}
             type="button"
             onClick={() => onSelect(String(style.id))}
-            className={`group relative aspect-[9/16] rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+            className={`group relative aspect-9/16 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
               selectedStyle === String(style.id)
                 ? "border-primary shadow-md scale-[1.02]"
                 : "border-transparent hover:border-border"
@@ -60,7 +60,14 @@ export function VideoStylePicker({
                   className="size-2.5 text-primary-foreground"
                   fill="currentColor"
                 >
-                  <path d="M10 3L5 8.5 2 5.5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path
+                    d="M10 3L5 8.5 2 5.5"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </div>
             )}

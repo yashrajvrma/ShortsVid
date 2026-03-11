@@ -17,9 +17,7 @@ export default async function FacelessShortsPage() {
       <ErrorBoundary fallback={<div>Something went wrong</div>}>
         <Suspense fallback={<div>Loading...</div>}>
           {/* <ClientGreeting /> */}
-          <div className="h-full w-full flex">
-            <FacelessShorts />
-          </div>
+          <FacelessShorts />
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>

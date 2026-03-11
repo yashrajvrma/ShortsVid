@@ -32,7 +32,6 @@ export default function FacelessShorts() {
 
   const scriptContent = form.generatedScript;
   const isOverLimit = scriptContent.length > 1000;
-
   const canGenerate = !isOverLimit;
 
   const handleGenerate = () => {
@@ -52,9 +51,12 @@ export default function FacelessShorts() {
   };
 
   return (
-    <div className="w-full flex flex-col">
-      {/* Page header */}
-      <div className="mb-5 flex items-center gap-3 shrink-0">
+    <div
+      className="w-full flex flex-col"
+      style={{ height: "calc(100vh - 2rem)" }}
+    >
+      {/* ── Page header ─────────────────────────────────────────────────── */}
+      <div className="mb-4 flex items-center gap-3 shrink-0">
         <div className="size-9 rounded-xl bg-primary/10 flex items-center justify-center">
           <Video className="size-5 text-primary" />
         </div>
@@ -68,14 +70,25 @@ export default function FacelessShorts() {
         </div>
       </div>
 
-      {/* Main card — fixed viewport height so inner ScrollArea works */}
+      {/* ── Main card ───────────────────────────────────────────────────── */}
+      {/*
+        CRITICAL FIX:
+        - Card is a flex ROW container with a fixed height (flex-1 + min-h-0)
+        - Left and right columns use explicit style widths so the browser
+          never collapses them regardless of content
+        - min-h-0 on every flex child prevents overflow blow-out
+        - ScrollArea sits inside the left column and does the scrolling
+      */}
       <Card
-        className="flex flex-col md:flex-row overflow-hidden shadow-md border border-border"
-        style={{ height: "calc(100vh - 9rem)" }}
+        className="flex-1 min-h-0 overflow-hidden"
+        style={{ display: "flex", flexDirection: "row" }}
       >
-        {/* ─── Left — Content (60%) ──────────────────────────────────────────── */}
-        <div className="flex-1 md:w-[60%] md:max-w-[60%] min-h-0 flex flex-col overflow-hidden">
-          <ScrollArea className="h-full">
+        {/* ── LEFT  70% ─────────────────────────────────────────────────── */}
+        <div
+          className="flex flex-col min-h-0 border-r border-border lg:w-[65%] w-full min-w-0"
+          // style={{ width: "70%", minWidth: 0 }}
+        >
+          <ScrollArea className="flex-1 min-h-0 h-full">
             <div className="p-6 space-y-7">
               {/* 1. Language */}
               <LanguageSelector
@@ -126,7 +139,7 @@ export default function FacelessShorts() {
 
               <Separator />
 
-              {/* Background Music */}
+              {/* 5. Background Music */}
               <BgMusicSelector
                 selectedMusicId={form.selectedMusicId}
                 onSelect={(id) => setField("selectedMusicId", id)}
@@ -134,7 +147,7 @@ export default function FacelessShorts() {
 
               <Separator />
 
-              {/* 5. Video Style */}
+              {/* 6. Video Style */}
               <VideoStylePicker
                 selectedStyle={form.videoStyle}
                 onSelect={(v) => setField("videoStyle", v)}
@@ -142,7 +155,7 @@ export default function FacelessShorts() {
 
               <Separator />
 
-              {/* 6. Caption Config */}
+              {/* 7. Caption Config */}
               <CaptionConfig
                 config={form.captionConfig}
                 onChange={setCaptionField}
@@ -151,14 +164,18 @@ export default function FacelessShorts() {
           </ScrollArea>
         </div>
 
-        {/* ─── Right — Mockup Preview (40%) — desktop only ──────────────────── */}
-        <div className="hidden md:flex md:w-[40%] md:max-w-[40%] border-l border-border bg-muted/30 flex-col">
-          <div className="flex-1 overflow-auto">
+        {/* ── RIGHT  30% ────────────────────────────────────────────────── */}
+        <div
+          className="hidden md:flex flex-col min-h-0 bg-muted/30 sm:w-[35%]"
+          // style={{ width: "30%", minWidth: 0 }}
+        >
+          {/* Scrollable preview */}
+          <div className="flex-1 min-h-0 overflow-auto">
             <MockupPreview form={form} />
           </div>
 
-          {/* Generate button pinned to bottom of right panel */}
-          <div className="p-5 border-t border-border bg-card">
+          {/* Generate button — pinned to bottom */}
+          <div className="shrink-0 p-5 border-t border-border bg-card">
             <Button
               className="w-full h-11 font-semibold gap-2 text-sm"
               disabled={isPending || !canGenerate}
@@ -185,8 +202,8 @@ export default function FacelessShorts() {
         </div>
       </Card>
 
-      {/* Mobile — Generate button (visible on small screens) */}
-      <div className="md:hidden mt-4">
+      {/* ── Mobile generate button ─────────────────────────────────────── */}
+      <div className="md:hidden mt-4 shrink-0">
         <Button
           className="w-full h-11 font-semibold gap-2"
           disabled={isPending || !canGenerate}
