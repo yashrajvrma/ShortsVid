@@ -11,75 +11,39 @@ export const LANGUAGES: Language[] = [
 
 export const VIDEO_STYLES: VideoStyle[] = [
   {
-    id: "anime",
+    id: "ANIME",
     label: "Anime",
-    thumbnail: "", // thumnail will come from public folder , in public/images i have all the images for video styles, take the label name from  the image name and add it here with .jpg extension, for example for anime the image name is anime.jpg so the thumbnail will be /images/anime.jpg
+    thumbnail: "/images/stocks/anime.jpg",
   },
   {
-    id: "anime",
-    label: "Anime",
-    thumbnail:
-      "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200&h=300&fit=crop",
+    id: "CARTOON",
+    label: "Cartoon",
+    thumbnail: "/images/stocks/cartoon.jpg",
   },
   {
-    id: "cinematic",
+    id: "CINEMATIC",
     label: "Cinematic",
-    thumbnail:
-      "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=200&h=300&fit=crop",
+    thumbnail: "/images/stocks/cinematic.jpg",
   },
   {
-    id: "comic-art",
-    label: "Comic Art",
-    thumbnail:
-      "https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?w=200&h=300&fit=crop",
+    id: "COLORFUL_COMICS",
+    label: "Colorful Comics",
+    thumbnail: "/images/stocks/colorful_comics.jpg",
   },
   {
-    id: "isometric",
-    label: "Isometric",
-    thumbnail:
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=300&fit=crop",
+    id: "CYBERPUNK",
+    label: "Cyberpunk",
+    thumbnail: "/images/stocks/cyberpunk.jpg",
   },
   {
-    id: "watercolor",
-    label: "Watercolor",
-    thumbnail:
-      "https://images.unsplash.com/photo-1549490349-8643362247b5?w=200&h=300&fit=crop",
-  },
-  {
-    id: "line-drawing",
-    label: "Line Drawing",
-    thumbnail:
-      "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=200&h=300&fit=crop",
-  },
-  {
-    id: "graffiti",
-    label: "Graffiti Art",
-    thumbnail:
-      "https://images.unsplash.com/photo-1499781350541-7783f6c6a0c8?w=200&h=300&fit=crop",
-  },
-  {
-    id: "pixel-art",
+    id: "PIXEL_ART",
     label: "Pixel Art",
-    thumbnail:
-      "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=200&h=300&fit=crop",
+    thumbnail: "/images/stocks/pixel_art.jpg",
   },
   {
-    id: "oil-painting",
-    label: "Oil Painting",
-    thumbnail:
-      "https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=200&h=300&fit=crop",
-  },
-  {
-    id: "neon-art",
-    label: "Neon Art",
-    thumbnail:
-      "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=200&h=300&fit=crop",
-  },
-  {
-    id: "cubism",
-    label: "Cubism",
-    thumbnail:
-      "https://images.unsplash.com/photo-1509749837427-ac94a2553d0e?w=200&h=300&fit=crop",
+    id: "PHOTO_REALISTIC",
+    label: "Photo Realistic",
+    thumbnail: "/images/stocks/realistic.jpg",
   },
 ];
 
