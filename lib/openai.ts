@@ -30,10 +30,12 @@ export type VideoStyle =
 // ─── Zod Schemas for Structured Outputs ─────────────────────────────────────
 
 const ImageSceneSchema = z.object({
-  sceneIndex: z
-    .number()
-    .int()
-    .describe("Zero-based index matching the script paragraph position"),
+  sceneIndex: z.number().int().describe("Zero-based index for ordering scenes"),
+  scriptSegment: z
+    .string()
+    .describe(
+      "The exact portion of the script this scene visually represents (one fact, idea, or beat)",
+    ),
   prompt: z
     .string()
     .describe(
@@ -49,7 +51,9 @@ const ImageSceneSchema = z.object({
 const ImagePromptsResponseSchema = z.object({
   scenes: z
     .array(ImageSceneSchema)
-    .describe("One scene per script paragraph, in order"),
+    .describe(
+      "One scene per distinct fact, idea, or narrative beat extracted from the script. Aim for 6–8 scenes for a rich short video.",
+    ),
 });
 
 export type ImagePromptResult = z.infer<typeof ImageSceneSchema>;
@@ -97,8 +101,12 @@ const VIDEO_STYLE_GUIDE: Record<VideoStyle, string> = {
 // ─── Image Prompt Generation (Structured Output) ─────────────────────────────
 
 /**
- * Uses GPT-4o with Zod structured output to generate one image prompt
- * per script paragraph, tailored to the topic and video style.
+ * Accepts the FULL script as a single string (joined paragraphs).
+ * The model reads the script holistically, identifies each distinct fact /
+ * idea / narrative beat, and generates one image prompt per beat.
+ *
+ * This produces 6-8 images for a typical 60-second short, regardless of how
+ * many paragraphs the text was split into.
  */
 export async function generateImagePrompts(
   scriptParagraphs: string[],
@@ -109,22 +117,36 @@ export async function generateImagePrompts(
   const styleGuide =
     VIDEO_STYLE_GUIDE[videoStyle] ?? VIDEO_STYLE_GUIDE.PHOTO_REALISTIC;
 
+  // Join paragraphs into one continuous script — let the model do the
+  // scene-boundary detection instead of inheriting paragraph structure.
+  const fullScript = scriptParagraphs.join("\n\n");
+
   const systemPrompt = `You are a creative director specialising in short-form vertical video (9:16, YouTube Shorts / TikTok).
-For each script paragraph you receive, generate ONE detailed image generation prompt that:
-  • Matches the topic mood: ${topicGuide}
-  • Uses the visual style: ${styleGuide}
-  • Is optimised for 9:16 vertical composition
-  • Contains NO text, watermarks, logos, or UI elements in the scene
-  • Is vivid, specific, and cinematic — describe lighting, camera angle, atmosphere, and subject clearly
-  • Each paragraph maps to exactly ONE scene in the same order`;
+
+You will receive a complete short-video script. Your job is to:
+1. Read the ENTIRE script and identify every distinct fact, idea, or narrative beat that deserves its own visual.
+2. Generate ONE detailed image-generation prompt per beat.
+3. Aim for 6-8 scenes total — never fewer than 4, never more than 8. Also decide the number based on the script length.
+   • For fact-based scripts (biology, history, life hacks, etc.) every individual fact = its own scene.
+   • For story scripts, every story beat or location change = its own scene.
+4. Each scene must:
+   • Match the topic mood: ${topicGuide}
+   • Use the visual style: ${styleGuide}
+   • Be optimised for 9:16 vertical composition
+   • Contain NO text, watermarks, logos, or UI elements in the scene
+   • Be vivid, specific, and cinematic — describe lighting, camera angle, atmosphere, and subject clearly
+5. Include the exact script segment that this scene covers in the \`scriptSegment\` field.
+6. Number scenes from 0 upward in the order they appear in the script.`;
 
   const userPrompt = `Topic: ${topic}
 Video Style: ${videoStyle}
 
-Script paragraphs (${scriptParagraphs.length} total):
-${scriptParagraphs.map((p, i) => `[${i}] ${p}`).join("\n\n")}
+Full script:
+"""
+${fullScript}
+"""
 
-Generate exactly ${scriptParagraphs.length} scene prompts, one per paragraph, in order (sceneIndex 0 to ${scriptParagraphs.length - 1}).`;
+Analyse the script and generate image scene prompts (one per distinct fact, idea, or beat). Do NOT group multiple facts into a single scene.`;
 
   const response = await openai.responses.parse({
     model: "gpt-4o-2024-08-06",
@@ -164,7 +186,7 @@ export async function generateImageBuffer(
   const response = await openai.images.generate({
     model: "gpt-image-1",
     prompt: enrichedPrompt,
-    size: "1024x1792", // 9:16 vertical
+    size: "1024x1536", // 9:16 vertical
     quality: "medium",
   });
 

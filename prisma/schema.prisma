@@ -212,7 +212,7 @@ model Video {
   scriptId String @unique
   script   Script @relation(fields: [scriptId], references: [id], onDelete: Cascade)
 
-  voiceId String?
+  voiceId String? // TODO : dont make ti optional
   voice   Voice?  @relation("VideoVoice", fields: [voiceId], references: [id], onDelete: SetNull)
 
   captionConfigId String?        @unique

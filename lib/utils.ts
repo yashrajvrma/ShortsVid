@@ -9,7 +9,7 @@ export function getDicebearUrl(seed: string) {
   return `https://api.dicebear.com/9.x/glass/svg?seed=${encodeURIComponent(seed)}`;
 }
 
-export const generateScriptystemPromptForFacelessShorts = ({
+export const genScriptSystemPromptForFacelessShorts = ({
   targetWordCount,
   duration,
   languageName,
@@ -29,6 +29,8 @@ Guidelines:
 - Start with a strong hook that grabs attention immediately.
 - End with a memorable closing line.
 - Write entirely in ${languageName}.
+
+NOTE : Always generate the script under 1000 characters.
 
 Return a JSON object with a single field "content" — an array of paragraph strings.
 Example: { "content": ["Hook paragraph...", "Middle paragraph...", "Closing paragraph..."] }`;

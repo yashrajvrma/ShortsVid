@@ -1,17 +1,20 @@
 "use client";
 
-import { useTransition } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { Loader2, Video, Zap } from "lucide-react";
+import { Loader2, Zap } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import type { TRPCClientErrorLike } from "@trpc/client";
 
 import {
   useFacelessForm,
   getIsScriptLanguageMismatch,
 } from "@/hooks/use-faceless-form";
-// import { generateVideo } from "@/app/(dashboard)/app/shorts/faceless-shorts/actions";
+import { useRouter } from "next/navigation";
+import { useTRPC } from "@/trpc/client";
+import { toast } from "react-hot-toast";
 
 import { LanguageSelector } from "./language-selector";
 import { TopicDuration } from "./topic-duration";
@@ -21,31 +24,62 @@ import { VideoStylePicker } from "./video-style-picker";
 import { CaptionConfig } from "./caption-config";
 import { MockupPreview } from "./mockup-preview";
 import { ScriptSection } from "./script-section";
+import type { AppRouter } from "@/trpc/routers/_app";
 
 export default function FacelessShorts() {
+  const router = useRouter();
+  const trpc = useTRPC();
   const form = useFacelessForm();
+
+  const mutationOptions = trpc.videos.generateFacelessVideo.mutationOptions();
+
+  const generateVideoMutation = useMutation({
+    ...mutationOptions,
+    onSuccess: () => {
+      toast.success("Video generation started successfully!");
+      form.reset();
+      router.push("/app");
+    },
+    onError: (error: TRPCClientErrorLike<AppRouter>) => {
+      toast.error(error.message || "Failed to start video generation");
+    },
+  });
+
   const { setField, setCaptionField, setGeneratedScript } = form;
   const isScriptLanguageMismatch = getIsScriptLanguageMismatch(form);
 
-  const [isPending, startTransition] = useTransition();
+  const isPending = generateVideoMutation.isPending;
 
   const scriptContent = form.generatedScript;
-  const isOverLimit = scriptContent.length > 1000;
-  const canGenerate = !isOverLimit;
+  const isOverLimit = scriptContent.length > 1200;
+  const canGenerate =
+    !isOverLimit &&
+    form.generatedScript.trim().length > 0 &&
+    form.selectedVoiceId !== null;
 
   const handleGenerate = () => {
-    if (!canGenerate) return;
-    startTransition(async () => {
-      // await generateVideo({
-      //   languageCode: form.languageCode,
-      //   topic: form.topic,
-      //   duration: form.duration,
-      //   script: form.generatedScript,
-      //   voiceId: form.selectedVoiceId,
-      //   musicId: form.selectedMusicId,
-      //   videoStyle: form.videoStyle,
-      //   captionConfig: form.captionConfig,
-      // });
+    if (!canGenerate) {
+      if (!form.generatedScript.trim()) {
+        toast.error("Please generate or write a script first.");
+        return;
+      }
+      if (!form.selectedVoiceId) {
+        toast.error("Please select a voice first.");
+        return;
+      }
+      return;
+    }
+
+    generateVideoMutation.mutate({
+      languageCode: form.languageCode,
+      topic: form.topic as any,
+      duration: form.duration,
+      prompt: form.prompt,
+      script: form.generatedScript,
+      voiceId: form.selectedVoiceId!, // TODO : remove the ! mark
+      musicId: form.selectedMusicId,
+      videoStyle: form.videoStyle as any,
+      captionConfig: form.captionConfig,
     });
   };
 
@@ -56,37 +90,20 @@ export default function FacelessShorts() {
     >
       {/* ── Page header ─────────────────────────────────────────────────── */}
       <div className="mb-4 flex items-center gap-3 shrink-0">
-        {/* <div className="size-9 rounded-xl bg-primary/10 flex items-center justify-center">
-          <Video className="size-5 text-primary" />
-        </div> */}
         <div>
           <h1 className="text-xl font-semibold text-foreground">
             Create Faceless Shorts
           </h1>
-          {/* <p className="text-xs text-muted-foreground mt-0.5">
-            Generate AI-powered short videos in minutes
-          </p> */}
         </div>
       </div>
 
       {/* ── Main card ───────────────────────────────────────────────────── */}
-      {/*
-        CRITICAL FIX:
-        - Card is a flex ROW container with a fixed height (flex-1 + min-h-0)
-        - Left and right columns use explicit style widths so the browser
-          never collapses them regardless of content
-        - min-h-0 on every flex child prevents overflow blow-out
-        - ScrollArea sits inside the left column and does the scrolling
-      */}
       <Card
         className="flex-1 min-h-0 overflow-hidden"
         style={{ display: "flex", flexDirection: "row" }}
       >
-        {/* ── LEFT  70% ─────────────────────────────────────────────────── */}
-        <div
-          className="flex flex-col min-h-0 border-r border-border lg:w-[65%] w-full min-w-0"
-          // style={{ width: "70%", minWidth: 0 }}
-        >
+        {/* ── LEFT  65% ─────────────────────────────────────────────────── */}
+        <div className="flex flex-col min-h-0 border-r border-border lg:w-[65%] w-full min-w-0">
           <ScrollArea className="flex-1 min-h-0 h-full">
             <div className="p-6 space-y-4">
               {/* 1. Language */}
@@ -95,8 +112,6 @@ export default function FacelessShorts() {
                 onChange={(v) => setField("languageCode", v)}
               />
 
-              {/* <Separator /> */}
-
               {/* 2. Topic + Duration */}
               <TopicDuration
                 topic={form.topic}
@@ -104,8 +119,6 @@ export default function FacelessShorts() {
                 onTopicChange={(v) => setField("topic", v)}
                 onDurationChange={(v) => setField("duration", v)}
               />
-
-              {/* <Separator /> */}
 
               {/* 3. Script */}
               <ScriptSection
@@ -119,8 +132,6 @@ export default function FacelessShorts() {
                 onPromptChange={(v) => setField("prompt", v)}
                 onGeneratedScriptChange={setGeneratedScript}
               />
-
-              {/* <Separator /> */}
 
               {/* 4. Voice */}
               <VoiceSelector
@@ -136,8 +147,6 @@ export default function FacelessShorts() {
                 }
               />
 
-              {/* <Separator /> */}
-
               {/* 5. Background Music */}
               <BgMusicSelector
                 selectedMusicId={form.selectedMusicId}
@@ -152,8 +161,6 @@ export default function FacelessShorts() {
                 onSelect={(v) => setField("videoStyle", v)}
               />
 
-              {/* <Separator /> */}
-
               {/* 7. Caption Config */}
               <CaptionConfig
                 config={form.captionConfig}
@@ -163,18 +170,15 @@ export default function FacelessShorts() {
           </ScrollArea>
         </div>
 
-        {/* ── RIGHT  30% ────────────────────────────────────────────────── */}
-        <div
-          className="hidden md:flex flex-col min-h-0 bg-muted/30 sm:w-[35%]"
-          // style={{ width: "30%", minWidth: 0 }}
-        >
+        {/* ── RIGHT  35% ────────────────────────────────────────────────── */}
+        <div className="hidden md:flex flex-col min-h-0 bg-muted/30 sm:w-[35%]">
           {/* Scrollable preview */}
           <div className="flex-1 min-h-0 overflow-auto">
             <MockupPreview form={form} />
           </div>
 
           {/* Generate button — pinned to bottom */}
-          <div className="shrink-0 p-5 border-border bg-card">
+          <div className="shrink-0 p-5 border-t border-border bg-card">
             <Button
               className="w-full h-11 font-semibold gap-2 text-sm"
               disabled={isPending || !canGenerate}
@@ -194,7 +198,7 @@ export default function FacelessShorts() {
             </Button>
             {isOverLimit && (
               <p className="text-destructive text-xs text-center mt-2">
-                Shorten your script to under 1000 characters to generate.
+                Shorten your script to under 1200 characters to generate.
               </p>
             )}
           </div>
@@ -220,6 +224,11 @@ export default function FacelessShorts() {
             </>
           )}
         </Button>
+        {isOverLimit && (
+          <p className="text-destructive text-xs text-center mt-2">
+            Shorten your script to under 1200 characters to generate.
+          </p>
+        )}
       </div>
     </div>
   );

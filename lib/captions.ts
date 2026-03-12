@@ -1,5 +1,5 @@
 import { openai } from "./openai";
-import { getSignedUrl_r2 } from "@/lib/r2-bucket";
+import { getSignedAudioUrl } from "@/lib/r2-bucket";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -43,7 +43,7 @@ export async function generateCaptions(
   wordsPerChunk: number = 3,
 ): Promise<CaptionData> {
   // Generate a short-lived signed URL — only used here, never persisted
-  const signedUrl = await getSignedUrl_r2(audioR2Key, 300); // 5 min TTL
+  const signedUrl = await getSignedAudioUrl(audioR2Key, 300); // 5 min TTL
 
   const audioRes = await fetch(signedUrl);
   if (!audioRes.ok) {
@@ -65,7 +65,7 @@ export async function generateCaptions(
     model: "whisper-1",
     language: languageCode.substring(0, 2), // ISO 639-1 two-letter code
     response_format: "verbose_json",
-    timestamp_granularities: ["word", "segment"],
+    timestamp_granularities: ["word"],
   });
 
   // ── Map segments ──────────────────────────────────────────────────────────

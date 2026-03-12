@@ -30,7 +30,7 @@ export const helloWorld = inngest.createFunction(
 
 // ─── Generate Short Video ────────────────────────────────────────────────────
 
-export const GenerateShort = inngest.createFunction(
+export const generateShort = inngest.createFunction(
   {
     id: "generate-short",
     retries: 2,
@@ -113,6 +113,8 @@ export const GenerateShort = inngest.createFunction(
         );
 
         const keys: string[] = [];
+
+        // TODO : send all the req parallely
 
         for (const scene of sorted) {
           const key = `videos/${videoId}/images/scene_${scene.sceneIndex}.png`;

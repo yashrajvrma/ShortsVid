@@ -76,7 +76,7 @@ export async function uploadVideoToR2({
  * Use this at render time — fetch the key(s) from DB then call this.
  * Never store the resulting URL in the DB; always generate on demand.
  */
-export async function getSignedUrl_r2(
+export async function getSignedAudioUrl(
   key: string,
   expiresIn = 3600,
 ): Promise<string> {
@@ -95,7 +95,7 @@ export async function getSignedUrls_r2(
   keys: string[],
   expiresIn = 3600,
 ): Promise<string[]> {
-  return Promise.all(keys.map((key) => getSignedUrl_r2(key, expiresIn)));
+  return Promise.all(keys.map((key) => getSignedAudioUrl(key, expiresIn)));
 }
 
 // ─── Delete ───────────────────────────────────────────────────────────────────

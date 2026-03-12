@@ -63,6 +63,7 @@ export interface FacelessFormStore extends FacelessFormState {
     value: CaptionConfigState[K],
   ) => void;
   setGeneratedScript: (script: string) => void;
+  reset: () => void;
 }
 
 export const useFacelessForm = create<FacelessFormStore>((set) => ({
@@ -93,6 +94,22 @@ export const useFacelessForm = create<FacelessFormStore>((set) => ({
       generatedScript: script,
       generatedScriptLanguage: state.languageCode,
     })),
+
+  reset: () =>
+    set({
+      languageCode: LANGUAGES[0].code,
+      topic: "ANY_TOPIC",
+      duration: DURATIONS[2].value,
+      scriptMode: "generate",
+      prompt: "",
+      generatedScript: "",
+      generatedScriptLanguage: "",
+      selectedVoiceId: null,
+      voiceSearchQuery: "",
+      selectedMusicId: null,
+      videoStyle: "CINEMATIC",
+      captionConfig: DEFAULT_CAPTION,
+    }),
 }));
 
 export const getIsScriptLanguageMismatch = (state: FacelessFormStore) =>

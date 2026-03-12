@@ -9,7 +9,7 @@ import { AlertTriangle, Loader2, Sparkles, WandSparkles } from "lucide-react";
 import { LANGUAGES } from "@/lib/constants";
 import { toast } from "react-hot-toast";
 
-const MAX_CHARS = 1000;
+const MAX_CHARS = 1200;
 
 interface ScriptSectionProps {
   languageCode: string;
