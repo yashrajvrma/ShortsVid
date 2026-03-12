@@ -7,7 +7,7 @@ import { z } from "zod";
 import OpenAI from "openai";
 import { prisma } from "@/db";
 import { Topic } from "@prisma/client";
-import { systemPromptForFacelessShorts } from "@/lib/utils";
+import { genScriptSystemPromptForFacelessShorts } from "@/lib/utils";
 
 const openAi = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -82,7 +82,7 @@ Creative direction: ${prompt}`;
       messages: [
         {
           role: "system",
-          content: systemPromptForFacelessShorts({
+          content: genScriptSystemPromptForFacelessShorts({
             targetWordCount,
             duration,
             languageName,

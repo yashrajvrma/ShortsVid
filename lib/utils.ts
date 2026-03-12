@@ -9,7 +9,7 @@ export function getDicebearUrl(seed: string) {
   return `https://api.dicebear.com/9.x/glass/svg?seed=${encodeURIComponent(seed)}`;
 }
 
-export const systemPromptForFacelessShorts = ({
+export const generateScriptystemPromptForFacelessShorts = ({
   targetWordCount,
   duration,
   languageName,
