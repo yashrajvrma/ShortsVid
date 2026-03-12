@@ -7,17 +7,20 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Loader2, Video, Zap } from "lucide-react";
 
-import { useFacelessForm, getIsScriptLanguageMismatch } from "@/hooks/use-faceless-form";
-import { generateVideo } from "@/app/(dashboard)/app/shorts/faceless-shorts/actions";
+import {
+  useFacelessForm,
+  getIsScriptLanguageMismatch,
+} from "@/hooks/use-faceless-form";
+// import { generateVideo } from "@/app/(dashboard)/app/shorts/faceless-shorts/actions";
 
 import { LanguageSelector } from "./language-selector";
 import { TopicDuration } from "./topic-duration";
-import { ScriptSection } from "./script-section";
 import { VoiceSelector } from "./voice-selector";
 import { BgMusicSelector } from "./bg-music-selector";
 import { VideoStylePicker } from "./video-style-picker";
 import { CaptionConfig } from "./caption-config";
 import { MockupPreview } from "./mockup-preview";
+import { ScriptSection } from "./script-section";
 
 export default function FacelessShorts() {
   const form = useFacelessForm();
@@ -33,16 +36,16 @@ export default function FacelessShorts() {
   const handleGenerate = () => {
     if (!canGenerate) return;
     startTransition(async () => {
-      await generateVideo({
-        languageCode: form.languageCode,
-        topic: form.topic,
-        duration: form.duration,
-        script: form.generatedScript,
-        voiceId: form.selectedVoiceId,
-        musicId: form.selectedMusicId,
-        videoStyle: form.videoStyle,
-        captionConfig: form.captionConfig,
-      });
+      // await generateVideo({
+      //   languageCode: form.languageCode,
+      //   topic: form.topic,
+      //   duration: form.duration,
+      //   script: form.generatedScript,
+      //   voiceId: form.selectedVoiceId,
+      //   musicId: form.selectedMusicId,
+      //   videoStyle: form.videoStyle,
+      //   captionConfig: form.captionConfig,
+      // });
     });
   };
 

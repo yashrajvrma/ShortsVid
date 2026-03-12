@@ -4,9 +4,10 @@ import { useState, useTransition } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { generateScript } from "@/app/(dashboard)/app/shorts/faceless-shorts/actions";
+import { generateScript } from "@/app/actions/faceless-shorts/generate-script";
 import { AlertTriangle, Loader2, Sparkles, WandSparkles } from "lucide-react";
 import { LANGUAGES } from "@/lib/constants";
+import { toast } from "react-hot-toast";
 
 const MAX_CHARS = 1000;
 
@@ -38,18 +39,29 @@ export function ScriptSection({
 
   const handleGenerate = () => {
     setError(null);
+    if (!prompt.trim()) {
+      toast.error("Prompt is required to generate a script.");
+      return;
+    }
+
     startTransition(async () => {
       try {
         const result = await generateScript({
           languageCode,
-          topic,
+          topic: topic as any,
           duration,
-          prompt: prompt || undefined,
+          prompt,
         });
+
         if (result.success) {
-          onGeneratedScriptChange(result.script);
+          toast.success("Script generated successfully!");
+          onGeneratedScriptChange(result.script!);
+        } else {
+          toast.error(result.error || "Failed to generate script");
+          setError(result.error || "Failed to generate script");
         }
       } catch (e) {
+        toast.error("Failed to generate script. Please try again.");
         setError("Failed to generate script. Please try again.");
       }
     });
@@ -82,7 +94,7 @@ export function ScriptSection({
         {/* Generate tab */}
         <TabsContent value="generate" className="space-y-3 mt-3">
           <Textarea
-            placeholder="Describe what you want your video to be about... (optional)"
+            placeholder="Describe what you want your video to be about..."
             value={prompt}
             onChange={(e) => onPromptChange(e.target.value)}
             className="resize-none min-h-[80px] text-sm"
