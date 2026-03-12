@@ -14,14 +14,16 @@ export function MockupPreview({ form }: MockupPreviewProps) {
   );
 
   const scriptPreview = form.generatedScript
-    ? form.generatedScript.slice(0, 120) + (form.generatedScript.length > 120 ? "…" : "")
+    ? form.generatedScript.slice(0, 120) +
+      (form.generatedScript.length > 120 ? "…" : "")
     : null;
 
   return (
     <div className="flex flex-col items-center justify-center h-full gap-6 py-6">
+      {/* <div>Preview</div> */}
       {/* Phone mockup */}
       <div
-        className="relative w-[200px] shrink-0"
+        className="relative w-[280px] shrink-0"
         style={{ aspectRatio: "9/16" }}
       >
         {/* Phone shell */}
@@ -40,7 +42,7 @@ export function MockupPreview({ form }: MockupPreviewProps) {
             )}
 
             {/* Overlay */}
-            <div className="absolute inset-0 bg-black/30" />
+            <div className="absolute inset-0 bg-black/10" />
 
             {/* Caption preview */}
             {form.generatedScript && (

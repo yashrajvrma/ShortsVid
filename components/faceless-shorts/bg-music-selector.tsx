@@ -18,13 +18,13 @@ export function BgMusicSelector({
 
   return (
     <div className="space-y-2">
-      <label className="text-sm font-semibold text-foreground">
+      <label className="text-sm font-medium text-foreground">
         Background Music
       </label>
       <Button
         type="button"
         variant="outline"
-        className="w-full justify-start gap-3"
+        className="w-full justify-start mt-2"
         onClick={() => setOpen(true)}
       >
         <Music2 className="size-4 text-muted-foreground" />

@@ -59,23 +59,23 @@ export function ScriptSection({
   const charCount = scriptContent.length;
   const isOverLimit = charCount > MAX_CHARS;
 
-  const mismatchLang = LANGUAGES.find((l) => l.code === generatedScriptLanguage);
+  const mismatchLang = LANGUAGES.find(
+    (l) => l.code === generatedScriptLanguage,
+  );
   const newLang = LANGUAGES.find((l) => l.code === languageCode);
 
   return (
     <div className="space-y-3">
-      <label className="text-sm font-semibold text-foreground">
-        3. Script
-      </label>
+      <label className="text-sm font-medium text-foreground">Script</label>
 
-      <Tabs defaultValue="generate">
-        <TabsList className="w-full">
+      <Tabs defaultValue="generate" className="py-2">
+        <TabsList className="w-full min-h-10">
           <TabsTrigger value="generate" className="flex-1">
-            <WandSparkles className="size-3.5 mr-1.5" />
-            Generate
+            {/* <WandSparkles className="size-3.5 mr-1.5" /> */}
+            Generate with AI
           </TabsTrigger>
           <TabsTrigger value="manual" className="flex-1">
-            Manual
+            Add your own
           </TabsTrigger>
         </TabsList>
 
@@ -107,9 +107,7 @@ export function ScriptSection({
             )}
           </Button>
 
-          {error && (
-            <p className="text-destructive text-xs">{error}</p>
-          )}
+          {error && <p className="text-destructive text-xs">{error}</p>}
 
           {generatedScript && (
             <div className="space-y-2">
@@ -136,7 +134,9 @@ export function ScriptSection({
                   <AlertTriangle className="size-4 text-amber-500 shrink-0 mt-0.5" />
                   <p className="text-xs text-amber-700 dark:text-amber-400">
                     Your script was generated in{" "}
-                    <strong>{mismatchLang?.name ?? generatedScriptLanguage}</strong>{" "}
+                    <strong>
+                      {mismatchLang?.name ?? generatedScriptLanguage}
+                    </strong>{" "}
                     but you&apos;ve switched to{" "}
                     <strong>{newLang?.name ?? languageCode}</strong>. Consider
                     regenerating the script.

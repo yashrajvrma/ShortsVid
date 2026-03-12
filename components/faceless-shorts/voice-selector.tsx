@@ -62,9 +62,9 @@ export function VoiceSelector({
 
   return (
     <div className="space-y-3">
-      <label className="text-sm font-semibold text-foreground flex items-center gap-2">
-        <Mic className="size-4" />
-        4. Select Voice
+      <label className="text-sm font-medium text-foreground flex items-center gap-2">
+        {/* <Mic className="size-4" /> */}
+        Select Voice
       </label>
 
       {/* Search */}
@@ -97,7 +97,7 @@ export function VoiceSelector({
                 onClick={() => onSelect(voice.id)}
                 className={`w-full flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all duration-150 text-left ${
                   selectedVoiceId === voice.id
-                    ? "bg-primary/10 border border-primary/30"
+                    ? "bg-secondary text-secondary-foreground border border-primary/30"
                     : "hover:bg-muted/50 border border-transparent"
                 }`}
               >
@@ -111,12 +111,12 @@ export function VoiceSelector({
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">{voice.name}</p>
-                  {voice.description && (
+                  <p className="text-md font-medium truncate">{voice.name}</p>
+                  {/* {voice.description && (
                     <p className="text-xs text-muted-foreground truncate">
                       {voice.description}
                     </p>
-                  )}
+                  )} */}
                 </div>
 
                 <Badge

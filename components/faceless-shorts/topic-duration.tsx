@@ -10,6 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { DURATIONS } from "@/lib/constants";
 import { Clock } from "lucide-react";
+import { Button } from "../ui/button";
 
 const TOPICS = [
   { id: "ANY_TOPIC", label: "Any Topic" },
@@ -39,47 +40,46 @@ export function TopicDuration({
     <div className="space-y-4">
       {/* Topic */}
       <div className="space-y-2">
-        <label className="text-sm font-semibold text-foreground">
-          2. Topic
-        </label>
-        <div className="flex flex-wrap gap-2">
+        <label className="text-sm font-medium text-foreground">Topic</label>
+        <div className="flex flex-wrap gap-2 py-2">
           {TOPICS.map((t) => (
-            <button
+            <Button
               key={t.id}
+              size="sm"
               type="button"
               onClick={() => onTopicChange(t.id)}
-              className={`rounded-full px-3 py-1.5 text-xs font-medium border transition-all duration-200 ${
+              className={`px-3 py-1.5 text-sm border transition-all duration-200 rouned-lg ${
                 topic === t.id
-                  ? "bg-primary text-primary-foreground border-primary shadow-sm"
-                  : "bg-card text-muted-foreground border-border hover:border-primary/50 hover:text-foreground"
+                  ? "bg-secondary text-secondary-foreground shadow-sm hover:text-secondary-foreground hover:bg-secondary"
+                  : "bg-card text-muted-foreground border-border hover:bg-secondary hover:text-secondary-foreground"
               }`}
             >
               {t.label}
-            </button>
+            </Button>
           ))}
         </div>
       </div>
 
       {/* Duration */}
       <div className="space-y-2">
-        <label className="text-sm font-semibold text-foreground flex items-center gap-2">
-          <Clock className="size-4" />
+        <label className="text-sm font-medium text-foreground flex items-center gap-2">
+          {/* <Clock className="size-4" /> */}
           Duration
         </label>
         <div className="flex gap-2">
           {DURATIONS.map((d) => (
-            <button
+            <Button
               key={d.id}
               type="button"
               onClick={() => onDurationChange(d.value)}
-              className={`flex-1 rounded-lg px-3 py-2 text-sm font-medium border transition-all duration-200 ${
+              className={`flex-1 px-3 py-2 text-sm font-medium border transition-all duration-200 rounded-lg ${
                 duration === d.value
-                  ? "bg-primary text-primary-foreground border-primary shadow-sm"
-                  : "bg-card text-muted-foreground border-border hover:border-primary/50 hover:text-foreground"
+                  ? "bg-secondary text-secondary-foreground shadow-sm hover:text-secondary-foreground hover:bg-secondary"
+                  : "bg-card text-muted-foreground border-border hover:bg-secondary hover:text-secondary-foreground"
               }`}
             >
               {d.label}
-            </button>
+            </Button>
           ))}
         </div>
       </div>

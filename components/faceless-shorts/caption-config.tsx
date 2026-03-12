@@ -45,12 +45,12 @@ function ColorField({
 export function CaptionConfig({ config, onChange }: CaptionConfigProps) {
   return (
     <div className="space-y-3">
-      <label className="text-sm font-semibold text-foreground flex items-center gap-2">
-        <Captions className="size-4" />
-        6. Live Captions
+      <label className="text-sm font-medium text-foreground flex items-center gap-2">
+        {/* <Captions className="size-4" /> */}
+        Live Captions
       </label>
 
-      <div className="rounded-xl border border-border bg-card p-4 space-y-1 divide-y divide-border">
+      <div className="rounded-xl border border-border bg-card px-4 py-2 space-y-1 divide-y divide-border">
         <ColorField
           label="Text"
           value={config.textColor}

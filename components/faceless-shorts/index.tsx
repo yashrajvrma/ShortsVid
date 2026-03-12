@@ -57,16 +57,16 @@ export default function FacelessShorts() {
     >
       {/* ── Page header ─────────────────────────────────────────────────── */}
       <div className="mb-4 flex items-center gap-3 shrink-0">
-        <div className="size-9 rounded-xl bg-primary/10 flex items-center justify-center">
+        {/* <div className="size-9 rounded-xl bg-primary/10 flex items-center justify-center">
           <Video className="size-5 text-primary" />
-        </div>
+        </div> */}
         <div>
-          <h1 className="text-xl font-bold text-foreground">
+          <h1 className="text-xl font-semibold text-foreground">
             Create Faceless Shorts
           </h1>
-          <p className="text-xs text-muted-foreground mt-0.5">
+          {/* <p className="text-xs text-muted-foreground mt-0.5">
             Generate AI-powered short videos in minutes
-          </p>
+          </p> */}
         </div>
       </div>
 
@@ -89,14 +89,14 @@ export default function FacelessShorts() {
           // style={{ width: "70%", minWidth: 0 }}
         >
           <ScrollArea className="flex-1 min-h-0 h-full">
-            <div className="p-6 space-y-7">
+            <div className="p-6 space-y-4">
               {/* 1. Language */}
               <LanguageSelector
                 value={form.languageCode}
                 onChange={(v) => setField("languageCode", v)}
               />
 
-              <Separator />
+              {/* <Separator /> */}
 
               {/* 2. Topic + Duration */}
               <TopicDuration
@@ -106,7 +106,7 @@ export default function FacelessShorts() {
                 onDurationChange={(v) => setField("duration", v)}
               />
 
-              <Separator />
+              {/* <Separator /> */}
 
               {/* 3. Script */}
               <ScriptSection
@@ -121,7 +121,7 @@ export default function FacelessShorts() {
                 onGeneratedScriptChange={setGeneratedScript}
               />
 
-              <Separator />
+              {/* <Separator /> */}
 
               {/* 4. Voice */}
               <VoiceSelector
@@ -137,7 +137,7 @@ export default function FacelessShorts() {
                 }
               />
 
-              <Separator />
+              {/* <Separator /> */}
 
               {/* 5. Background Music */}
               <BgMusicSelector
@@ -153,7 +153,7 @@ export default function FacelessShorts() {
                 onSelect={(v) => setField("videoStyle", v)}
               />
 
-              <Separator />
+              {/* <Separator /> */}
 
               {/* 7. Caption Config */}
               <CaptionConfig
@@ -175,7 +175,7 @@ export default function FacelessShorts() {
           </div>
 
           {/* Generate button — pinned to bottom */}
-          <div className="shrink-0 p-5 border-t border-border bg-card">
+          <div className="shrink-0 p-5 border-border bg-card">
             <Button
               className="w-full h-11 font-semibold gap-2 text-sm"
               disabled={isPending || !canGenerate}

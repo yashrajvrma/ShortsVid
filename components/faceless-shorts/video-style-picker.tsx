@@ -14,10 +14,10 @@ export function VideoStylePicker({
 }: VideoStylePickerProps) {
   return (
     <div className="space-y-3">
-      <label className="text-sm font-semibold text-foreground">
-        5. Video Style
+      <label className="text-sm font-medium text-foreground">
+        Choose your Video Style
       </label>
-      <div className="grid grid-cols-4 gap-2 sm:grid-cols-4">
+      <div className="grid grid-cols-4 gap-2 sm:grid-cols-4 py-2">
         {VIDEO_STYLES.map((style) => (
           <button
             key={`${style.id}-${style.label}`}
@@ -48,7 +48,7 @@ export function VideoStylePicker({
                   : "bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100"
               }`}
             >
-              <span className="text-white text-[10px] font-semibold leading-tight line-clamp-2">
+              <span className="text-white text-xs font-medium leading-tight line-clamp-2">
                 {style.label}
               </span>
             </div>
