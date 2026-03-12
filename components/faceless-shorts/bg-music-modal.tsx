@@ -14,16 +14,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { getDicebearUrl } from "@/lib/utils";
 
 interface BgMusicModalProps {
   open: boolean;
   onClose: () => void;
   selectedMusicId: string | null;
   onSelect: (id: string | null) => void;
-}
-
-function getDicebearUrl(seed: string) {
-  return `https://api.dicebear.com/9.x/glass/svg?seed=${encodeURIComponent(seed)}`;
 }
 
 function MusicItem({
@@ -69,16 +66,12 @@ function MusicItem({
       }`}
     >
       <div
-        className="size-10 shrink-0 rounded-xl overflow-hidden border border-border bg-muted cursor-pointer"
+        className="size-10 shrink-0 rounded-xl overflow-hidden border border-border bg-muted cursor-pointer max:[w-50px]"
         onClick={handlePlay}
       >
-        <img
-          src={getDicebearUrl(name)}
-          alt={name}
-          className="size-full"
-        />
+        <img src={getDicebearUrl(name)} alt={name} className="size-full" />
       </div>
-      <span className="text-sm font-medium truncate flex-1">{name}</span>
+      <span className="text-sm font-medium truncate  flex-1">{name}</span>
       {audioUrl && (
         <button
           type="button"
@@ -89,11 +82,7 @@ function MusicItem({
               : "bg-muted hover:bg-primary/20"
           }`}
         >
-          {playing ? (
-            <Pause className="size-3" />
-          ) : (
-            <Play className="size-3" />
-          )}
+          {playing ? <Pause className="size-3" /> : <Play className="size-3" />}
         </button>
       )}
     </button>
@@ -116,10 +105,10 @@ export function BgMusicModal({
 
   return (
     <AlertDialog open={open}>
-      <AlertDialogContent className="max-w-2xl p-0 overflow-hidden">
-        <AlertDialogHeader className="px-6 pt-6 pb-4 border-b border-border">
-          <div className="flex items-center justify-between">
-            <AlertDialogTitle className="text-lg font-semibold">
+      <AlertDialogContent className="sm:min-w-2xl min-w-2xl p-0 overflow-hidden">
+        <AlertDialogHeader className="px-6 pt-4">
+          <div className="flex items-center justify-between w-full">
+            <AlertDialogTitle className="text-lg font-medium">
               Choose background music
             </AlertDialogTitle>
             <AlertDialogCancel
@@ -132,7 +121,7 @@ export function BgMusicModal({
         </AlertDialogHeader>
 
         <Tabs defaultValue="templates" className="w-full">
-          <div className="px-6 pt-4">
+          <div className="px-6">
             <TabsList className="w-full">
               <TabsTrigger value="templates" className="flex-1">
                 Templates

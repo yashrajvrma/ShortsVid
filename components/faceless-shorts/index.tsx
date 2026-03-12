@@ -7,7 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Loader2, Video, Zap } from "lucide-react";
 
-import { useFacelessForm } from "@/hooks/use-faceless-form";
+import { useFacelessForm, getIsScriptLanguageMismatch } from "@/hooks/use-faceless-form";
 import { generateVideo } from "@/app/(dashboard)/app/shorts/faceless-shorts/actions";
 
 import { LanguageSelector } from "./language-selector";
@@ -20,13 +20,9 @@ import { CaptionConfig } from "./caption-config";
 import { MockupPreview } from "./mockup-preview";
 
 export default function FacelessShorts() {
-  const {
-    form,
-    setField,
-    setCaptionField,
-    setGeneratedScript,
-    isScriptLanguageMismatch,
-  } = useFacelessForm();
+  const form = useFacelessForm();
+  const { setField, setCaptionField, setGeneratedScript } = form;
+  const isScriptLanguageMismatch = getIsScriptLanguageMismatch(form);
 
   const [isPending, startTransition] = useTransition();
 

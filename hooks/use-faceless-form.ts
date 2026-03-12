@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { create } from "zustand";
 import { DURATIONS, LANGUAGES } from "@/lib/constants";
 
 // ─── Caption Config ────────────────────────────────────────────────────────────
@@ -53,58 +53,49 @@ const DEFAULT_CAPTION: CaptionConfigState = {
   highlightColor: "#FF00FF",
 };
 
-export function useFacelessForm() {
-  const [form, setForm] = useState<FacelessFormState>({
-    languageCode: LANGUAGES[0].code,
-    topic: "ANY_TOPIC",
-    duration: DURATIONS[2].value,
-    scriptMode: "generate",
-    prompt: "",
-    generatedScript: "",
-    generatedScriptLanguage: "",
-    selectedVoiceId: null,
-    voiceSearchQuery: "",
-    selectedMusicId: null,
-    videoStyle: "CINEMATIC",
-    captionConfig: DEFAULT_CAPTION,
-  });
-
-  // ─── Helpers ────────────────────────────────────────────────────────────────
-  const setField = <K extends keyof FacelessFormState>(
+export interface FacelessFormStore extends FacelessFormState {
+  setField: <K extends keyof FacelessFormState>(
     key: K,
     value: FacelessFormState[K],
-  ) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const setCaptionField = <K extends keyof CaptionConfigState>(
+  ) => void;
+  setCaptionField: <K extends keyof CaptionConfigState>(
     key: K,
     value: CaptionConfigState[K],
-  ) => {
-    setForm((prev) => ({
-      ...prev,
-      captionConfig: { ...prev.captionConfig, [key]: value },
-    }));
-  };
-
-  const setGeneratedScript = (script: string) => {
-    setForm((prev) => ({
-      ...prev,
-      generatedScript: script,
-      generatedScriptLanguage: prev.languageCode,
-    }));
-  };
-
-  const isScriptLanguageMismatch =
-    form.generatedScript !== "" &&
-    form.generatedScriptLanguage !== "" &&
-    form.generatedScriptLanguage !== form.languageCode;
-
-  return {
-    form,
-    setField,
-    setCaptionField,
-    setGeneratedScript,
-    isScriptLanguageMismatch,
-  };
+  ) => void;
+  setGeneratedScript: (script: string) => void;
 }
+
+export const useFacelessForm = create<FacelessFormStore>((set) => ({
+  languageCode: LANGUAGES[0].code,
+  topic: "ANY_TOPIC",
+  duration: DURATIONS[2].value,
+  scriptMode: "generate",
+  prompt: "",
+  generatedScript: "",
+  generatedScriptLanguage: "",
+  selectedVoiceId: null,
+  voiceSearchQuery: "",
+  selectedMusicId: null,
+  videoStyle: "CINEMATIC",
+  captionConfig: DEFAULT_CAPTION,
+
+  setField: (key, value) => set((state) => ({ ...state, [key]: value })),
+
+  setCaptionField: (key, value) =>
+    set((state) => ({
+      ...state,
+      captionConfig: { ...state.captionConfig, [key]: value },
+    })),
+
+  setGeneratedScript: (script) =>
+    set((state) => ({
+      ...state,
+      generatedScript: script,
+      generatedScriptLanguage: state.languageCode,
+    })),
+}));
+
+export const getIsScriptLanguageMismatch = (state: FacelessFormStore) =>
+  state.generatedScript !== "" &&
+  state.generatedScriptLanguage !== "" &&
+  state.generatedScriptLanguage !== state.languageCode;

@@ -120,8 +120,8 @@ export function VoiceSelector({
                 </div>
 
                 <Badge
-                  variant="outline"
-                  className="text-[10px] capitalize shrink-0"
+                  variant="secondary"
+                  className="text-xs capitalize shrink-0"
                 >
                   {voice.gender}
                 </Badge>
@@ -134,7 +134,7 @@ export function VoiceSelector({
                       e.stopPropagation();
                       handlePlay(voice.id, voice.audioUrl!);
                     }}
-                    className="size-7 rounded-full flex items-center justify-center bg-muted hover:bg-primary/20 transition-colors shrink-0"
+                    className="size-7 rounded-full flex items-center justify-center bg-muted transition-colors shrink-0"
                   >
                     {playingId === voice.id ? (
                       <Pause className="size-3.5 text-primary" />
