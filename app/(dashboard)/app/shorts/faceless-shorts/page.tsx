@@ -5,8 +5,8 @@ import { ErrorBoundary } from "react-error-boundary";
 import { LANGUAGES } from "@/lib/constants";
 
 export default async function FacelessShortsPage() {
-  void prefetch(trpc.stocks.getAllBackgroundMusic.queryOptions());
-  void prefetch(
+  prefetch(trpc.stocks.getAllBackgroundMusic.queryOptions());
+  prefetch(
     trpc.voices.getSystemVoice.queryOptions({
       languageCode: LANGUAGES[0].code,
     }),

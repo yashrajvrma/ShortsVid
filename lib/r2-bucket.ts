@@ -91,11 +91,23 @@ export async function getSignedAudioUrl(
  * Convenience: resolves an array of R2 keys to signed URLs in parallel.
  * Order is preserved.
  */
-export async function getSignedUrls_r2(
+
+export async function getSignedObjectUrl(
+  key: string,
+  expiresIn = 3600,
+): Promise<string> {
+  const command = new GetObjectCommand({
+    Bucket: env.R2_BUCKET_NAME,
+    Key: key,
+  });
+  return getSignedUrl(r2, command, { expiresIn });
+}
+
+export async function getSignedUrlInBulk(
   keys: string[],
   expiresIn = 3600,
 ): Promise<string[]> {
-  return Promise.all(keys.map((key) => getSignedAudioUrl(key, expiresIn)));
+  return Promise.all(keys.map((key) => getSignedObjectUrl(key, expiresIn)));
 }
 
 // ─── Delete ───────────────────────────────────────────────────────────────────

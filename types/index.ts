@@ -1,3 +1,11 @@
+import { AppRouter } from "@/trpc/routers/_app";
+import { inferRouterOutputs } from "@trpc/server";
+
+type RouterOutputs = inferRouterOutputs<AppRouter>;
+
+export type GetAllShortsOutput = RouterOutputs["videos"]["getAllShorts"];
+export type ShortsVideo = GetAllShortsOutput[number];
+
 export type Language = {
   code: string;
   name: string;

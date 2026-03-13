@@ -3,6 +3,7 @@ import { authProcedure, createTRPCRouter } from "../init";
 import { TRPCError } from "@trpc/server";
 import { prisma } from "@/db";
 import { inngest } from "@/inngest/client";
+import { getSignedAudioUrl, getSignedUrlInBulk } from "@/lib/r2-bucket";
 
 export const videoRouter = createTRPCRouter({
   generateFacelessVideo: authProcedure
@@ -140,4 +141,52 @@ export const videoRouter = createTRPCRouter({
         status: video.status,
       };
     }),
+  getAllShorts: authProcedure.query(async ({ ctx }) => {
+    const { userId } = ctx;
+
+    const videos = await prisma.video.findMany({
+      where: { userId },
+      include: {
+        captionConfig: true,
+        stock: true,
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    const videosWithSignedUrls = await Promise.all(
+      videos.map(async (video) => {
+        const [
+          signedImages,
+          signedAudio,
+          signedVideoUrl,
+          signedBackgroundMusicUrl,
+        ] = await Promise.all([
+          video.images.length > 0
+            ? getSignedUrlInBulk(video.images)
+            : Promise.resolve([] as string[]),
+
+          video.audio ? getSignedAudioUrl(video.audio) : Promise.resolve(null),
+
+          video.r2ObjectKey
+            ? getSignedAudioUrl(video.r2ObjectKey)
+            : Promise.resolve(null),
+
+          // Return signed URL only if backgroundMusicId exists AND stock has an r2 key
+          video.backgroundMusicId && video.stock?.r2ObjectKey
+            ? getSignedAudioUrl(video.stock.r2ObjectKey)
+            : Promise.resolve(null),
+        ]);
+
+        return {
+          ...video,
+          imagesUrl: signedImages,
+          audioUrl: signedAudio,
+          videoUrl: signedVideoUrl,
+          backgroundMusicUrl: signedBackgroundMusicUrl,
+        };
+      }),
+    );
+
+    return videosWithSignedUrls;
+  }),
 });
