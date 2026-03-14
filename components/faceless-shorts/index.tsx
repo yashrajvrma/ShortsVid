@@ -25,6 +25,7 @@ import { CaptionConfig } from "./caption-config";
 import { MockupPreview } from "./mockup-preview";
 import { ScriptSection } from "./script-section";
 import type { AppRouter } from "@/trpc/routers/_app";
+import Header from "@/components/header";
 
 export default function FacelessShorts() {
   const router = useRouter();
@@ -85,18 +86,20 @@ export default function FacelessShorts() {
 
   return (
     <div
-      className="w-full flex flex-col"
+      className="w-full flex flex-col font-sans"
       style={{ height: "calc(100vh - 2rem)" }}
     >
       {/* ── Page header ─────────────────────────────────────────────────── */}
-      <div className="mb-4 flex items-center gap-3 shrink-0">
+      {/* <div className="mb-4 flex items-center gap-3 shrink-0">
         <div>
           <h1 className="text-xl font-semibold text-foreground">
             Create Faceless Shorts
           </h1>
         </div>
-      </div>
-
+      </div> */}
+      <Header>
+        <div>Create Faceless Shorts</div>
+      </Header>
       {/* ── Main card ───────────────────────────────────────────────────── */}
       <Card
         className="flex-1 min-h-0 overflow-hidden"
@@ -134,7 +137,7 @@ export default function FacelessShorts() {
               />
 
               {/* 4. Voice */}
-              <VoiceSelector
+              {/* <VoiceSelector
                 languageCode={form.languageCode}
                 selectedVoiceId={form.selectedVoiceId}
                 searchQuery={form.voiceSearchQuery}
@@ -145,7 +148,7 @@ export default function FacelessShorts() {
                     form.selectedVoiceId === id ? null : id,
                   )
                 }
-              />
+              /> */}
 
               {/* 5. Background Music */}
               <BgMusicSelector
@@ -204,7 +207,6 @@ export default function FacelessShorts() {
           </div>
         </div>
       </Card>
-
       {/* ── Mobile generate button ─────────────────────────────────────── */}
       <div className="md:hidden mt-4 shrink-0">
         <Button

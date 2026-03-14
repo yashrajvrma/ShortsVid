@@ -1,3 +1,7 @@
-export default function Header({ chidren }: { chidren?: React.ReactNode }) {
-  return <header className="flex font-semibold text-lg">{chidren}</header>;
+export default function Header({ children }: { children?: React.ReactNode }) {
+  return (
+    <div className="flex font-semibold tracking-tighter text-xl pb-3 font-sans">
+      {children}
+    </div>
+  );
 }

@@ -21,10 +21,10 @@ export default function RemotionPlayer({
         compositionWidth={1080}
         compositionHeight={1920}
         fps={30}
-        controls
+        // controls
         style={{
-          // width: "vw",
-          height: "55vh",
+          height: "50vh",
+          // height: "55vh",
           // aspectRatio: "9/16",
         }}
         inputProps={{

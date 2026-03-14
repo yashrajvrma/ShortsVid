@@ -79,75 +79,80 @@ export function VoiceSelector({
       </div>
 
       {/* Voice List */}
-      <ScrollArea className="h-[200px] rounded-lg border border-border">
-        {isLoading ? (
-          <div className="flex items-center justify-center h-full py-8">
-            <div className="text-muted-foreground text-sm">Loading voices…</div>
-          </div>
-        ) : voices.length === 0 ? (
-          <div className="flex items-center justify-center h-full py-8">
-            <div className="text-muted-foreground text-sm">No voices found</div>
-          </div>
-        ) : (
-          <div className="p-2 space-y-1">
-            {voices.map((voice) => (
-              <button
-                key={voice.id}
-                type="button"
-                onClick={() => onSelect(voice.id)}
-                className={`w-full flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all duration-150 text-left ${
-                  selectedVoiceId === voice.id
-                    ? "bg-secondary text-secondary-foreground border border-primary/30"
-                    : "hover:bg-muted/50 border border-transparent"
-                }`}
-              >
-                {/* Avatar */}
-                <div className="relative size-9 shrink-0 rounded-full overflow-hidden border border-border bg-muted">
-                  <img
-                    src={getDicebearUrl(voice.name)}
-                    alt={voice.name}
-                    className="size-full"
-                  />
-                </div>
+      <div>
+        <ScrollArea className="h-[200px] rounded-lg border border-border">
+          {isLoading ? (
+            <div className="flex items-center justify-center h-full py-8">
+              <div className="text-muted-foreground text-sm">
+                Loading voices…
+              </div>
+            </div>
+          ) : voices.length === 0 ? (
+            <div className="flex items-center justify-center h-full py-8">
+              <div className="text-muted-foreground text-sm">
+                No voices found
+              </div>
+            </div>
+          ) : (
+            <div className="p-2 space-y-1">
+              {voices.map((voice) => (
+                <button
+                  key={voice.id}
+                  type="button"
+                  onClick={() => onSelect(voice.id)}
+                  className={`w-full flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all duration-150 text-left ${
+                    selectedVoiceId === voice.id
+                      ? "bg-secondary text-secondary-foreground border border-primary/30"
+                      : "hover:bg-muted/50 border border-transparent"
+                  }`}
+                >
+                  {/* Avatar */}
+                  <div className="relative size-11 shrink-0 rounded-full overflow-hidden border border-border bg-muted">
+                    <img
+                      src={getDicebearUrl(voice.name)}
+                      alt={voice.name}
+                      className="size-full"
+                    />
+                  </div>
 
-                <div className="flex-1 min-w-0">
-                  <p className="text-md font-medium truncate">{voice.name}</p>
-                  {/* {voice.description && (
+                  <div className="flex-1 min-w-0">
+                    <p className="text-md font-medium truncate">{voice.name}</p>
+                    {/* {voice.description && (
                     <p className="text-xs text-muted-foreground truncate">
                       {voice.description}
                     </p>
                   )} */}
-                </div>
+                    <Badge
+                      variant="secondary"
+                      className="text-xs capitalize shrink-0"
+                    >
+                      {voice.gender}
+                    </Badge>
+                  </div>
 
-                <Badge
-                  variant="secondary"
-                  className="text-xs capitalize shrink-0"
-                >
-                  {voice.gender}
-                </Badge>
-
-                {/* Play button */}
-                {voice.audioUrl && (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handlePlay(voice.id, voice.audioUrl!);
-                    }}
-                    className="size-7 rounded-full flex items-center justify-center bg-muted transition-colors shrink-0"
-                  >
-                    {playingId === voice.id ? (
-                      <Pause className="size-3.5 text-primary" />
-                    ) : (
-                      <Play className="size-3.5 text-muted-foreground" />
-                    )}
-                  </button>
-                )}
-              </button>
-            ))}
-          </div>
-        )}
-      </ScrollArea>
+                  {/* Play button */}
+                  {voice.audioUrl && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handlePlay(voice.id, voice.audioUrl!);
+                      }}
+                      className="size-7 rounded-full flex items-center justify-center bg-muted transition-colors shrink-0"
+                    >
+                      {playingId === voice.id ? (
+                        <Pause className="size-3.5 text-primary" />
+                      ) : (
+                        <Play className="size-3.5 text-muted-foreground" />
+                      )}
+                    </button>
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+        </ScrollArea>
+      </div>
     </div>
   );
 }

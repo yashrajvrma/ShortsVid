@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -29,20 +29,40 @@ function MusicItem({
   audioUrl,
   isSelected,
   onSelect,
+  stopSignal,
 }: {
   id: string;
   name: string;
   audioUrl?: string;
   isSelected: boolean;
   onSelect: () => void;
+  /** Increment this from the parent to force-stop playback */
+  stopSignal: number;
 }) {
   const [playing, setPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Stop playback whenever parent increments stopSignal (modal close)
+  useEffect(() => {
+    if (stopSignal > 0) {
+      audioRef.current?.pause();
+      audioRef.current = null;
+      setPlaying(false);
+    }
+  }, [stopSignal]);
+
+  // Also stop when component unmounts (tab switch / modal unmount)
+  useEffect(() => {
+    return () => {
+      audioRef.current?.pause();
+    };
+  }, []);
 
   const handlePlay = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (playing) {
       audioRef.current?.pause();
+      audioRef.current = null;
       setPlaying(false);
       return;
     }
@@ -59,19 +79,19 @@ function MusicItem({
     <button
       type="button"
       onClick={onSelect}
-      className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all duration-150 text-left w-full ${
+      className={`flex items-center gap-3 font-sans font-medium rounded-xl px-3 py-2.5 transition-all duration-150 text-left w-full ${
         isSelected
-          ? "bg-primary text-primary-foreground"
+          ? "bg-secondary text-secondary-foreground border border-primary/30"
           : "hover:bg-muted/60 bg-transparent"
       }`}
     >
       <div
-        className="size-10 shrink-0 rounded-xl overflow-hidden border border-border bg-muted cursor-pointer max:[w-50px]"
+        className="size-10 shrink-0 rounded-xl overflow-hidden border border-border bg-muted cursor-pointer"
         onClick={handlePlay}
       >
         <img src={getDicebearUrl(name)} alt={name} className="size-full" />
       </div>
-      <span className="text-sm font-medium truncate  flex-1">{name}</span>
+      <span className="text-sm font-medium truncate flex-1">{name}</span>
       {audioUrl && (
         <button
           type="button"
@@ -100,19 +120,27 @@ export function BgMusicModal({
     trpc.stocks.getAllBackgroundMusic.queryOptions(),
   );
 
+  // Incrementing this tells every MusicItem to stop playback
+  const [stopSignal, setStopSignal] = useState(0);
+
+  const handleClose = () => {
+    setStopSignal((s) => s + 1);
+    onClose();
+  };
+
   const systemMusic = data?.systemMusic ?? [];
   const userMusic = data?.userMusic ?? [];
 
   return (
     <AlertDialog open={open}>
-      <AlertDialogContent className="sm:min-w-2xl min-w-2xl p-0 overflow-hidden">
+      <AlertDialogContent className="sm:min-w-2xl p-0 overflow-hidden sm:my-0 my-5">
         <AlertDialogHeader className="px-6 pt-4">
           <div className="flex items-center justify-between w-full">
             <AlertDialogTitle className="text-lg font-medium">
               Choose background music
             </AlertDialogTitle>
             <AlertDialogCancel
-              onClick={onClose}
+              onClick={handleClose}
               className="size-8 p-0 rounded-full border-none shadow-none hover:bg-muted"
             >
               <X className="size-4" />
@@ -140,18 +168,18 @@ export function BgMusicModal({
                   Loading music…
                 </div>
               ) : (
-                <div className="grid grid-cols-3 gap-1.5">
+                <div className="grid sm:grid-cols-3 gap-1.5">
                   {/* No Sound option */}
                   <button
                     type="button"
                     onClick={() => onSelect(null)}
-                    className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all text-left ${
+                    className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all text-left font-medium ${
                       selectedMusicId === null
-                        ? "bg-primary text-primary-foreground"
+                        ? "bg-secondary text-secondary-foreground border border-primary/30"
                         : "hover:bg-muted/60"
                     }`}
                   >
-                    <div className="size-10 rounded-xl flex items-center justify-center bg-muted shrink-0">
+                    <div className="size-8 rounded-xl flex items-center justify-center bg-muted shrink-0">
                       <X className="size-5 text-muted-foreground" />
                     </div>
                     <span className="text-sm font-medium">No Sound</span>
@@ -165,6 +193,7 @@ export function BgMusicModal({
                       audioUrl={music.musicUrl ?? undefined}
                       isSelected={selectedMusicId === music.id}
                       onSelect={() => onSelect(music.id)}
+                      stopSignal={stopSignal}
                     />
                   ))}
 
@@ -182,6 +211,7 @@ export function BgMusicModal({
           <TabsContent value="uploaded" className="mt-0">
             <div className="px-6 py-4 space-y-4">
               <Button variant="outline" className="w-full gap-2">
+                {/* TODO : Implement upload flow */}
                 <Upload className="size-4" />
                 Upload Music
               </Button>
@@ -201,6 +231,7 @@ export function BgMusicModal({
                         audioUrl={music.musicUrl ?? undefined}
                         isSelected={selectedMusicId === music.id}
                         onSelect={() => onSelect(music.id)}
+                        stopSignal={stopSignal}
                       />
                     ))}
                   </div>

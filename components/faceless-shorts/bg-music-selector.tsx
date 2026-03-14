@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { BgMusicModal } from "./bg-music-modal";
-import { Music2 } from "lucide-react";
+import { Music2, VolumeX } from "lucide-react";
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
 import { getDicebearUrl } from "@/lib/utils";
@@ -22,14 +22,19 @@ export function BgMusicSelector({
 
   const { data } = useQuery(trpc.stocks.getAllBackgroundMusic.queryOptions());
 
-  const selectedMusicName = useMemo(() => {
+  const selectedMusic = useMemo(() => {
     if (!selectedMusicId) return null;
-    if (!data) return "Loading...";
-
+    if (!data) return null;
     const allMusic = [...(data.systemMusic ?? []), ...(data.userMusic ?? [])];
-    const found = allMusic.find((m) => m.id === selectedMusicId);
-    return found ? found.name : "Music selected";
+    return allMusic.find((m) => m.id === selectedMusicId) ?? null;
   }, [selectedMusicId, data]);
+
+  // Three states:
+  //   selectedMusicId === undefined  → nothing chosen yet (initial)
+  //   selectedMusicId === null       → user explicitly chose "No Sound"
+  //   selectedMusicId === string     → a track is selected
+  const hasChosen = selectedMusicId !== undefined;
+  const noSoundChosen = hasChosen && selectedMusicId === null;
 
   return (
     <div className="space-y-2">
@@ -39,26 +44,40 @@ export function BgMusicSelector({
       <Button
         type="button"
         variant="outline"
-        className="w-full justify-start mt-2 h-10"
+        className="w-full justify-start mt-2 h-10 rounded-lg gap-2"
         onClick={() => setOpen(true)}
       >
-        <Music2 className="size-4 text-muted-foreground" />
-        {selectedMusicId ? (
-          <div className="flex items-center text-foreground gap-x-2">
-            <div
-              className="size-6 shrink-0 rounded-xl overflow-hidden border border-border bg-muted cursor-pointer"
-              // onClick={handlePlay}
-            >
+        {noSoundChosen ? (
+          // User picked "No Sound"
+          <>
+            <VolumeX className="size-5 text-muted-foreground shrink-0" />
+            <span className="text-foreground text-md font-medium">
+              No Music
+            </span>
+          </>
+        ) : selectedMusic ? (
+          // A real track is selected
+          <>
+            {/* <Music2 className="size-4 text-muted-foreground shrink-0" /> */}
+            <div className="size-6 shrink-0 rounded-md overflow-hidden border border-border bg-muted">
               <img
-                src={getDicebearUrl(selectedMusicName!)}
-                // alt={name}
+                src={getDicebearUrl(selectedMusic.name)}
+                alt={selectedMusic.name}
                 className="size-full"
               />
             </div>
-            {selectedMusicName}
-          </div>
+            <span className="truncate text-foreground text-sm font-medium">
+              {selectedMusic.name}
+            </span>
+          </>
         ) : (
-          <span className="text-muted-foreground">Choose background music</span>
+          // Nothing chosen yet
+          <>
+            <Music2 className="size-4 text-muted-foreground shrink-0" />
+            <span className="text-muted-foreground">
+              Choose background music
+            </span>
+          </>
         )}
       </Button>
 

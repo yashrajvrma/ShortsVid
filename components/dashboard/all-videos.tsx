@@ -14,7 +14,7 @@ export default function AllVideos() {
   return (
     <div className="flex flex-col gap-4 h-screen w-full">
       <h1 className="text-xl font-medium tracking-tight">All Videos</h1>
-      <div className="flex flex-wrap items-center gap-x-4">
+      <div className="flex flex-wrap items-center gap-4">
         {isLoading ? (
           <p>Loading...</p>
         ) : (
