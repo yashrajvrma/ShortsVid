@@ -80,7 +80,7 @@ export function VoiceSelector({
 
       {/* Voice List */}
       <div>
-        <ScrollArea className="h-[200px] rounded-lg border border-border">
+        <ScrollArea className="[&>div>div[style]]:!block h-[200px] rounded-lg border border-border">
           {isLoading ? (
             <div className="flex items-center justify-center h-full py-8">
               <div className="text-muted-foreground text-sm">
@@ -94,7 +94,7 @@ export function VoiceSelector({
               </div>
             </div>
           ) : (
-            <div className="p-2 space-y-1">
+            <div className="p-1 space-y-1 w-full">
               {voices.map((voice) => (
                 <button
                   key={voice.id}
@@ -122,13 +122,13 @@ export function VoiceSelector({
                       {voice.description}
                     </p>
                   )} */}
-                    <Badge
-                      variant="secondary"
-                      className="text-xs capitalize shrink-0"
-                    >
-                      {voice.gender}
-                    </Badge>
                   </div>
+                  <Badge
+                    variant="secondary"
+                    className="text-xs capitalize shrink-0"
+                  >
+                    {voice.gender}
+                  </Badge>
 
                   {/* Play button */}
                   {voice.audioUrl && (

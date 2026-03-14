@@ -102,13 +102,13 @@ export default function FacelessShorts() {
       </Header>
       {/* ── Main card ───────────────────────────────────────────────────── */}
       <Card
-        className="flex-1 min-h-0 overflow-hidden"
+        className="flex-1 min-h-0 overflow-hidden p-0"
         style={{ display: "flex", flexDirection: "row" }}
       >
         {/* ── LEFT  65% ─────────────────────────────────────────────────── */}
-        <div className="flex flex-col min-h-0 border-r border-border lg:w-[65%] w-full min-w-0">
-          <ScrollArea className="flex-1 min-h-0 h-full">
-            <div className="p-6 space-y-4">
+        <div className="flex flex-col min-h-0 border-r border-border lg:w-[65%] w-full min-w-0 overflow-hidden">
+          <ScrollArea className="[&>div>div[style]]:!block flex-1 min-h-0 h-full overflow-y-auto overflow-x-hidden">
+            <div className="sm:p-6 p-4 space-y-4 min-w-0 overflow-hidden w-full">
               {/* 1. Language */}
               <LanguageSelector
                 value={form.languageCode}
@@ -137,7 +137,7 @@ export default function FacelessShorts() {
               />
 
               {/* 4. Voice */}
-              {/* <VoiceSelector
+              <VoiceSelector
                 languageCode={form.languageCode}
                 selectedVoiceId={form.selectedVoiceId}
                 searchQuery={form.voiceSearchQuery}
@@ -148,7 +148,7 @@ export default function FacelessShorts() {
                     form.selectedVoiceId === id ? null : id,
                   )
                 }
-              /> */}
+              />
 
               {/* 5. Background Music */}
               <BgMusicSelector
