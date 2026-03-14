@@ -16,7 +16,7 @@ export default function RemotionPlayer({
         className="border-border rounded-xl bg-neutral-300"
         component={RemotionComposition}
         durationInFrames={
-          videoData?.duration ? Math.ceil(videoData?.duration * 30) : 200
+          videoData?.duration ? Math.ceil(videoData?.duration * 30) : 1
         }
         compositionWidth={1080}
         compositionHeight={1920}
@@ -29,7 +29,9 @@ export default function RemotionPlayer({
         }}
         inputProps={{
           videoData,
-          durationInFrames: Math.ceil(videoData?.duration! * 30),
+          durationInFrames: videoData?.duration
+            ? Math.ceil(videoData?.duration * 30)
+            : 1,
         }}
       />
     </div>

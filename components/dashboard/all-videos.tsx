@@ -19,9 +19,14 @@ export default function AllVideos() {
           <p>Loading...</p>
         ) : (
           <>
-            {data?.map((video: ShortsVideo) => (
-              <RemotionPlayer key={video.id} videoData={video} />
-            ))}
+            {data?.map((video: ShortsVideo) => {
+              console.log(
+                "videos is",
+                video.id === "cmmqiz1s8000am4l9fr9w05f4" &&
+                  JSON.stringify(video),
+              );
+              return <RemotionPlayer key={video.id} videoData={video} />;
+            })}
           </>
         )}
       </div>

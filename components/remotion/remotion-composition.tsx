@@ -210,8 +210,6 @@ export default function RemotionComposition({
 
   const captionData = videoData.caption as CaptionData | null;
 
-
-
   return (
     <AbsoluteFill>
       {/* ── Images with Ken Burns zoom + light leak overlays ── */}
@@ -244,6 +242,11 @@ export default function RemotionComposition({
 
       {/* ── Voiceover audio ── */}
       {videoData?.audioUrl && <Html5Audio src={videoData.audioUrl} />}
+
+      {/* ── Background Music ── */}
+      {videoData?.backgroundMusicUrl && (
+        <Html5Audio volume={0.3} src={videoData.backgroundMusicUrl} />
+      )}
     </AbsoluteFill>
   );
 }
