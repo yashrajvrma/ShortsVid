@@ -187,7 +187,7 @@ export async function generateImageBuffer(
     model: "gpt-image-1",
     prompt: enrichedPrompt,
     size: "1024x1536", // 9:16 vertical
-    quality: "medium",
+    quality: "low",
   });
 
   if (!response.data || !response.data[0])

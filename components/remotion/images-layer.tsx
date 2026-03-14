@@ -16,7 +16,7 @@ import { LightLeak } from "@remotion/light-leaks";
 // ─── Tweakable constants ───────────────────────────────────────────────────────
 
 const LIGHT_LEAK_FRAMES = 30; // overlay duration in frames (~1 s at 30 fps)
-const LIGHT_LEAK_OPACITY = 0.8; // 0 = invisible · 1 = full intensity
+const LIGHT_LEAK_OPACITY = 0.7; // 0 = invisible · 1 = full intensity
 
 // Change to "sfx/whoosh.mp3" if you want the whoosh instead
 const SFX_SRC = staticFile("sfx/cameraflash.mp3");
@@ -68,7 +68,7 @@ const LightLeakOverlay: React.FC<{
       width: "100%",
       // grayscale strips the warm hue → pure white flash
       // brightness boosts it → feels like a real film flare
-      filter: "grayscale(1) brightness(2)",
+      filter: "grayscale(1) brightness(0.8)",
       opacity: LIGHT_LEAK_OPACITY,
     }}
   >
@@ -100,7 +100,7 @@ export const ImagesLayer: React.FC<{
   // that occur when sequences are shorter than the transition duration.
   const transitionDuration = Math.min(
     LIGHT_LEAK_FRAMES,
-    Math.max(1, Math.floor(segmentDuration / 2))
+    Math.max(1, Math.floor(segmentDuration / 2)),
   );
 
   // Calculate the absolute frame at which each cut happens.
