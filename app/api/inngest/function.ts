@@ -8,7 +8,7 @@ import {
   type Topic,
   type VideoStyle,
 } from "@/lib/openai";
-import { generateCaptions } from "@/lib/captions";
+import { CaptionData, generateCaptions } from "@/lib/captions";
 import { uploadAudioToR2, uploadImageToR2 } from "@/lib/r2-bucket";
 
 // ─── Fish Audio Client ───────────────────────────────────────────────────────
@@ -174,15 +174,14 @@ export const generateShort = inngest.createFunction(
 
     const captionData = await step.run("generate-captions", async () => {
       return generateCaptions(audioR2Key, videoData.languageCode);
+      // ↑ no more wordsPerChunk arg needed
     });
-
-    // ── STEP 9: Persist captions + audio duration to DB ──────────────────────
 
     await step.run("save-captions-to-db", async () => {
       await prisma.video.update({
         where: { id: videoId },
         data: {
-          caption: captionData as any, // Prisma Json field
+          caption: captionData as CaptionData,
           duration: Math.ceil(captionData.duration),
         },
       });
@@ -201,7 +200,7 @@ export const generateShort = inngest.createFunction(
       videoId,
       imageCount: imageR2Keys.length,
       audioR2Key,
-      captionSegments: captionData.segments.length,
+      caption: captionData,
       durationSeconds: captionData.duration,
     };
   },
