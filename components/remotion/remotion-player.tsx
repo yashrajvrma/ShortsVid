@@ -5,7 +5,6 @@ import RemotionComposition from "./remotion-composition";
 import { useState } from "react";
 import { ShortsVideo } from "@/types";
 
-// TODO : add the correct types for videoData from trpc router
 export default function RemotionPlayer({
   videoData,
 }: {
@@ -14,7 +13,7 @@ export default function RemotionPlayer({
   return (
     <div>
       <Player
-        className="border-border rounded-xl bg-red-400"
+        className="border-border rounded-xl bg-neutral-300"
         component={RemotionComposition}
         durationInFrames={
           videoData?.duration ? Math.ceil(videoData?.duration * 30) : 200
@@ -24,7 +23,7 @@ export default function RemotionPlayer({
         fps={30}
         controls
         style={{
-          width: "25vw",
+          // width: "vw",
           height: "55vh",
           // aspectRatio: "9/16",
         }}

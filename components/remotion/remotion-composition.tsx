@@ -116,7 +116,7 @@
 // }
 
 import { ShortsVideo } from "@/types";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { AbsoluteFill, Html5Audio, useVideoConfig } from "remotion";
 
 import { CaptionData, CaptionsLayer } from "./captions-layer";
@@ -209,6 +209,8 @@ export default function RemotionComposition({
   );
 
   const captionData = videoData.caption as CaptionData | null;
+
+
 
   return (
     <AbsoluteFill>

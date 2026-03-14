@@ -1018,16 +1018,16 @@ export const RemotionRoot: React.FC = () => {
     <>
       <Composition
         id="Empty"
-        component={RemotionComposition}
+        component={MyComposition}
         durationInFrames={Math.ceil(videoData.duration * 30)}
         fps={30}
         width={1080}
         height={1920}
-        defaultProps={{
-          // @ts-ignore
-          videoData: videoData,
-          durationInFrames: Math.ceil(videoData.duration * 30),
-        }}
+        // defaultProps={{
+        //   // @ts-ignore
+        //   videoData: videoData,
+        //   durationInFrames: Math.ceil(videoData.duration * 30),
+        // }}
       />
     </>
   );

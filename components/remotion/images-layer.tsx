@@ -86,9 +86,21 @@ export const ImagesLayer: React.FC<{
 }> = ({ imagesList, durationInFrames, lightLeakHue, lightLeakSeed }) => {
   const { fps } = useVideoConfig();
 
+  if (!imagesList || imagesList.length === 0) {
+    return null;
+  }
+
   const segmentDuration = Math.max(
     1,
     Math.floor(durationInFrames / imagesList.length),
+  );
+
+  // Prevent transition from taking more than half the segment duration.
+  // This avoids "TransitionSeries.Overlay extends before frame 0" errors
+  // that occur when sequences are shorter than the transition duration.
+  const transitionDuration = Math.min(
+    LIGHT_LEAK_FRAMES,
+    Math.max(1, Math.floor(segmentDuration / 2))
   );
 
   // Calculate the absolute frame at which each cut happens.
@@ -113,7 +125,7 @@ export const ImagesLayer: React.FC<{
             </TransitionSeries.Sequence>
 
             {index < imagesList.length - 1 && (
-              <TransitionSeries.Overlay durationInFrames={LIGHT_LEAK_FRAMES}>
+              <TransitionSeries.Overlay durationInFrames={transitionDuration}>
                 <LightLeakOverlay
                   hueShift={lightLeakHue}
                   seed={(lightLeakSeed + index) % 10}
@@ -135,13 +147,13 @@ export const ImagesLayer: React.FC<{
         <Sequence
           key={cutFrame}
           from={cutFrame}
-          durationInFrames={LIGHT_LEAK_FRAMES}
+          durationInFrames={transitionDuration}
           layout="none"
         >
           <Html5Audio
             src={SFX_SRC}
             volume={SFX_VOLUME}
-            trimAfter={LIGHT_LEAK_FRAMES}
+            trimAfter={transitionDuration}
           />
         </Sequence>
       ))}
