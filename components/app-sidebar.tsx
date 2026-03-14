@@ -170,7 +170,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <div
-              className="flex justify-start py-2 hover:bg-transparent md:block hidden"
+              className="flex justify-start py-2 hover:bg-transparent"
+              // size="lg"
+              // asChild
+              // <div
+              //   className="flex justify-start py-2 hover:bg-transparent md:block hidden"
               // size="lg"
               // asChild
             >
@@ -182,7 +186,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <span className="truncate font-medium">Acme Inc</span>
                   <span className="truncate text-xs">Enterprise</span>
                 </div> */}
-                <div className="flex text-xl font-medium leading-tight ">
+                <div className="flex text-xl font-medium leading-tight sm:px-0 px-1">
                   {/* Shorts Vid */}
                   <Image
                     src={ShortsVidLogo}
@@ -196,7 +200,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent className="gap-0 md:mt-0 mt-10">
+      <SidebarContent className="gap-0 sm:px-0 px-1">
         {/* <NavMain items={data.navMain} /> */}
         <NavProjects projects={data.projects} />
         <NavShorts shorts={data.shorts} />

@@ -2,18 +2,24 @@
 
 import { Player } from "@remotion/player";
 import RemotionComposition from "./remotion-composition";
-import { useState } from "react";
 import { ShortsVideo } from "@/types";
+import { useRouter } from "next/navigation";
 
 export default function RemotionPlayer({
   videoData,
 }: {
   videoData: ShortsVideo;
 }) {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(`/app/shorts/${videoData.id}`);
+  };
+
   return (
-    <div>
+    <div onClick={handleClick}>
       <Player
-        className="border-border rounded-xl bg-neutral-300"
+        className="border-border rounded-xl bg-neutral-300 hover:cursor-pointer"
         component={RemotionComposition}
         durationInFrames={
           videoData?.duration ? Math.ceil(videoData?.duration * 30) : 1
@@ -23,7 +29,7 @@ export default function RemotionPlayer({
         fps={30}
         // controls
         style={{
-          height: "50vh",
+          height: "40vh",
           // height: "55vh",
           // aspectRatio: "9/16",
         }}

@@ -98,7 +98,8 @@ export default function FacelessShorts() {
         </div>
       </div> */}
       <Header>
-        <div>Create Faceless Shorts</div>
+        <div className="text-xl tracking-tighter">Create Faceless Shorts</div>
+        {/* <div>hello</div> */}
       </Header>
       {/* ── Main card ───────────────────────────────────────────────────── */}
       <Card
