@@ -1,25 +1,198 @@
+// import { ShortsVideo } from "@/types";
+// import React, { useMemo } from "react";
+// import { AbsoluteFill, Html5Audio, useVideoConfig } from "remotion";
+
+// import {
+//   CaptionStyle,
+//   CAPTION_PRESETS,
+//   DEFAULT_CAPTION_STYLE,
+// } from "./caption-types";
+// import { CaptionData, CaptionsLayer } from "./captions-layer";
+// import { ImagesLayer } from "./images-layer";
+
+// // ─── Caption config resolver ───────────────────────────────────────────────────
+// // Priority:  DB captionConfig  >  preset by presetId  >  DEFAULT_CAPTION_STYLE
+// // If captionConfigId is null (no config attached to the video) → returns null
+// // and the composition skips rendering captions entirely.
+
+// function resolveCaptionStyle(
+//   captionConfig: ShortsVideo["captionConfig"],
+// ): CaptionStyle | null {
+//   // No captionConfig attached → do not render captions
+//   if (!captionConfig) return null;
+
+//   const db = captionConfig as any;
+
+//   // If the DB record carries a presetId, start from that preset's style
+//   const basePreset = db.presetId
+//     ? CAPTION_PRESETS.find((p) => p.id === db.presetId)?.style
+//     : undefined;
+
+//   const base: CaptionStyle = basePreset ?? DEFAULT_CAPTION_STYLE;
+
+//   return {
+//     ...base,
+//     // Colors
+//     textColor: db.textColor ?? base.textColor,
+//     strokeColor: db.strokeColor ?? base.strokeColor,
+//     highlightColor: db.highlightColor ?? base.highlightColor,
+//     highlightStrokeColor: db.highlightStrokeColor ?? base.highlightStrokeColor,
+//     popBackgroundColor:
+//       db.popBackgroundColor ?? db.backgroundColor ?? base.popBackgroundColor,
+//     // Effects
+//     strokeWidth: db.strokeWidth ?? base.strokeWidth,
+//     fontSize: db.fontSize ?? base.fontSize,
+//     verticalPosition: db.verticalPosition ?? base.verticalPosition,
+//     horizontalPosition: db.horizontalPosition ?? base.horizontalPosition,
+//     maxLines: db.maxLines ?? base.maxLines,
+//     maxWordsPerLine: db.maxWordsPerLine ?? base.maxWordsPerLine,
+//     shadowOffsetY: db.shadowOffsetY ?? base.shadowOffsetY,
+//     shadowBlur: db.shadowBlur ?? base.shadowBlur,
+//     // Typography
+//     fontFamily: db.fontType ?? db.fontFamily ?? base.fontFamily,
+//     fontWeight: db.fontWeight ?? base.fontWeight,
+//     textTransform: db.textTransform ?? base.textTransform,
+//     letterSpacing: db.letterSpacing ?? base.letterSpacing,
+//     // Animation
+//     animationPreset: db.animationPreset ?? base.animationPreset,
+//     // Light leak
+//     lightLeakHue: db.lightLeakHue ?? base.lightLeakHue,
+//     lightLeakSeed: db.lightLeakSeed ?? base.lightLeakSeed,
+//   };
+// }
+
+// // ─── Root Composition ─────────────────────────────────────────────────────────
+
+// export default function RemotionComposition({
+//   videoData,
+//   durationInFrames,
+// }: {
+//   videoData: ShortsVideo;
+//   durationInFrames: number;
+// }) {
+//   const { width, height } = useVideoConfig();
+
+//   const captionStyle = useMemo(
+//     () => resolveCaptionStyle(videoData.captionConfig),
+//     [videoData.captionConfig],
+//   );
+
+//   const captionData = videoData.caption as CaptionData | null;
+
+//   return (
+//     <AbsoluteFill>
+//       {/* ── Images with Ken Burns zoom + light leak overlays ── */}
+//       <ImagesLayer
+//         imagesList={videoData.imagesUrl}
+//         durationInFrames={durationInFrames}
+//         lightLeakHue={
+//           captionStyle?.lightLeakHue ?? DEFAULT_CAPTION_STYLE.lightLeakHue
+//         }
+//         lightLeakSeed={
+//           captionStyle?.lightLeakSeed ?? DEFAULT_CAPTION_STYLE.lightLeakSeed
+//         }
+//       />
+
+//       {/*
+//         ── Captions ──
+//         Rendered ONLY when:
+//           • captionStyle is non-null (captionConfig exists on the video)
+//           • captionData has words
+//       */}
+//       {captionStyle && captionData && captionData.words.length > 0 && (
+//         <CaptionsLayer
+//           captionData={captionData}
+//           style={captionStyle}
+//           totalDurationInFrames={durationInFrames}
+//           canvasWidth={width}
+//           canvasHeight={height}
+//         />
+//       )}
+
+//       {/* ── Voiceover audio ── */}
+//       {videoData?.audioUrl && <Html5Audio src={videoData.audioUrl} />}
+//     </AbsoluteFill>
+//   );
+// }
+
 import { ShortsVideo } from "@/types";
-import { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
+import { AbsoluteFill, Html5Audio, useVideoConfig } from "remotion";
+
+import { CaptionData, CaptionsLayer } from "./captions-layer";
+import { ImagesLayer } from "./images-layer";
 import {
-  AbsoluteFill,
-  Html5Audio,
-  Img,
-  interpolate,
-  Sequence,
-  useCurrentFrame,
-  useVideoConfig,
-} from "remotion";
+  CAPTION_PRESETS,
+  CaptionStyle,
+  DEFAULT_CAPTION_STYLE,
+} from "./caption-types";
 
-interface CaptionWord {
-  word: string;
-  start: number;
-  end: number;
+// ─── DEV TESTING ──────────────────────────────────────────────────────────────
+// Set this to any preset id from caption-types.ts to force that style in the
+// Remotion Studio preview, regardless of what videoData.captionConfig contains.
+// Set to null to use the real captionConfig from videoData (production mode).
+//
+// Available preset ids: "viral-green" | "purple-pill" | "comic-bold" |
+//                        "minimal-clean" | "tiktok-yellow" | "neon-glow" | "storyteller"
+const DEV_PRESET_ID: string | null = "purple-pill";
+
+// ─── Caption config resolver ───────────────────────────────────────────────────
+// Priority:  DEV_PRESET_ID (dev only)  >  DB captionConfig  >  DEFAULT_CAPTION_STYLE
+// If captionConfigId is null and DEV_PRESET_ID is null → captions are skipped.
+
+function resolveCaptionStyle(
+  captionConfig: ShortsVideo["captionConfig"],
+): CaptionStyle | null {
+  // DEV override — short-circuits everything when set
+  if (DEV_PRESET_ID !== null) {
+    const preset = CAPTION_PRESETS.find((p) => p.id === DEV_PRESET_ID);
+    if (preset) return preset.style;
+  }
+
+  // No captionConfig attached → do not render captions
+  if (!captionConfig) return null;
+
+  const db = captionConfig as any;
+
+  // If the DB record carries a presetId, start from that preset's style
+  const basePreset = db.presetId
+    ? CAPTION_PRESETS.find((p) => p.id === db.presetId)?.style
+    : undefined;
+
+  const base: CaptionStyle = basePreset ?? DEFAULT_CAPTION_STYLE;
+
+  return {
+    ...base,
+    // Colors
+    textColor: db.textColor ?? base.textColor,
+    strokeColor: db.strokeColor ?? base.strokeColor,
+    highlightColor: db.highlightColor ?? base.highlightColor,
+    highlightStrokeColor: db.highlightStrokeColor ?? base.highlightStrokeColor,
+    popBackgroundColor:
+      db.popBackgroundColor ?? db.backgroundColor ?? base.popBackgroundColor,
+    // Effects
+    strokeWidth: db.strokeWidth ?? base.strokeWidth,
+    fontSize: db.fontSize ?? base.fontSize,
+    verticalPosition: db.verticalPosition ?? base.verticalPosition,
+    horizontalPosition: db.horizontalPosition ?? base.horizontalPosition,
+    maxLines: db.maxLines ?? base.maxLines,
+    maxWordsPerLine: db.maxWordsPerLine ?? base.maxWordsPerLine,
+    shadowOffsetY: db.shadowOffsetY ?? base.shadowOffsetY,
+    shadowBlur: db.shadowBlur ?? base.shadowBlur,
+    // Typography
+    fontFamily: db.fontType ?? db.fontFamily ?? base.fontFamily,
+    fontWeight: db.fontWeight ?? base.fontWeight,
+    textTransform: db.textTransform ?? base.textTransform,
+    letterSpacing: db.letterSpacing ?? base.letterSpacing,
+    // Animation
+    animationPreset: db.animationPreset ?? base.animationPreset,
+    // Light leak
+    lightLeakHue: db.lightLeakHue ?? base.lightLeakHue,
+    lightLeakSeed: db.lightLeakSeed ?? base.lightLeakSeed,
+  };
 }
 
-interface CaptionData {
-  words: CaptionWord[];
-  duration: number;
-}
+// ─── Root Composition ─────────────────────────────────────────────────────────
 
 export default function RemotionComposition({
   videoData,
@@ -28,133 +201,47 @@ export default function RemotionComposition({
   videoData: ShortsVideo;
   durationInFrames: number;
 }) {
-  const { fps } = useVideoConfig();
-  const frame = useCurrentFrame();
+  const { width, height } = useVideoConfig();
+
+  const captionStyle = useMemo(
+    () => resolveCaptionStyle(videoData.captionConfig),
+    [videoData.captionConfig],
+  );
 
   const captionData = videoData.caption as CaptionData | null;
-  const captionConfig = videoData.captionConfig;
-
-  // const durationInFrames = useMemo(() => {
-  //   if (!captionData?.duration) return 0;
-  //   return Math.ceil(captionData.duration * fps);
-  // }, [captionData?.duration, fps]);
-
-  // useEffect(() => {
-  //   if (durationInFrames > 0) {
-  //     setDurationInFrames(durationInFrames);
-  //   }
-  // }, [durationInFrames]);
-
-  const currentCaptionWords = useMemo(() => {
-    if (!captionData?.words) return [];
-    const currentTime = frame / fps;
-    return captionData.words.filter(
-      (word) => currentTime >= word.start && currentTime <= word.end,
-    );
-  }, [captionData?.words, frame, fps]);
-
-  const imagesList = videoData.imagesUrl;
 
   return (
-    <div>
-      {/* Images layer */}
-      <AbsoluteFill>
-        {imagesList.map((image, index) => {
-          const startFrame = (index * durationInFrames) / imagesList.length;
-          const segmentDuration = durationInFrames / imagesList.length;
+    <AbsoluteFill>
+      {/* ── Images with Ken Burns zoom + light leak overlays ── */}
+      <ImagesLayer
+        imagesList={videoData.imagesUrl}
+        durationInFrames={durationInFrames}
+        lightLeakHue={
+          captionStyle?.lightLeakHue ?? DEFAULT_CAPTION_STYLE.lightLeakHue
+        }
+        lightLeakSeed={
+          captionStyle?.lightLeakSeed ?? DEFAULT_CAPTION_STYLE.lightLeakSeed
+        }
+      />
 
-          const scale = interpolate(
-            frame,
-            [
-              startFrame,
-              startFrame + segmentDuration / 2,
-              startFrame + segmentDuration,
-            ],
-            index % 2 === 0 ? [1, 1.2, 1] : [1.2, 1, 1.2],
-            { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
-          );
+      {/*
+        ── Captions ──
+        Rendered ONLY when:
+          • captionStyle is non-null (captionConfig exists on the video)
+          • captionData has words
+      */}
+      {captionStyle && captionData && captionData?.words?.length > 0 && (
+        <CaptionsLayer
+          captionData={captionData}
+          style={captionStyle}
+          totalDurationInFrames={durationInFrames}
+          canvasWidth={width}
+          canvasHeight={height}
+        />
+      )}
 
-          return (
-            <Sequence
-              key={index}
-              from={startFrame}
-              durationInFrames={segmentDuration}
-            >
-              <AbsoluteFill>
-                <Img
-                  src={image}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    transform: `scale(${scale})`,
-                  }}
-                />
-              </AbsoluteFill>
-            </Sequence>
-          );
-        })}
-      </AbsoluteFill>
-
-      {/* Caption overlay — pinned to bottom */}
-      <AbsoluteFill
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-end",
-          alignItems: "center",
-          paddingBottom: 100,
-        }}
-      >
-        {currentCaptionWords.length > 0 && (
-          <div
-            style={{
-              backgroundColor:
-                captionConfig?.backgroundColor ?? "rgba(0,0,0,0.6)",
-              borderRadius: 8,
-              padding: "6px 20px",
-              maxWidth: "85%",
-              textAlign: "center",
-              // Stroke effect via text-shadow layers
-              // WebkitTextStroke: captionConfig
-              //   ? `${captionConfig.strokeWidth}px ${captionConfig.strokeColor}`
-              //   : "1px rgba(0,0,0,0.8)",
-            }}
-          >
-            <span
-              style={{
-                textDecorationColor: captionConfig?.textColor ?? "white",
-                fontSize: captionConfig?.fontSize ?? 36,
-                fontFamily: captionConfig?.fontType ?? "sans-serif",
-                fontWeight: "bold",
-                textShadow: captionConfig
-                  ? `0 2px 6px ${captionConfig.strokeColor}`
-                  : "0 2px 4px rgba(0,0,0,0.8)",
-                lineHeight: 1.3,
-              }}
-            >
-              {currentCaptionWords.map((word, i) => (
-                <span
-                  key={i}
-                  style={{
-                    // Highlight the most recent (last) word in the group
-                    color:
-                      i === currentCaptionWords.length - 1 &&
-                      captionConfig?.textColor
-                        ? captionConfig.textColor
-                        : (captionConfig?.highlightColor ?? "white"),
-                  }}
-                >
-                  {word.word}
-                  {i < currentCaptionWords.length - 1 ? " " : ""}
-                </span>
-              ))}
-            </span>
-          </div>
-        )}
-      </AbsoluteFill>
-
+      {/* ── Voiceover audio ── */}
       {videoData?.audioUrl && <Html5Audio src={videoData.audioUrl} />}
-    </div>
+    </AbsoluteFill>
   );
 }
