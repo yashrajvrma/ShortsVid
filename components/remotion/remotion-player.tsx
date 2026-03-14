@@ -11,14 +11,14 @@ export default function RemotionPlayer({
 }: {
   videoData: ShortsVideo;
 }) {
-  const [durationInFrames, setDurationInFrames] = useState<number>(100);
-
   return (
     <div>
       <Player
         className="border-border rounded-xl bg-red-400"
         component={RemotionComposition}
-        durationInFrames={durationInFrames}
+        durationInFrames={
+          videoData?.duration ? Math.ceil(videoData?.duration * 30) : 200
+        }
         compositionWidth={1080}
         compositionHeight={1920}
         fps={30}
@@ -30,8 +30,7 @@ export default function RemotionPlayer({
         }}
         inputProps={{
           videoData,
-          setDurationInFrames: (duration: number) =>
-            setDurationInFrames(duration),
+          durationInFrames: Math.ceil(videoData?.duration! * 30),
         }}
       />
     </div>

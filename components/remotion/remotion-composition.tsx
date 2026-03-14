@@ -23,10 +23,10 @@ interface CaptionData {
 
 export default function RemotionComposition({
   videoData,
-  setDurationInFrames,
+  durationInFrames,
 }: {
   videoData: ShortsVideo;
-  setDurationInFrames: (duration: number) => void;
+  durationInFrames: number;
 }) {
   const { fps } = useVideoConfig();
   const frame = useCurrentFrame();
@@ -34,16 +34,16 @@ export default function RemotionComposition({
   const captionData = videoData.caption as CaptionData | null;
   const captionConfig = videoData.captionConfig;
 
-  const durationInFrames = useMemo(() => {
-    if (!captionData?.duration) return 0;
-    return Math.ceil(captionData.duration * fps);
-  }, [captionData?.duration, fps]);
+  // const durationInFrames = useMemo(() => {
+  //   if (!captionData?.duration) return 0;
+  //   return Math.ceil(captionData.duration * fps);
+  // }, [captionData?.duration, fps]);
 
-  useEffect(() => {
-    if (durationInFrames > 0) {
-      setDurationInFrames(durationInFrames);
-    }
-  }, [durationInFrames]);
+  // useEffect(() => {
+  //   if (durationInFrames > 0) {
+  //     setDurationInFrames(durationInFrames);
+  //   }
+  // }, [durationInFrames]);
 
   const currentCaptionWords = useMemo(() => {
     if (!captionData?.words) return [];
@@ -70,7 +70,7 @@ export default function RemotionComposition({
               startFrame + segmentDuration / 2,
               startFrame + segmentDuration,
             ],
-            index % 2 === 0 ? [1, 1.8, 1] : [1.8, 1, 1.8],
+            index % 2 === 0 ? [1, 1.2, 1] : [1.2, 1, 1.2],
             { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
           );
 
