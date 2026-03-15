@@ -149,7 +149,7 @@ ${fullScript}
 Analyse the script and generate image scene prompts (one per distinct fact, idea, or beat). Do NOT group multiple facts into a single scene.`;
 
   const response = await openai.responses.parse({
-    model: "gpt-4o-2024-08-06",
+    model: "gpt-4o-mini",
     input: [
       { role: "system", content: systemPrompt },
       { role: "user", content: userPrompt },

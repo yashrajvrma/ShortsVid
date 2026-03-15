@@ -40,7 +40,7 @@ const ANIM_CSS = `
   0%   { opacity: 0; }
   100% { opacity: 1; }
 }
-@keyframes caption-slide-up {
+@keyframes caption-slide {
   0%   { transform: translateY(14px); opacity: 0; }
   100% { transform: translateY(0);    opacity: 1; }
 }
@@ -114,8 +114,8 @@ function CaptionOverlay({ style }: { style: CaptionStyle }) {
       ? "caption-pop"
       : style.animationPreset === "fade"
         ? "caption-fade"
-        : style.animationPreset === "slide-up"
-          ? "caption-slide-up"
+        : style.animationPreset === "slide"
+          ? "caption-slide"
           : "none";
 
   return (

@@ -88,7 +88,7 @@ const CaptionGroupRenderer: React.FC<{
         }),
       };
       break;
-    case "slide-up":
+    case "slide":
       entranceStyle = {
         transform: `translateY(${interpolate(entranceProgress, [0, 1], [50, 0])}px)`,
         opacity: interpolate(entranceProgress, [0, 1], [0, 1]),

@@ -37,21 +37,50 @@ export const videoRouter = createTRPCRouter({
           "PIXEL_ART",
           "COLORFUL_COMICS",
         ]),
+
+        // ── Caption ──────────────────────────────────────────────────────────
+        captionsEnabled: z.boolean().default(true),
         captionConfig: z.object({
-          fontType: z.string(),
-          fontSize: z.number(),
+          // Colors
           textColor: z.string(),
-          backgroundColor: z.string(),
           strokeColor: z.string(),
-          strokeWidth: z.number(),
           highlightColor: z.string(),
+          highlightStrokeColor: z.string(),
+          popBackgroundColor: z.string(),
+
+          // Effects — strokeWidth/shadow/fontSize/letterSpacing can be decimals
+          strokeWidth: z.number(),
+          fontSize: z.number(),
+          verticalPosition: z.number().int(),
+          horizontalPosition: z.number().int(),
+          maxLines: z.number().int(),
+          maxWordsPerLine: z.number().int(),
+          shadowOffsetY: z.number(),
+          shadowBlur: z.number(),
+
+          // Typography
+          fontFamily: z.string(),
+          fontWeight: z.string(),
+          textTransform: z.enum([
+            "uppercase",
+            "lowercase",
+            "capitalize",
+            "none",
+          ]),
+          letterSpacing: z.number(),
+
+          animationPreset: z.enum(["pop", "fade", "slide", "none"]),
+
+          // Light leak
+          lightLeakHue: z.number().int(),
+          lightLeakSeed: z.number().int(),
         }),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       const { userId } = ctx;
 
-      // 1. Validate if voice exists
+      // 1. Validate voice exists
       const voice = await prisma.voice.findUnique({
         where: { id: input.voiceId },
       });
@@ -63,7 +92,7 @@ export const videoRouter = createTRPCRouter({
         });
       }
 
-      // 2. Validate if music exists (if provided)
+      // 2. Validate music exists (if provided)
       if (input.musicId) {
         const music = await prisma.stock.findUnique({
           where: { id: input.musicId, stockType: "MUSIC" },
@@ -77,6 +106,7 @@ export const videoRouter = createTRPCRouter({
         }
       }
 
+      // 3. Extra server-side script length guard
       if (input.script.length > 1200) {
         throw new TRPCError({
           code: "BAD_REQUEST",
@@ -85,13 +115,13 @@ export const videoRouter = createTRPCRouter({
         });
       }
 
-      // 3. Create the script, caption config, and video in a transaction
-      // Split the script by double newline for paragraphs
+      // 4. Split script into paragraphs
       const paragraphs = input.script
         .split("\n\n")
         .map((p) => p.trim())
         .filter((p) => p.length > 0);
 
+      // 5. Transaction — create script, optionally caption config, then video
       const video = await prisma.$transaction(async (tx) => {
         // Create script
         const script = await tx.script.create({
@@ -105,14 +135,48 @@ export const videoRouter = createTRPCRouter({
           },
         });
 
-        // Create caption config
-        const captionConfig = await tx.captionConfig.create({
-          data: {
-            ...input.captionConfig,
-          },
-        });
+        // Only create a CaptionConfig row when captions are enabled
+        let captionConfigId: string | null = null;
 
-        // Create video
+        if (input.captionsEnabled) {
+          const captionConfig = await tx.captionConfig.create({
+            data: {
+              // Colors
+              textColor: input.captionConfig.textColor,
+              strokeColor: input.captionConfig.strokeColor,
+              highlightColor: input.captionConfig.highlightColor,
+              highlightStrokeColor: input.captionConfig.highlightStrokeColor,
+              popBackgroundColor: input.captionConfig.popBackgroundColor,
+
+              // Effects
+              strokeWidth: input.captionConfig.strokeWidth,
+              fontSize: input.captionConfig.fontSize,
+              verticalPosition: input.captionConfig.verticalPosition,
+              horizontalPosition: input.captionConfig.horizontalPosition,
+              maxLines: input.captionConfig.maxLines,
+              maxWordsPerLine: input.captionConfig.maxWordsPerLine,
+              shadowOffsetY: input.captionConfig.shadowOffsetY,
+              shadowBlur: input.captionConfig.shadowBlur,
+
+              // Typography
+              fontFamily: input.captionConfig.fontFamily,
+              fontWeight: input.captionConfig.fontWeight,
+              textTransform: input.captionConfig.textTransform,
+              letterSpacing: input.captionConfig.letterSpacing,
+
+              // Animation
+              animationPreset: input.captionConfig.animationPreset,
+
+              // Light leak
+              lightLeakHue: input.captionConfig.lightLeakHue,
+              lightLeakSeed: input.captionConfig.lightLeakSeed,
+            },
+          });
+
+          captionConfigId = captionConfig.id;
+        }
+
+        // Create video — captionConfigId is null when captions are disabled
         return tx.video.create({
           data: {
             userId,
@@ -120,13 +184,13 @@ export const videoRouter = createTRPCRouter({
             status: "PROCESSING",
             scriptId: script.id,
             voiceId: input.voiceId,
-            captionConfigId: captionConfig.id,
+            captionConfigId: captionConfigId,
             backgroundMusicId: input.musicId ?? null,
           },
         });
       });
 
-      // 4. Trigger Inngest workflow
+      // 6. Trigger Inngest workflow
       await inngest.send({
         name: "shorts/generate",
         data: {

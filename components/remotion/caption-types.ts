@@ -52,7 +52,7 @@ export interface CaptionStyle {
   letterSpacing: number;
 
   // ── Entrance animation ───────────────────────────────────────────────────────
-  animationPreset: "pop" | "fade" | "slide-up" | "none";
+  animationPreset: "pop" | "fade" | "slide" | "none";
 
   // ── Light leak ───────────────────────────────────────────────────────────────
   /**
@@ -305,11 +305,11 @@ export const CAPTION_PRESETS: CaptionPreset[] = [
     },
   },
 
-  // ── 7. Slide-up storytelling style ──────────────────────────────────────
+  // ── 7. Slide storytelling style ──────────────────────────────────────
   {
     id: "storyteller",
     name: "Storyteller",
-    description: "Slide-up entrance, orange highlight — warm & narrative",
+    description: "Slide entrance, orange highlight — warm & narrative",
     style: {
       textColor: "#FFFFFF",
       strokeColor: "#2a1a00",
@@ -331,7 +331,7 @@ export const CAPTION_PRESETS: CaptionPreset[] = [
       textTransform: "none",
       letterSpacing: 0,
 
-      animationPreset: "slide-up",
+      animationPreset: "slide",
       lightLeakHue: 30,
       lightLeakSeed: 5,
     },

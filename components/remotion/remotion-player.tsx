@@ -17,7 +17,9 @@ export default function RemotionPlayer({
   };
 
   return (
-    <div onClick={handleClick}>
+    <div
+    // onClick={handleClick}
+    >
       <Player
         className="border-border rounded-xl bg-neutral-300 hover:cursor-pointer"
         component={RemotionComposition}
@@ -27,7 +29,7 @@ export default function RemotionPlayer({
         compositionWidth={1080}
         compositionHeight={1920}
         fps={30}
-        // controls
+        controls
         style={{
           height: "40vh",
           // height: "55vh",

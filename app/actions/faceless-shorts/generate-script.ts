@@ -78,7 +78,7 @@ Creative direction: ${prompt}`;
 
     // ── Call OpenAI ───────────────────────────────────────────────────────
     const completion = await openAi.chat.completions.create({
-      model: "gpt-4o",
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",

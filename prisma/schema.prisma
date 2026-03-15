@@ -234,21 +234,56 @@ model Video {
   @@map("video")
 }
 
+enum TextTransform {
+  uppercase
+  lowercase
+  capitalize
+  none
+}
+
+enum AnimationPreset {
+  pop
+  fade
+  slide
+  none
+}
+
 model CaptionConfig {
   id String @id @default(cuid())
 
   name String?
 
-  fontType String
-  fontSize Int
+  // ── Colors ─────────────────────────────────────────────────────────────────
+  textColor            String
+  strokeColor          String
+  highlightColor       String
+  highlightStrokeColor String
+  popBackgroundColor   String
 
-  textColor       String
-  backgroundColor String
+  // ── Effects — positions/counts are Int, stroke/shadow/font/spacing are Float
+  strokeWidth        Float
+  fontSize           Float
+  verticalPosition   Int
+  horizontalPosition Int
+  maxLines           Int
+  maxWordsPerLine    Int
+  shadowOffsetY      Float
+  shadowBlur         Float
 
-  strokeColor    String
-  strokeWidth    Int
-  highlightColor String
+  // ── Typography ─────────────────────────────────────────────────────────────
+  fontFamily    String
+  fontWeight    String
+  textTransform TextTransform
+  letterSpacing Float
 
+  // ── Animation ──────────────────────────────────────────────────────────────
+  animationPreset AnimationPreset
+
+  // ── Light Leak ─────────────────────────────────────────────────────────────
+  lightLeakHue  Int
+  lightLeakSeed Int
+
+  // ── Timestamps ─────────────────────────────────────────────────────────────
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

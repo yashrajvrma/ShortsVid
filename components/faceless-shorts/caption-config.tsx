@@ -141,7 +141,7 @@ export function CaptionConfig({
   const animationOptions = [
     { value: "pop", label: "Pop", icon: "✦" },
     { value: "fade", label: "Fade", icon: "◎" },
-    { value: "slide-up", label: "Slide Up", icon: "↑" },
+    { value: "slide", label: "Slide", icon: "↑" },
     { value: "none", label: "None", icon: "—" },
   ] as const;
 
