@@ -13,12 +13,13 @@ export default function RemotionPlayer({
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/app/shorts/${videoData.id}`);
+    router.push(`/app/videos/${videoData.id}`);
   };
 
   return (
     <div
-    // onClick={handleClick}
+      onClick={handleClick}
+      className="hover:scale-[1.02] transition-transform"
     >
       <Player
         className="border-border rounded-xl bg-neutral-300 hover:cursor-pointer"
@@ -29,7 +30,7 @@ export default function RemotionPlayer({
         compositionWidth={1080}
         compositionHeight={1920}
         fps={30}
-        controls
+        // controls
         style={{
           height: "40vh",
           // height: "55vh",

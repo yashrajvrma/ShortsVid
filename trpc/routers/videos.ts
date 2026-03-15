@@ -217,6 +217,7 @@ export const videoRouter = createTRPCRouter({
       orderBy: { createdAt: "desc" },
     });
 
+    //  TODO : only return videoUrl by rendering it into gcp and return the signed url iof vidoe instaed of images,audio and all ans show the video  the playet thats it
     const videosWithSignedUrls = await Promise.all(
       videos.map(async (video) => {
         const [
@@ -253,4 +254,58 @@ export const videoRouter = createTRPCRouter({
 
     return videosWithSignedUrls;
   }),
+  getShortsById: authProcedure
+    .input(z.object({ videoId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { userId } = ctx;
+      const { videoId } = input;
+
+      // check if videoId exist
+      const video = await prisma.video.findUnique({
+        where: { id: videoId, userId },
+        include: {
+          script: true,
+          captionConfig: true,
+          stock: true,
+          voice: true,
+        },
+      });
+
+      if (!video) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Video not found",
+        });
+      }
+
+      //  TODO : only return videoUrl by rendering it into gcp and return the signed url iof vidoe instaed of images,audio and all ans show the video  the playet thats it
+
+      if (video.status === "PROCESSING") {
+        return {
+          id: video.id,
+          status: video.status,
+          videoStyle: video.videoStyle,
+          script: {
+            languageCode: video.script?.languageCode,
+            topic: video.script?.topic,
+            content: video.script?.content,
+          },
+          voice: video.voiceId
+            ? {
+                name: video?.voice?.name,
+                languageCode: video?.voice?.languageCode,
+                gender: video?.voice?.gender,
+              }
+            : null,
+          stock: video.backgroundMusicId
+            ? {
+                name: video.stock?.name,
+                stockType: video.stock?.stockType,
+              }
+            : null,
+          videoUrl: null,
+        };
+      }
+      return video;
+    }),
 });

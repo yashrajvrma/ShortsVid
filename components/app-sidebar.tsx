@@ -28,6 +28,7 @@ import {
   Gamepad,
   Gamepad2Icon,
   PlusIcon,
+  Play,
 } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
 import Image from "next/image";
@@ -145,6 +146,11 @@ const data = {
       name: "Home",
       url: "/app",
       icon: <HomeIcon />,
+    },
+    {
+      name: "All Videos",
+      url: "/app/videos",
+      icon: <Play />,
     },
   ],
   shorts: [
