@@ -16,7 +16,6 @@ export default function AllVideos() {
     <div className="flex flex-col h-screen w-full">
       <Header>
         <div className="text-xl tracking-tighter">All Videos</div>
-        {/* <div>hello</div> */}
       </Header>
       <div className="flex flex-wrap items-center gap-4">
         {isLoading ? (
@@ -24,11 +23,6 @@ export default function AllVideos() {
         ) : (
           <>
             {data?.map((video: ShortsVideo) => {
-              console.log(
-                "videos is",
-                video.id === "cmmqiz1s8000am4l9fr9w05f4" &&
-                  JSON.stringify(video),
-              );
               return <RemotionPlayer key={video.id} videoData={video} />;
             })}
           </>

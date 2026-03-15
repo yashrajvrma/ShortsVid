@@ -1,3 +1,4 @@
+import { CaptionStyle } from "@/components/remotion/caption-types";
 import { AppRouter } from "@/trpc/routers/_app";
 import { inferRouterOutputs } from "@trpc/server";
 
@@ -46,13 +47,5 @@ export interface GenerateVideoRequest {
   voiceId: string | null;
   musicId: string | null;
   videoStyle: string;
-  captionConfig: {
-    fontType: string;
-    fontSize: number;
-    textColor: string;
-    backgroundColor: string;
-    strokeColor: string;
-    strokeWidth: number;
-    highlightColor: string;
-  };
+  captionConfig: CaptionStyle;
 }

@@ -1,18 +1,12 @@
+// usefacelessform.ts - Zustand store for managing the state of the faceless video creation form
 "use client";
 
 import { create } from "zustand";
 import { DURATIONS, LANGUAGES } from "@/lib/constants";
-
-// ─── Caption Config ────────────────────────────────────────────────────────────
-export interface CaptionConfigState {
-  fontType: string;
-  fontSize: number;
-  textColor: string;
-  backgroundColor: string;
-  strokeColor: string;
-  strokeWidth: number;
-  highlightColor: string;
-}
+import {
+  CaptionStyle,
+  DEFAULT_CAPTION_STYLE,
+} from "@/components/remotion/caption-types";
 
 // ─── Full Form State ──────────────────────────────────────────────────────────
 export interface FacelessFormState {
@@ -27,7 +21,7 @@ export interface FacelessFormState {
   scriptMode: "generate" | "manual";
   prompt: string;
   generatedScript: string;
-  generatedScriptLanguage: string; // track the language used when script was generated
+  generatedScriptLanguage: string;
 
   // Voice
   selectedVoiceId: string | null;
@@ -39,28 +33,19 @@ export interface FacelessFormState {
   // Video Style
   videoStyle: string;
 
-  // Caption Config
-  captionConfig: CaptionConfigState;
+  // Caption Config — now uses the full CaptionStyle type
+  captionConfig: CaptionStyle;
+  captionsEnabled: boolean;
 }
-
-const DEFAULT_CAPTION: CaptionConfigState = {
-  fontType: "bold",
-  fontSize: 48,
-  textColor: "#FFFFFF",
-  backgroundColor: "#000000",
-  strokeColor: "#000000",
-  strokeWidth: 2,
-  highlightColor: "#FF00FF",
-};
 
 export interface FacelessFormStore extends FacelessFormState {
   setField: <K extends keyof FacelessFormState>(
     key: K,
     value: FacelessFormState[K],
   ) => void;
-  setCaptionField: <K extends keyof CaptionConfigState>(
+  setCaptionField: <K extends keyof CaptionStyle>(
     key: K,
-    value: CaptionConfigState[K],
+    value: CaptionStyle[K],
   ) => void;
   setGeneratedScript: (script: string) => void;
   reset: () => void;
@@ -78,7 +63,8 @@ export const useFacelessForm = create<FacelessFormStore>((set) => ({
   voiceSearchQuery: "",
   selectedMusicId: null,
   videoStyle: "CINEMATIC",
-  captionConfig: DEFAULT_CAPTION,
+  captionConfig: DEFAULT_CAPTION_STYLE,
+  captionsEnabled: true,
 
   setField: (key, value) => set((state) => ({ ...state, [key]: value })),
 
@@ -108,7 +94,8 @@ export const useFacelessForm = create<FacelessFormStore>((set) => ({
       voiceSearchQuery: "",
       selectedMusicId: null,
       videoStyle: "CINEMATIC",
-      captionConfig: DEFAULT_CAPTION,
+      captionConfig: DEFAULT_CAPTION_STYLE,
+      captionsEnabled: true,
     }),
 }));
 
@@ -116,3 +103,6 @@ export const getIsScriptLanguageMismatch = (state: FacelessFormStore) =>
   state.generatedScript !== "" &&
   state.generatedScriptLanguage !== "" &&
   state.generatedScriptLanguage !== state.languageCode;
+
+// Re-export CaptionStyle for backward compat
+export type { CaptionStyle };

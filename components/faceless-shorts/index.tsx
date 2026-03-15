@@ -26,6 +26,7 @@ import { MockupPreview } from "./mockup-preview";
 import { ScriptSection } from "./script-section";
 import type { AppRouter } from "@/trpc/routers/_app";
 import Header from "@/components/header";
+import { CaptionStyle } from "../remotion/caption-types";
 
 export default function FacelessShorts() {
   const router = useRouter();
@@ -71,16 +72,46 @@ export default function FacelessShorts() {
       return;
     }
 
+    const { captionConfig } = form;
+
     generateVideoMutation.mutate({
       languageCode: form.languageCode,
       topic: form.topic as any,
       duration: form.duration,
       prompt: form.prompt,
       script: form.generatedScript,
-      voiceId: form.selectedVoiceId!, // TODO : remove the ! mark
+      voiceId: form.selectedVoiceId!,
       musicId: form.selectedMusicId,
       videoStyle: form.videoStyle as any,
-      captionConfig: form.captionConfig,
+      captionConfig: {
+        // ── Colors ──────────────────────────────────────────────────────
+        textColor: captionConfig.textColor,
+        strokeColor: captionConfig.strokeColor,
+        highlightColor: captionConfig.highlightColor,
+        // @ts-ignore
+        highlightStrokeColor: captionConfig.highlightStrokeColor,
+        popBackgroundColor: captionConfig.popBackgroundColor,
+        // ── Effects ─────────────────────────────────────────────────────
+        strokeWidth: captionConfig.strokeWidth,
+        fontSize: captionConfig.fontSize,
+        verticalPosition: captionConfig.verticalPosition,
+        horizontalPosition: captionConfig.horizontalPosition,
+        maxLines: captionConfig.maxLines,
+        maxWordsPerLine: captionConfig.maxWordsPerLine,
+        shadowOffsetY: captionConfig.shadowOffsetY,
+        shadowBlur: captionConfig.shadowBlur,
+        // ── Typography ───────────────────────────────────────────────────
+        fontFamily: captionConfig.fontFamily,
+        fontWeight: captionConfig.fontWeight,
+        textTransform: captionConfig.textTransform,
+        letterSpacing: captionConfig.letterSpacing,
+        // ── Animation ───────────────────────────────────────────────────
+        animationPreset: captionConfig.animationPreset,
+        // ── Light leak ───────────────────────────────────────────────────
+        lightLeakHue: captionConfig.lightLeakHue,
+        lightLeakSeed: captionConfig.lightLeakSeed,
+      } satisfies CaptionStyle,
+      captionsEnabled: form.captionsEnabled,
     });
   };
 
@@ -89,18 +120,10 @@ export default function FacelessShorts() {
       className="w-full flex flex-col font-sans"
       style={{ height: "calc(100vh - 2rem)" }}
     >
-      {/* ── Page header ─────────────────────────────────────────────────── */}
-      {/* <div className="mb-4 flex items-center gap-3 shrink-0">
-        <div>
-          <h1 className="text-xl font-semibold text-foreground">
-            Create Faceless Shorts
-          </h1>
-        </div>
-      </div> */}
       <Header>
         <div className="text-xl tracking-tighter">Create Faceless Shorts</div>
-        {/* <div>hello</div> */}
       </Header>
+
       {/* ── Main card ───────────────────────────────────────────────────── */}
       <Card
         className="flex-1 min-h-0 overflow-hidden p-0"
@@ -123,6 +146,7 @@ export default function FacelessShorts() {
                 onTopicChange={(v) => setField("topic", v)}
                 onDurationChange={(v) => setField("duration", v)}
               />
+              <Separator />
 
               {/* 3. Script */}
               <ScriptSection
@@ -136,6 +160,7 @@ export default function FacelessShorts() {
                 onPromptChange={(v) => setField("prompt", v)}
                 onGeneratedScriptChange={setGeneratedScript}
               />
+              <Separator />
 
               {/* 4. Voice */}
               <VoiceSelector
@@ -150,6 +175,7 @@ export default function FacelessShorts() {
                   )
                 }
               />
+              <Separator />
 
               {/* 5. Background Music */}
               <BgMusicSelector
@@ -165,9 +191,13 @@ export default function FacelessShorts() {
                 onSelect={(v) => setField("videoStyle", v)}
               />
 
+              <Separator />
+
               {/* 7. Caption Config */}
               <CaptionConfig
                 config={form.captionConfig}
+                captionsEnabled={form.captionsEnabled}
+                onCaptionsEnabledChange={(v) => setField("captionsEnabled", v)}
                 onChange={setCaptionField}
               />
             </div>
@@ -208,6 +238,7 @@ export default function FacelessShorts() {
           </div>
         </div>
       </Card>
+
       {/* ── Mobile generate button ─────────────────────────────────────── */}
       <div className="md:hidden mt-4 shrink-0">
         <Button

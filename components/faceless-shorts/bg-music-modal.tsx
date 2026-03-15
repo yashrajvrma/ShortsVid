@@ -148,9 +148,9 @@ export function BgMusicModal({
           </div>
         </AlertDialogHeader>
 
-        <Tabs defaultValue="templates" className="w-full">
+        <Tabs defaultValue="templates" className="w-full py-2">
           <div className="px-6">
-            <TabsList className="w-full">
+            <TabsList className="w-full min-h-10">
               <TabsTrigger value="templates" className="flex-1">
                 Templates
               </TabsTrigger>
