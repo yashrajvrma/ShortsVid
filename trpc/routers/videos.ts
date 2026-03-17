@@ -220,63 +220,25 @@ export const videoRouter = createTRPCRouter({
         status: true,
         duration: true,
         thumbnailR2ObjectKey: true,
-        // TODO : also send title of the video from script
         createdAt: true,
         updatedAt: true,
       },
     });
 
-    //  TODO : only return videoUrl by rendering it into gcp and return the signed url iof vidoe instaed of images,audio and all ans show the video  the playet thats it
-    // const videosWithSignedUrls = await Promise.all(
-    //   videos.map(async (video) => {
-    //     const [
-    //       signedImages,
-    //       signedAudio,
-    //       signedVideoUrl,
-    //       signedBackgroundMusicUrl,
-    //     ] = await Promise.all([
-    //       video.images.length > 0
-    //         ? getSignedUrlInBulk(video.images)
-    //         : Promise.resolve([] as string[]),
+    const videosWithSignedUrls = await Promise.all(
+      videos.map(async (video) => {
+        const signedThumbnailUrl = video.thumbnailR2ObjectKey
+          ? await getSignedObjectUrl(video.thumbnailR2ObjectKey)
+          : null;
 
-    //       video.audio ? getSignedAudioUrl(video.audio) : Promise.resolve(null),
+        return {
+          ...video,
+          signedThumbnailUrl,
+        };
+      }),
+    );
 
-    //       video.r2ObjectKey
-    //         ? getSignedAudioUrl(video.r2ObjectKey)
-    //         : Promise.resolve(null),
-
-    //       // Return signed URL only if backgroundMusicId exists AND stock has an r2 key
-    //       video.backgroundMusicId && video.stock?.r2ObjectKey
-    //         ? getSignedAudioUrl(video.stock.r2ObjectKey)
-    //         : Promise.resolve(null),
-    //     ]);
-
-    //     return {
-    //       id: video.id,
-    //       status: video.status,
-    //       duration: video.duration,
-    //       videoStyle: video.videoStyle,
-    //       script: {
-    //         languageCode: video.script?.languageCode,
-    //         topic: video.script?.topic,
-    //         content: video.script?.content,
-    //       },
-    //       voice: {
-    //         name: video?.voice?.name,
-    //         languageCode: video?.voice?.languageCode,
-    //         gender: video?.voice?.gender,
-    //       },
-
-    //       // ...video,
-    //       imagesUrl: signedImages,
-    //       audioUrl: signedAudio,
-    //       videoUrl: signedVideoUrl,
-    //       backgroundMusicUrl: signedBackgroundMusicUrl,
-    //     };
-    //   }),
-    // );
-
-    return videos;
+    return videosWithSignedUrls;
   }),
   // getShortsById: authProcedure
   //   .input(z.object({ videoId: z.string() }))

@@ -3,7 +3,7 @@
 import { useTRPC } from "@/trpc/client";
 import RemotionPlayer from "../remotion/remotion-player";
 import { useQuery } from "@tanstack/react-query";
-import { ShortsVideo } from "@/types";
+import { AllShorts, ShortsVideo } from "@/types";
 import Header from "../header";
 
 export default function AllVideos() {
@@ -22,7 +22,7 @@ export default function AllVideos() {
           <p>Loading...</p>
         ) : (
           <>
-            {data?.map((video: ShortsVideo) => {
+            {data?.map((video: AllShorts) => {
               return <RemotionPlayer key={video.id} videoData={video} />;
             })}
           </>
