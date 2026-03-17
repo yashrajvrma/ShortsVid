@@ -122,7 +122,9 @@ enum VoiceService {
 }
 
 enum Status {
-  PROCESSING
+  GENERATING
+  READY
+  RENDERING
   SUCCESS
   FAILED
 }
@@ -207,7 +209,7 @@ model Video {
   videoStyle VideoStyle
   duration   Int? // TODO:update the duration after the audio is generated
 
-  status Status @default(PROCESSING)
+  status Status @default(GENERATING)
 
   scriptId String @unique
   script   Script @relation(fields: [scriptId], references: [id], onDelete: Cascade)
@@ -226,7 +228,8 @@ model Video {
 
   caption Json? // caption file in json format (array of objects with text and timestamp)
 
-  r2ObjectKey String? // reference to the video file in r2
+  thumbnailR2ObjectKey String? // thumbnail image r2 object key
+  r2ObjectKey          String? // reference to the video file in r2
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -253,14 +256,12 @@ model CaptionConfig {
 
   name String?
 
-  // ── Colors ─────────────────────────────────────────────────────────────────
   textColor            String
   strokeColor          String
   highlightColor       String
   highlightStrokeColor String
   popBackgroundColor   String
 
-  // ── Effects — positions/counts are Int, stroke/shadow/font/spacing are Float
   strokeWidth        Float
   fontSize           Float
   verticalPosition   Int
@@ -270,20 +271,16 @@ model CaptionConfig {
   shadowOffsetY      Float
   shadowBlur         Float
 
-  // ── Typography ─────────────────────────────────────────────────────────────
   fontFamily    String
   fontWeight    String
   textTransform TextTransform
   letterSpacing Float
 
-  // ── Animation ──────────────────────────────────────────────────────────────
   animationPreset AnimationPreset
 
-  // ── Light Leak ─────────────────────────────────────────────────────────────
   lightLeakHue  Int
   lightLeakSeed Int
 
-  // ── Timestamps ─────────────────────────────────────────────────────────────
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

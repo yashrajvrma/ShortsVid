@@ -181,7 +181,7 @@ export const videoRouter = createTRPCRouter({
           data: {
             userId,
             videoStyle: input.videoStyle,
-            status: "PROCESSING",
+            status: "GENERATING",
             scriptId: script.id,
             voiceId: input.voiceId,
             captionConfigId: captionConfigId,
@@ -280,7 +280,7 @@ export const videoRouter = createTRPCRouter({
 
       //  TODO : only return videoUrl by rendering it into gcp and return the signed url iof vidoe instaed of images,audio and all ans show the video  the playet thats it
 
-      if (video.status === "PROCESSING") {
+      if (video.status === "GENERATING") {
         return {
           id: video.id,
           status: video.status,
