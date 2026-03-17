@@ -15,6 +15,7 @@
     "@prisma/adapter-pg": "^7.4.1",
     "@prisma/client": "7.4.1",
     "@remotion/cli": "4.0.435",
+    "@remotion/cloudrun": "4.0.435",
     "@remotion/fonts": "^4.0.435",
     "@remotion/google-fonts": "^4.0.435",
     "@remotion/light-leaks": "4.0.435",
