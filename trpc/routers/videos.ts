@@ -3,7 +3,11 @@ import { authProcedure, createTRPCRouter } from "../init";
 import { TRPCError } from "@trpc/server";
 import { prisma } from "@/db";
 import { inngest } from "@/inngest/client";
-import { getSignedAudioUrl, getSignedUrlInBulk } from "@/lib/r2-bucket";
+import {
+  getSignedAudioUrl,
+  getSignedObjectUrl,
+  getSignedUrlInBulk,
+} from "@/lib/r2-bucket";
 
 export const videoRouter = createTRPCRouter({
   generateFacelessVideo: authProcedure
@@ -210,102 +214,200 @@ export const videoRouter = createTRPCRouter({
 
     const videos = await prisma.video.findMany({
       where: { userId },
-      include: {
-        captionConfig: true,
-        stock: true,
-      },
       orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        status: true,
+        duration: true,
+        thumbnailR2ObjectKey: true,
+        // TODO : also send title of the video from script
+        createdAt: true,
+        updatedAt: true,
+      },
     });
 
     //  TODO : only return videoUrl by rendering it into gcp and return the signed url iof vidoe instaed of images,audio and all ans show the video  the playet thats it
-    const videosWithSignedUrls = await Promise.all(
-      videos.map(async (video) => {
-        const [
-          signedImages,
-          signedAudio,
-          signedVideoUrl,
-          signedBackgroundMusicUrl,
-        ] = await Promise.all([
-          video.images.length > 0
-            ? getSignedUrlInBulk(video.images)
-            : Promise.resolve([] as string[]),
+    // const videosWithSignedUrls = await Promise.all(
+    //   videos.map(async (video) => {
+    //     const [
+    //       signedImages,
+    //       signedAudio,
+    //       signedVideoUrl,
+    //       signedBackgroundMusicUrl,
+    //     ] = await Promise.all([
+    //       video.images.length > 0
+    //         ? getSignedUrlInBulk(video.images)
+    //         : Promise.resolve([] as string[]),
 
-          video.audio ? getSignedAudioUrl(video.audio) : Promise.resolve(null),
+    //       video.audio ? getSignedAudioUrl(video.audio) : Promise.resolve(null),
 
-          video.r2ObjectKey
-            ? getSignedAudioUrl(video.r2ObjectKey)
-            : Promise.resolve(null),
+    //       video.r2ObjectKey
+    //         ? getSignedAudioUrl(video.r2ObjectKey)
+    //         : Promise.resolve(null),
 
-          // Return signed URL only if backgroundMusicId exists AND stock has an r2 key
-          video.backgroundMusicId && video.stock?.r2ObjectKey
-            ? getSignedAudioUrl(video.stock.r2ObjectKey)
-            : Promise.resolve(null),
-        ]);
+    //       // Return signed URL only if backgroundMusicId exists AND stock has an r2 key
+    //       video.backgroundMusicId && video.stock?.r2ObjectKey
+    //         ? getSignedAudioUrl(video.stock.r2ObjectKey)
+    //         : Promise.resolve(null),
+    //     ]);
 
-        return {
-          ...video,
-          imagesUrl: signedImages,
-          audioUrl: signedAudio,
-          videoUrl: signedVideoUrl,
-          backgroundMusicUrl: signedBackgroundMusicUrl,
-        };
-      }),
-    );
+    //     return {
+    //       id: video.id,
+    //       status: video.status,
+    //       duration: video.duration,
+    //       videoStyle: video.videoStyle,
+    //       script: {
+    //         languageCode: video.script?.languageCode,
+    //         topic: video.script?.topic,
+    //         content: video.script?.content,
+    //       },
+    //       voice: {
+    //         name: video?.voice?.name,
+    //         languageCode: video?.voice?.languageCode,
+    //         gender: video?.voice?.gender,
+    //       },
 
-    return videosWithSignedUrls;
+    //       // ...video,
+    //       imagesUrl: signedImages,
+    //       audioUrl: signedAudio,
+    //       videoUrl: signedVideoUrl,
+    //       backgroundMusicUrl: signedBackgroundMusicUrl,
+    //     };
+    //   }),
+    // );
+
+    return videos;
   }),
-  getShortsById: authProcedure
-    .input(z.object({ videoId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const { userId } = ctx;
-      const { videoId } = input;
+  // getShortsById: authProcedure
+  //   .input(z.object({ videoId: z.string() }))
+  //   .query(async ({ ctx, input }) => {
+  //     const { userId } = ctx;
 
-      // check if videoId exist
+  //     // check if videoId exist
+  //     const video = await prisma.video.findUnique({
+  //       where: { id: input.videoId, userId },
+  //       include: {
+  //         script: true,
+  //         captionConfig: true,
+  //         stock: true,
+  //         voice: true,
+  //       },
+  //     });
+
+  //     if (!video) {
+  //       throw new TRPCError({
+  //         code: "NOT_FOUND",
+  //         message: "Video not found",
+  //       });
+  //     }
+
+  //     // if (video.status === "GENERATING") {
+  //     //   return {
+  //     //     id: video.id,
+  //     //     status: video.status,
+  //     //     videoStyle: video.videoStyle,
+  //     //     script: {
+  //     //       languageCode: video.script?.languageCode,
+  //     //       topic: video.script?.topic,
+  //     //       content: video.script?.content,
+  //     //     },
+  //     //     voice: video.voiceId
+  //     //       ? {
+  //     //           name: video?.voice?.name,
+  //     //           languageCode: video?.voice?.languageCode,
+  //     //           gender: video?.voice?.gender,
+  //     //         }
+  //     //       : null,
+  //     //     stock: video.backgroundMusicId
+  //     //       ? {
+  //     //           name: video.stock?.name,
+  //     //           stockType: video.stock?.stockType,
+  //     //         }
+  //     //       : null,
+  //     //     videoUrl: null,
+  //     //   };
+  //     // }
+
+  //     return;
+  //   }),
+  exportVideo: authProcedure
+    .input(
+      z.object({
+        videoId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { userId } = ctx;
+
+      // get the video details
       const video = await prisma.video.findUnique({
-        where: { id: videoId, userId },
-        include: {
-          script: true,
-          captionConfig: true,
-          stock: true,
-          voice: true,
-        },
+        where: { id: input.videoId, userId },
       });
 
       if (!video) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Video not found",
+          message: "Invalid video Id",
         });
       }
 
-      //  TODO : only return videoUrl by rendering it into gcp and return the signed url iof vidoe instaed of images,audio and all ans show the video  the playet thats it
-
       if (video.status === "GENERATING") {
+        throw new TRPCError({
+          code: "UNPROCESSABLE_CONTENT",
+          message: "Video is being generated, Pls try after some time",
+        });
+      }
+
+      if (video.status === "FAILED") {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Video generation failed, Please try again",
+        });
+      }
+
+      if (video.status === "SUCCESS") {
+        // generate signed url of the video and return it to the client
+        const r2Key = video.r2ObjectKey;
+        if (!r2Key) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Something went wrong, Please try again",
+          });
+        }
+
+        const signedVideoUrl = await getSignedObjectUrl(r2Key);
+
         return {
           id: video.id,
           status: video.status,
-          videoStyle: video.videoStyle,
-          script: {
-            languageCode: video.script?.languageCode,
-            topic: video.script?.topic,
-            content: video.script?.content,
-          },
-          voice: video.voiceId
-            ? {
-                name: video?.voice?.name,
-                languageCode: video?.voice?.languageCode,
-                gender: video?.voice?.gender,
-              }
-            : null,
-          stock: video.backgroundMusicId
-            ? {
-                name: video.stock?.name,
-                stockType: video.stock?.stockType,
-              }
-            : null,
-          videoUrl: null,
+          downloadUrl: signedVideoUrl,
         };
       }
-      return video;
+
+      if (video.status === "RENDERING") {
+        return {
+          id: video.id,
+          status: video.status,
+          message: "Video is being exported, Please wait for some time",
+        };
+      }
+
+      if (video.status === "READY") {
+        // Trigger Inngest workflow
+        await inngest.send({
+          name: "shorts/render",
+          data: {
+            userId,
+            videoId: video.id,
+          },
+        });
+
+        return {
+          success: true,
+          status: video.status,
+          message:
+            "Video export started, We will notify you once it's ready for download",
+        };
+      }
     }),
 });

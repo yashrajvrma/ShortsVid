@@ -5,7 +5,18 @@ import { inferRouterOutputs } from "@trpc/server";
 type RouterOutputs = inferRouterOutputs<AppRouter>;
 
 export type GetAllShortsOutput = RouterOutputs["videos"]["getAllShorts"];
-export type ShortsVideo = GetAllShortsOutput[number];
+// export type ShortsVideo = GetAllShortsOutput[number];
+
+export type ShortsVideo = {
+  id: string;
+  duration: number;
+  thumbnailR2ObjectKey: string | null;
+  imagesUrl: string[];
+  audioUrl: string | null;
+  backgroundMusicUrl: string | null;
+  caption: JSON | null;
+  captionConfig: CaptionStyle | null;
+};
 
 export type Language = {
   code: string;
