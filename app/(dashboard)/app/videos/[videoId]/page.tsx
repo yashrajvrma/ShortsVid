@@ -8,7 +8,6 @@ import { Suspense } from "react";
 import VideoDetailClient from "@/components/videos/video-details";
 import { getVideoDetailsById } from "@/app/actions/faceless-shorts/get-video-detail-by-id";
 import { Loader2 } from "lucide-react";
-import type { CaptionStyle } from "@/types";
 
 interface VideoDetailPageProps {
   params: Promise<{ videoId: string }>;

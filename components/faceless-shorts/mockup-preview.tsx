@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import type { FacelessFormState } from "@/hooks/use-faceless-form";
-import type { CaptionStyle } from "../remotion/caption-types";
 import { VIDEO_STYLES } from "@/lib/constants";
+import { CaptionStyle } from "@/types";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 

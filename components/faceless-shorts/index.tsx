@@ -26,7 +26,7 @@ import { MockupPreview } from "./mockup-preview";
 import { ScriptSection } from "./script-section";
 import type { AppRouter } from "@/trpc/routers/_app";
 import Header from "@/components/header";
-import { CaptionStyle } from "../remotion/caption-types";
+import { CaptionStyle } from "@/types";
 
 export default function FacelessShorts() {
   const router = useRouter();

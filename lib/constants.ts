@@ -1,4 +1,3 @@
-import { FONT_FAMILIES } from "@/components/remotion/fonts";
 import type { CaptionPreset, CaptionStyle, Duration, Language } from "@/types";
 
 export const LANGUAGES: Language[] = [
@@ -73,6 +72,21 @@ export const SYSTEM_BG_MUSIC = [
   "Romantic",
   "Viral",
 ] as const;
+
+// fonts
+export const FONT_FAMILIES = {
+  bangers: "Bangers",
+  montserrat: "Montserrat",
+  oswald: "Oswald",
+  permanentMarker: "Permanent Marker",
+  inter: "Inter",
+  bebasNeue: "Bebas Neue",
+  rubikDirt: "Rubik Dirt",
+  komikaAxis: "komikaAxis",
+} as const;
+
+export type FontKey = keyof typeof FONT_FAMILIES;
+export type FontFamily = (typeof FONT_FAMILIES)[FontKey];
 
 // captions
 
@@ -322,7 +336,7 @@ export const DEFAULT_CAPTION_STYLE: CaptionStyle = {
   shadowOffsetY: 7,
   shadowBlur: 16,
 
-  fontFamily: FONT_FAMILIES.bebasNeue,
+  fontFamily: FONT_FAMILIES.bangers,
   fontWeight: "600",
   textTransform: "none",
   letterSpacing: 2,

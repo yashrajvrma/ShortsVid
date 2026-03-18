@@ -20,10 +20,9 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Sparkles, Type, Palette, Sliders, Zap } from "lucide-react";
 
-import { FONT_FAMILIES } from "../remotion/fonts";
 import { Button } from "../ui/button";
 import { CaptionStyle } from "@/types";
-import { CAPTION_PRESETS } from "@/lib/constants";
+import { CAPTION_PRESETS, FONT_FAMILIES } from "@/lib/constants";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

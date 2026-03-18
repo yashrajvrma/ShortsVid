@@ -17,6 +17,8 @@ import ShortsVidLogo from "@/public/shortsvid-icon.png";
 import React from "react";
 import Image from "next/image";
 
+export const dynamic = "force-dynamic";
+
 export default function Layout({
   children,
 }: Readonly<{

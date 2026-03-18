@@ -1,7 +1,7 @@
 import React from "react";
 import { Composition } from "remotion";
 import { MyComposition } from "./Composition";
-import RemotionComposition from "../components/remotion/remotion-composition";
+import RemotionComposition from "@/components/remotion/remotion-composition";
 
 const videoData = {
   id: "cmmrsct100007ocl9oxxgbrby",

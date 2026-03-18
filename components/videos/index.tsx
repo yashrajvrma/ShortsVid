@@ -1,9 +1,8 @@
 "use client";
 
 import { useTRPC } from "@/trpc/client";
-import RemotionPlayer from "../remotion/remotion-player";
 import { useQuery } from "@tanstack/react-query";
-import { AllShorts, ShortsVideo } from "@/types";
+import { AllShorts } from "@/types";
 import Header from "../header";
 import FetchAllVideo from "./fetch-all-video";
 

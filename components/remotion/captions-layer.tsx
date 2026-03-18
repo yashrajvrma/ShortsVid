@@ -1,3 +1,4 @@
+import { CaptionStyle } from "@/types";
 import React, { useMemo } from "react";
 import {
   AbsoluteFill,
@@ -7,7 +8,6 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { CaptionStyle } from "./caption-types";
 
 // ─── Internal types ────────────────────────────────────────────────────────────
 

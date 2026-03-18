@@ -102,4 +102,4 @@ export const getIsScriptLanguageMismatch = (state: FacelessFormStore) =>
   state.generatedScriptLanguage !== state.languageCode;
 
 // Re-export CaptionStyle for backward compat
-export type { CaptionStyle };
+// export type { CaptionStyle };

@@ -40,14 +40,14 @@ export default function App() {
       {/* <div className="mb-2">
         <Image src={ShortsVidIcon} alt="shortsvid-icon" className="w-16" />
       </div> */}
-      <h1 className="flex flex-col items-center text-5xl font-medium font-sans tracking-tighter max-w-xl ">
+      <h1 className="flex flex-col items-center sm:text-5xl text-3xl font-medium font-sans tracking-tighter max-w-xl ">
         What are you{" "}
         <span className="flex items-center">
           creating
           <Image
             src={ShortsVidIcon}
             alt="shortsvid-icon"
-            className="w-16 ml-1 rotate-[-5deg]"
+            className="sm:w-16 w-12 ml-1 rotate-[-5deg]"
           />
           today?
         </span>
