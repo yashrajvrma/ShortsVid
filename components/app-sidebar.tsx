@@ -32,7 +32,7 @@ import {
 } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
 import Image from "next/image";
-import ShortsVidLogo from "../public/new-logo.svg";
+import ShortsVidLogo from "@/public/shortsvid-icon.png";
 import Link from "next/link";
 import { NavShorts } from "./nav-shorts";
 
@@ -192,21 +192,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <span className="truncate font-medium">Acme Inc</span>
                   <span className="truncate text-xs">Enterprise</span>
                 </div> */}
-                <div className="flex text-xl font-medium leading-tight sm:px-0 px-1">
+                <div className="flex items-center text-2xl font-semibold tracking-tighter leading-tight gap-1">
                   {/* Shorts Vid */}
                   <Image
                     src={ShortsVidLogo}
                     alt="shortsVid-logo"
-                    className="w-[130]"
+                    className="w-8 rotate-[-5deg]"
                     loading="eager"
                   />
+                  ShortsVid
                 </div>
               </Link>
             </div>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent className="gap-0 sm:px-0 px-1">
+      <SidebarContent className="gap-0 px-1">
         {/* <NavMain items={data.navMain} /> */}
         <NavProjects projects={data.projects} />
         <NavShorts shorts={data.shorts} />

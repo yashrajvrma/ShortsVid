@@ -13,7 +13,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
-import ShortsVidLogo from "@/public/new-logo.svg";
+import ShortsVidLogo from "@/public/shortsvid-icon.png";
 import React from "react";
 import Image from "next/image";
 
@@ -37,12 +37,22 @@ export default function Layout({
               <BreadcrumbList>
                 <BreadcrumbItem className="">
                   <BreadcrumbLink href="/app">
-                    <Image
+                    {/* <Image
                       src={ShortsVidLogo}
                       alt="shortsVid-logo"
                       className="w-[130]"
                       loading="eager"
-                    />
+                    /> */}
+                    <div className="flex items-center text-2xl font-semibold tracking-tighter text-black leading-tight gap-1">
+                      {/* Shorts Vid */}
+                      <Image
+                        src={ShortsVidLogo}
+                        alt="shortsVid-logo"
+                        className="w-8 rotate-[-5deg]"
+                        loading="eager"
+                      />
+                      ShortsVid
+                    </div>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 {/* <BreadcrumbSeparator className="" />

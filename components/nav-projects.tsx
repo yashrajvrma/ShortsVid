@@ -44,7 +44,7 @@ export function NavProjects({
       <SidebarMenu>
         {/* Create New Video  */}
         <SidebarMenuItem>
-          <SidebarMenuButton className="flex justify-center py-4 bg-sidebar-primary text-sidebar-primary-foreground rounded-lg hover:bg-sidebar-primary hover:text-sidebar-primary-foreground ">
+          <SidebarMenuButton className="flex justify-center py-4 bg-sidebar-primary text-sidebar-primary-foreground rounded-lg hover:bg-sidebar-primary hover:text-sidebar-primary-foreground text-sm mb-1">
             <Link className="flex items-center gap-x-2" href="/app/shorts">
               <PlusIcon />
               <span>Create Viral Shorts</span>
@@ -54,8 +54,12 @@ export function NavProjects({
 
         {/* Nav Menu */}
         {projects.map((item) => (
-          <SidebarMenuItem className="pt-1" key={item.name}>
-            <SidebarMenuButton asChild isActive={pathname === item.url}>
+          <SidebarMenuItem key={item.name}>
+            <SidebarMenuButton
+              className="py-4 text-sm"
+              asChild
+              isActive={pathname === item.url}
+            >
               <Link href={item.url}>
                 {item.icon}
                 <span>{item.name}</span>

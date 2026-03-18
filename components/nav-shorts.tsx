@@ -41,14 +41,18 @@ export function NavShorts({
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel className="text-xs px-0">
+      <SidebarGroupLabel className="text-xs font-normal px-0">
         Shorts Templates
       </SidebarGroupLabel>
       <SidebarMenu>
         {/* Nav Menu */}
         {shorts.map((item) => (
           <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild isActive={pathname === item.url}>
+            <SidebarMenuButton
+              className="text-sm py-4"
+              asChild
+              isActive={pathname === item.url}
+            >
               <Link href={item.url}>
                 {item.icon}
                 <span>{item.name}</span>

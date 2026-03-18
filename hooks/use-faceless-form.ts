@@ -2,11 +2,8 @@
 "use client";
 
 import { create } from "zustand";
-import { DURATIONS, LANGUAGES } from "@/lib/constants";
-import {
-  CaptionStyle,
-  DEFAULT_CAPTION_STYLE,
-} from "@/components/remotion/caption-types";
+import { DEFAULT_CAPTION_STYLE, DURATIONS, LANGUAGES } from "@/lib/constants";
+import { CaptionStyle } from "@/types";
 
 // ─── Full Form State ──────────────────────────────────────────────────────────
 export interface FacelessFormState {

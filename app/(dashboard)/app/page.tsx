@@ -1,3 +1,4 @@
+import App from "@/components/app";
 import AllVideos from "@/components/videos";
 import { HydrateClient, prefetch, trpc } from "@/trpc/server";
 import { Suspense } from "react";
@@ -10,8 +11,7 @@ export default async function Home() {
     <HydrateClient>
       <ErrorBoundary fallback={<div>Something went wrong</div>}>
         <Suspense fallback={<div>Loading...</div>}>
-          {/* <AllVideos /> */}
-          <div>home</div>
+          <App />
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>
