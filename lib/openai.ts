@@ -1,3 +1,4 @@
+import { Topic, VideoStyle } from "@/types";
 import OpenAI from "openai";
 import { zodTextFormat } from "openai/helpers/zod";
 import { z } from "zod";
@@ -7,25 +8,6 @@ export const openai = new OpenAI({
 });
 
 // ─── Enums (mirrored from Prisma schema) ────────────────────────────────────
-
-export type Topic =
-  | "MOTIVATIONAL"
-  | "HORROR_STORY"
-  | "HISTORY_FACTS"
-  | "PHILOSOPHY"
-  | "STORYTELLING"
-  | "MYSTERY_STORY"
-  | "LIFE_HACKS"
-  | "ANY_TOPIC";
-
-export type VideoStyle =
-  | "PHOTO_REALISTIC"
-  | "CARTOON"
-  | "ANIME"
-  | "CYBERPUNK"
-  | "CINEMATIC"
-  | "PIXEL_ART"
-  | "COLORFUL_COMICS";
 
 // ─── Zod Schemas for Structured Outputs ─────────────────────────────────────
 

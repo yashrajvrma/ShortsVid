@@ -1,5 +1,5 @@
-import { CaptionStyle } from "@/components/remotion/caption-types";
 import { AppRouter } from "@/trpc/routers/_app";
+import { Prisma } from "@prisma/client";
 import { inferRouterOutputs } from "@trpc/server";
 
 type RouterOutputs = inferRouterOutputs<AppRouter>;
@@ -7,28 +7,60 @@ type RouterOutputs = inferRouterOutputs<AppRouter>;
 export type GetAllShortsOutput = RouterOutputs["videos"]["getAllShorts"];
 export type AllShorts = GetAllShortsOutput[number];
 
+export type GetShortsByIdOutput = RouterOutputs["videos"]["getShortsById"];
+
 export type ShortsVideo = {
   id: string;
   duration: number;
-  thumbnailR2ObjectKey: string | null;
   imagesUrl: string[];
   audioUrl: string | null;
   backgroundMusicUrl: string | null;
-  caption: JSON | null;
+  caption: Prisma.JsonValue | null;
   captionConfig: CaptionStyle | null;
 };
+
+export type VideoDetail = {
+  id: string;
+  status: VideoStatus;
+  videoStyle: VideoStyle;
+  duration: number | null;
+  script: {
+    id: string;
+    languageCode: string;
+    topic: Topic;
+    prompt: string | null;
+    content: string[];
+  };
+  voice: {
+    id: string;
+    name: string;
+    gender: string;
+    languageCode: string[];
+  } | null;
+  caption: Prisma.JsonValue | null;
+  captionConfig: CaptionStyle | null;
+  imagesUrl: string[];
+  audioUrl: string | null;
+  videoUrl: string | null;
+  backgroundMusicUrl: string | null;
+  createdAt: Date;
+};
+
+// export type ShortsVideo = Pick<
+//   GetShortsByIdOutput,
+//   | "id"
+//   | "duration"
+//   | "imagesUrl"
+//   | "audioUrl"
+//   | "backgroundMusicUrl"
+//   | "caption"
+//   | "captionConfig"
+// >;
 
 export type Language = {
   code: string;
   name: string;
   flag?: string;
-};
-
-export type VideoStyle = {
-  id: number | string;
-  name?: string;
-  label: string;
-  thumbnail: string;
 };
 
 export interface Duration {
@@ -60,3 +92,67 @@ export interface GenerateVideoRequest {
   videoStyle: string;
   captionConfig: CaptionStyle;
 }
+
+// caption types
+
+export type TextTransform = "uppercase" | "lowercase" | "capitalize" | "none";
+
+export type AnimationPreset = "pop" | "fade" | "slide" | "none";
+
+export interface CaptionPreset {
+  id: string;
+  name: string;
+  /** Short description shown in the template card */
+  description: string;
+  style: CaptionStyle;
+}
+
+export interface CaptionStyle {
+  textColor: string;
+  strokeColor: string;
+  highlightColor: string;
+  highlightStrokeColor: string;
+  popBackgroundColor: string;
+  strokeWidth: number;
+  fontSize: number;
+  verticalPosition: number;
+  horizontalPosition: number;
+  maxLines: number;
+  maxWordsPerLine: number;
+  shadowOffsetY: number;
+  shadowBlur: number;
+  fontFamily: string;
+  fontWeight: string;
+  textTransform: TextTransform;
+  letterSpacing: number;
+  animationPreset: AnimationPreset;
+  lightLeakHue: number;
+  lightLeakSeed: number;
+}
+
+// custom types
+export type VideoStatus =
+  | "GENERATING"
+  | "RENDERING"
+  | "READY"
+  | "SUCCESS"
+  | "FAILED";
+
+export type Topic =
+  | "MOTIVATIONAL"
+  | "HORROR_STORY"
+  | "HISTORY_FACTS"
+  | "PHILOSOPHY"
+  | "STORYTELLING"
+  | "MYSTERY_STORY"
+  | "LIFE_HACKS"
+  | "ANY_TOPIC";
+
+export type VideoStyle =
+  | "PHOTO_REALISTIC"
+  | "CARTOON"
+  | "ANIME"
+  | "CYBERPUNK"
+  | "CINEMATIC"
+  | "PIXEL_ART"
+  | "COLORFUL_COMICS";

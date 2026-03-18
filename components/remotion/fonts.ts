@@ -1,17 +1,3 @@
-// ─── remotion/fonts.ts ────────────────────────────────────────────────────────
-//
-// Load every Google Font used by caption presets here at module level.
-// Import this file once at the top of remotion-composition.tsx.
-//
-// To add a new font:
-//   1. Find the exact package path at https://www.remotion.dev/docs/google-fonts/
-//      (every Google Font has its own sub-path, e.g. "@remotion/google-fonts/Bangers")
-//   2. Add a loadFont() call below — specify only the weights you need
-//   3. Export the fontFamily and use it in your preset in caption-types.ts
-//
-// Install:
-//   npx remotion add @remotion/google-fonts
-
 import { loadFont as loadBangers } from "@remotion/google-fonts/Bangers";
 import { loadFont as loadMontserrat } from "@remotion/google-fonts/Montserrat";
 import { loadFont as loadOswald } from "@remotion/google-fonts/Oswald";

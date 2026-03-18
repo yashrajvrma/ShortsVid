@@ -5,8 +5,6 @@ import {
   generateImagePrompts,
   generateImageBuffer,
   type ImagePromptResult,
-  type Topic,
-  type VideoStyle,
 } from "@/lib/openai";
 import {
   getSignedAudioUrl,
@@ -18,6 +16,7 @@ import {
 
 import { getServices, renderMediaOnCloudrun } from "@remotion/cloudrun/client";
 import { CaptionData, generateCaptions } from "@/lib/captions";
+import { Topic, VideoStyle } from "@/types";
 
 const fishAudio = new FishAudioClient({
   apiKey: process.env.FISH_AUDIO_API_KEY!,

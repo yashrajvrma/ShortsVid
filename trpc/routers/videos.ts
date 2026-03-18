@@ -240,58 +240,121 @@ export const videoRouter = createTRPCRouter({
 
     return videosWithSignedUrls;
   }),
-  // getShortsById: authProcedure
-  //   .input(z.object({ videoId: z.string() }))
-  //   .query(async ({ ctx, input }) => {
-  //     const { userId } = ctx;
+  getShortsById: authProcedure
+    .input(z.object({ videoId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { userId } = ctx;
 
-  //     // check if videoId exist
-  //     const video = await prisma.video.findUnique({
-  //       where: { id: input.videoId, userId },
-  //       include: {
-  //         script: true,
-  //         captionConfig: true,
-  //         stock: true,
-  //         voice: true,
-  //       },
-  //     });
+      const video = await prisma.video.findUnique({
+        where: { id: input.videoId, userId },
+        include: {
+          script: true,
+          captionConfig: true,
+          stock: true,
+          voice: true,
+        },
+      });
 
-  //     if (!video) {
-  //       throw new TRPCError({
-  //         code: "NOT_FOUND",
-  //         message: "Video not found",
-  //       });
-  //     }
+      if (!video) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Video not found",
+        });
+      }
 
-  //     // if (video.status === "GENERATING") {
-  //     //   return {
-  //     //     id: video.id,
-  //     //     status: video.status,
-  //     //     videoStyle: video.videoStyle,
-  //     //     script: {
-  //     //       languageCode: video.script?.languageCode,
-  //     //       topic: video.script?.topic,
-  //     //       content: video.script?.content,
-  //     //     },
-  //     //     voice: video.voiceId
-  //     //       ? {
-  //     //           name: video?.voice?.name,
-  //     //           languageCode: video?.voice?.languageCode,
-  //     //           gender: video?.voice?.gender,
-  //     //         }
-  //     //       : null,
-  //     //     stock: video.backgroundMusicId
-  //     //       ? {
-  //     //           name: video.stock?.name,
-  //     //           stockType: video.stock?.stockType,
-  //     //         }
-  //     //       : null,
-  //     //     videoUrl: null,
-  //     //   };
-  //     // }
+      // ── While still generating, return lightweight metadata only ──────────
+      // No assets exist yet, so no signed URLs needed
+      if (video.status === "GENERATING") {
+        return {
+          id: video.id,
+          status: video.status,
+          videoStyle: video.videoStyle,
+          duration: video.duration,
+          script: {
+            id: video.script.id,
+            languageCode: video.script.languageCode,
+            topic: video.script.topic,
+            prompt: video.script.prompt,
+            content: video.script.content,
+          },
+          voice: video.voice
+            ? {
+                id: video.voice.id,
+                name: video.voice.name,
+                gender: video.voice.gender,
+                languageCode: video.voice.languageCode,
+              }
+            : null,
+          // No asset URLs yet
+          imagesUrl: [] as string[],
+          audioUrl: null,
+          videoUrl: null,
+          caption: video.caption,
+          captionConfig: video.captionConfig,
+          createdAt: video.createdAt,
+          updatedAt: video.updatedAt,
+        };
+      }
 
-  //     return;
-  //   }),
+      // ── Generate signed URLs for all R2 assets ────────────────────────────
+
+      // Images — array of r2 object keys
+      const imagesUrl = video.images.length
+        ? await Promise.all(video.images.map((key) => getSignedObjectUrl(key)))
+        : [];
+
+      // Audio
+      const audioUrl = video.audio
+        ? await getSignedObjectUrl(video.audio)
+        : null;
+
+      // Thumbnail
+      const thumbnailUrl = video.thumbnailR2ObjectKey
+        ? await getSignedObjectUrl(video.thumbnailR2ObjectKey)
+        : null;
+
+      // Final rendered video (only exists on SUCCESS)
+      const videoUrl =
+        video.status === "SUCCESS" && video.r2ObjectKey
+          ? await getSignedObjectUrl(video.r2ObjectKey)
+          : null;
+
+      // Background music
+      const backgroundMusicUrl = video.stock?.r2ObjectKey
+        ? await getSignedObjectUrl(video.stock.r2ObjectKey)
+        : null;
+
+      return {
+        id: video.id,
+        status: video.status,
+        videoStyle: video.videoStyle,
+        duration: video.duration,
+        script: {
+          id: video.script.id,
+          languageCode: video.script.languageCode,
+          topic: video.script.topic,
+          prompt: video.script.prompt,
+          content: video.script.content,
+        },
+        voice: video.voice
+          ? {
+              id: video.voice.id,
+              name: video.voice.name,
+              gender: video.voice.gender,
+              languageCode: video.voice.languageCode,
+            }
+          : null,
+        // Signed asset URLs — ready for Remotion
+        captionConfig: video.captionConfig,
+        caption: video.caption,
+        imagesUrl,
+        audioUrl,
+        videoUrl,
+        backgroundMusicUrl,
+        createdAt: video.createdAt,
+        updatedAt: video.updatedAt,
+      };
+    }),
   exportVideo: authProcedure
     .input(
       z.object({
@@ -343,6 +406,7 @@ export const videoRouter = createTRPCRouter({
           id: video.id,
           status: video.status,
           downloadUrl: signedVideoUrl,
+          message: "Video has been exported successfully",
         };
       }
 
@@ -365,11 +429,61 @@ export const videoRouter = createTRPCRouter({
         });
 
         return {
-          success: true,
+          id: video.id,
           status: video.status,
           message:
             "Video export started, We will notify you once it's ready for download",
         };
       }
+    }),
+  getVideoStatus: authProcedure
+    .input(
+      z.object({
+        videoId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { userId } = ctx;
+
+      // get the status
+      const video = await prisma.video.findUnique({
+        where: { id: input.videoId, userId },
+      });
+
+      if (!video) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Invalid video Id",
+        });
+      }
+
+      if (video.status === "SUCCESS") {
+        // generate signed url of the video and return it to the client
+        const r2Key = video.r2ObjectKey;
+        if (!r2Key) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Something went wrong, Please try again",
+          });
+        }
+
+        const signedVideoUrl = await getSignedObjectUrl(r2Key);
+
+        return {
+          id: video.id,
+          status: video.status,
+          downloadUrl: signedVideoUrl,
+          message: "Video has been exported successfully",
+          createdAt: video.createdAt,
+          updatedAt: video.updatedAt,
+        };
+      }
+
+      return {
+        id: video.id,
+        status: video.status,
+        createdAt: video.createdAt,
+        updatedAt: video.updatedAt,
+      };
     }),
 });

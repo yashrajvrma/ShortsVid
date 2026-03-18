@@ -5,6 +5,7 @@ import RemotionPlayer from "../remotion/remotion-player";
 import { useQuery } from "@tanstack/react-query";
 import { AllShorts, ShortsVideo } from "@/types";
 import Header from "../header";
+import FetchAllVideo from "./fetch-all-video";
 
 export default function AllVideos() {
   const trpc = useTRPC();
@@ -23,7 +24,7 @@ export default function AllVideos() {
         ) : (
           <>
             {data?.map((video: AllShorts) => {
-              return <RemotionPlayer key={video.id} videoData={video} />;
+              return <FetchAllVideo key={video.id} videoData={video} />;
             })}
           </>
         )}
