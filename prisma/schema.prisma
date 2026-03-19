@@ -25,6 +25,11 @@ model User {
   emailVerified Boolean @default(false)
   image         String?
 
+  role   Role @default(USER)
+  credit Int  @default(0)
+
+  plan SubscriptionPlan @default(FREE)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
@@ -34,8 +39,8 @@ model User {
   stocks   Stock[]
   videos   Video[]
 
-  role   Role @default(USER)
-  credit Int  @default(0)
+  subscription    Subscription?
+  creditHistories CreditHistory[]
 
   @@map("user")
 }
@@ -296,4 +301,63 @@ model CaptionConfig {
   video Video?
 
   @@map("caption_config")
+}
+
+enum SubscriptionPlan {
+  FREE
+  BASIC
+  PRO
+}
+
+enum SubscriptionPeriod {
+  MONTHLY
+  YEARLY
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  PAST_DUE
+}
+
+model Subscription {
+  id String @id @default(uuid())
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  polarSubscriptionId String @unique
+  polarCustomerId     String
+
+  plan   SubscriptionPlan
+  period SubscriptionPeriod
+  status SubscriptionStatus @default(ACTIVE)
+
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  cancelAtPeriodEnd  Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("subscription")
+}
+
+model CreditHistory {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  amount        Int // positive = credit added, negative = deducted
+  description   String
+  balanceBefore Int
+  balanceAfter  Int
+
+  videoId             String?
+  polarSubscriptionId String?
+
+  createdAt DateTime @default(now())
+
+  @@map("credit_history")
 }

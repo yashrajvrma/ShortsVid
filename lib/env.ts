@@ -13,6 +13,9 @@ export const env = createEnv({
     R2_SECRET_ACCESS_KEY: z.string().min(1),
     R2_BUCKET_NAME: z.string().min(1),
     FISH_AUDIO_API_KEY: z.string().min(1),
+
+    // polar
+    POLAR_SERVER_ENV: z.enum(["sandbox", "production"]).default("sandbox"),
   },
   experimental__runtimeEnv: {},
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,

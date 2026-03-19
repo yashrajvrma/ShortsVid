@@ -1,5 +1,4 @@
 "use client";
-
 import * as React from "react";
 import { NavMain } from "@/components/nav-main";
 import { NavProjects } from "@/components/nav-projects";
@@ -35,6 +34,8 @@ import Image from "next/image";
 import ShortsVidLogo from "@/public/shortsvid-icon.png";
 import Link from "next/link";
 import { NavShorts } from "./nav-shorts";
+import { Button } from "./ui/button";
+import { customerPortal } from "@/app/actions/billing/customer-portal";
 
 const data = {
   // user: {
@@ -214,6 +215,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
+        <div>
+          <Button
+            onClick={async () => {
+              await customerPortal();
+            }}
+          >
+            Manage Subscription
+          </Button>
+        </div>
         <NavUser
           user={{
             name: session?.user.name!,
