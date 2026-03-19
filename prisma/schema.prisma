@@ -12,21 +12,30 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
 model User {
   id String @id @default(uuid())
 
   name          String
-  email         String   @unique
-  emailVerified Boolean  @default(false)
+  email         String  @unique
+  emailVerified Boolean @default(false)
   image         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @default(now()) @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   scripts  Script[]
   sessions Session[]
   accounts Account[]
   stocks   Stock[]
   videos   Video[]
+
+  role   Role @default(USER)
+  credit Int  @default(0)
 
   @@map("user")
 }

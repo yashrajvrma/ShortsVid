@@ -7,6 +7,22 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  user: {
+    additionalFields: {
+      role: {
+        type: ["USER", "ADMIN"],
+        required: true,
+        defaultValue: "USER",
+        input: false,
+      },
+      credit: {
+        type: "number",
+        required: true,
+        defaultValue: 0,
+        input: false,
+      },
+    },
+  },
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -15,5 +31,6 @@ export const auth = betterAuth({
       scope: ["profile", "email"],
     },
   },
+
   // plugins: [nextCookies()],
 });
