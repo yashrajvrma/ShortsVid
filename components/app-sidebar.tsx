@@ -1,4 +1,3 @@
-"use client";
 import * as React from "react";
 import { NavMain } from "@/components/nav-main";
 import { NavProjects } from "@/components/nav-projects";
@@ -36,6 +35,7 @@ import Link from "next/link";
 import { NavShorts } from "./nav-shorts";
 import { Button } from "./ui/button";
 import { customerPortal } from "@/app/actions/billing/customer-portal";
+import CreditUsageCard from "./credits-card";
 
 const data = {
   // user: {
@@ -169,8 +169,6 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { data: session, isPending, error } = useSession();
-
   return (
     <Sidebar variant="sidebar" {...props}>
       <SidebarHeader>
@@ -215,22 +213,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
-        <div>
-          <Button
-            onClick={async () => {
-              await customerPortal();
-            }}
-          >
-            Manage Subscription
-          </Button>
-        </div>
-        <NavUser
-          user={{
-            name: session?.user.name!,
-            email: session?.user.email!,
-            avatar: session?.user.image!,
-          }}
-        />
+        <CreditUsageCard />
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   );

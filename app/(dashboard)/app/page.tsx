@@ -1,5 +1,7 @@
 import App from "@/components/app";
+import { auth } from "@/lib/auth-server";
 import { HydrateClient, prefetch, trpc } from "@/trpc/server";
+import { headers } from "next/headers";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
