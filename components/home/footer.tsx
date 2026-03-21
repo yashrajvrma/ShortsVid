@@ -68,7 +68,7 @@ export function Footer() {
               href="https://buildfast.shop/"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-1 flex items-center gap-1.5 w-fit rounded-lg border border-border bg-muted/50 px-3 py-1.5 text-sm font-medium text-foreground hover:border-primary/40 hover:bg-muted transition-colors "
+              className="mt-2 flex items-center gap-1.5 w-fit rounded-lg border border-border bg-muted/50 px-3 py-1.5 text-sm font-medium text-foreground hover:border-primary/40 hover:bg-muted transition-colors "
             >
               Built with
               <Image src={buildfastIcon} alt="buildfast-icon" className="w-3" />

@@ -1,4 +1,4 @@
-import { FaqSection } from "@/components/home/faq";
+import { FAQ } from "@/components/home/faq";
 import { ProductFeatures } from "@/components/home/product-features";
 import { Footer } from "@/components/home/footer";
 import { Hero } from "@/components/home/hero";
@@ -33,7 +33,7 @@ export default async function Home() {
       <ViewsShowcase />
       {/* <SocialProofSection /> */}
       <PricingSection />
-      <FaqSection />
+      <FAQ />
       <Footer />
     </main>
   );
