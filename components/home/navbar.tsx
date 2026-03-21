@@ -35,7 +35,7 @@ const Navbar = () => {
               <Image
                 src={logo}
                 alt="shortsVid-logo"
-                className="w-12 rotate-[-5deg]"
+                className="w-10 rotate-[-5deg]"
                 loading="eager"
               />
               ShortsVid

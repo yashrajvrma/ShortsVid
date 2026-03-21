@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Volume2, VolumeOff, VolumeX } from "lucide-react";
+import { Volume2, VolumeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface DemoVideo {
@@ -11,25 +11,20 @@ interface DemoVideo {
 }
 
 const DEMO_VIDEOS: DemoVideo[] = [
-  {
-    id: 1,
-    src: "/videos/shorts-1.mp4",
-  },
-  {
-    id: 2,
-    src: "/videos/shorts-2.mp4",
-  },
-  {
-    id: 3,
-    src: "/videos/shorts-3.mp4",
-  },
-  // {
-  //   id: 4,
-  //   src: "/videos/shorts-4.mp4",
-  // },
+  { id: 1, src: "/videos/shorts-1.mp4" },
+  { id: 2, src: "/videos/shorts-2.mp4" },
+  { id: 3, src: "/videos/shorts-3.mp4" },
 ];
 
-function VideoCard({ video, index }: { video: DemoVideo; index: number }) {
+function VideoCard({
+  video,
+  index,
+  mobileLayout,
+}: {
+  video: DemoVideo;
+  index: number;
+  mobileLayout?: boolean;
+}) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
 
@@ -52,13 +47,16 @@ function VideoCard({ video, index }: { video: DemoVideo; index: number }) {
       }}
       whileHover={{ y: -6, scale: 1.02 }}
       className={cn(
-        "relative overflow-hidden rounded-4xl shadow-xl ring-1 ring-white/10 flex-shrink-0",
-        video.id !== 2 && "mt-28",
+        "relative overflow-hidden sm:rounded-4xl rounded-3xl shadow-xl ring-1 ring-white/10 flex-shrink-0",
+        !mobileLayout && video.id !== 2 && "mt-28",
       )}
     >
       <video
         ref={videoRef}
-        className="aspect-9/16 w-[160px] sm:w-[300px] object-cover block"
+        className={cn(
+          "aspect-9/16 object-cover block",
+          mobileLayout ? "w-[44vw]" : "w-[300px]",
+        )}
         playsInline
         muted
         loop
@@ -71,21 +69,12 @@ function VideoCard({ video, index }: { video: DemoVideo; index: number }) {
       {/* Bottom gradient */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10" />
 
-      {/* Label */}
-      {/* {video.label && (
-        <div className="absolute bottom-8 left-0 right-0 px-3">
-          <span className="inline-block rounded-lg bg-black/50 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur-sm">
-            {video.label}
-          </span>
-        </div>
-      )} */}
-
       {/* Mute toggle button */}
       <motion.button
         onClick={toggleMute}
         whileTap={{ scale: 0.85 }}
         className={cn(
-          "absolute bottom-3 right-3 flex h-7 w-7 items-center justify-center",
+          "absolute top-3 right-3 flex h-7 w-7 items-center justify-center",
           "rounded-full bg-black/50 backdrop-blur-sm",
           "text-white/80 hover:text-white hover:bg-black/70 transition-colors",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
@@ -122,10 +111,22 @@ function VideoCard({ video, index }: { video: DemoVideo; index: number }) {
 
 export function VideoShowcase() {
   return (
-    <div className="flex items-center justify-center gap-4 hover:cursor-pointer mt-12">
-      {DEMO_VIDEOS.map((video, index) => (
-        <VideoCard key={index} video={video} index={index} />
-      ))}
-    </div>
+    <>
+      {/* Mobile: horizontal scroll, no offsets */}
+      <div className="sm:hidden flex gap-3 overflow-x-auto px-4 mt-12 pb-2 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        {DEMO_VIDEOS.map((video, index) => (
+          <div key={index} className="snap-center flex-shrink-0">
+            <VideoCard video={video} index={index} mobileLayout />
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop: centered with vertical offsets */}
+      <div className="hidden sm:flex items-center justify-center gap-4 cursor-pointer mt-12">
+        {DEMO_VIDEOS.map((video, index) => (
+          <VideoCard key={index} video={video} index={index} />
+        ))}
+      </div>
+    </>
   );
 }

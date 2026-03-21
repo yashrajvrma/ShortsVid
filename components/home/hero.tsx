@@ -5,7 +5,7 @@ import { VideoShowcase } from "./video-showcase";
 
 export function Hero() {
   return (
-    <section className="relative sm:pt-36 pt-28 pb-8 px-4 text-center">
+    <section className="relative sm:pt-36 pt-28 pb-8 text-center">
       <div className="flex justify-center border-2 border-double text-sm mx-auto w-64 rounded-xl sm:px-3 px-2 py-1 font-medium mb-3">
         <p className="flex items-center">
           Join
@@ -35,7 +35,7 @@ export function Hero() {
 
       {/* videos */}
 
-      {/* <VideoShowcase /> */}
+      <VideoShowcase />
     </section>
   );
 }
