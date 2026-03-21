@@ -205,7 +205,7 @@ function VideoCard({ video, index }: { video: DemoVideo; index: number }) {
 export function ViewsShowcase() {
   return (
     <div className="flex justify-center">
-      <section className="relative overflow-hidden bg-neutral-950 w-full my-20 sm:max-w-4xl max-w-[340px] rounded-3xl border border-neutral-800">
+      <section className="relative overflow-hidden bg-neutral-950 w-full my-20 sm:max-w-5xl max-w-[340px] rounded-3xl border border-neutral-800">
         {/* Big background text */}
         <div
           aria-hidden

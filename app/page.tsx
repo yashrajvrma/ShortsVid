@@ -1,5 +1,5 @@
 import { FaqSection } from "@/components/home/faq";
-import { FeaturesSection } from "@/components/home/features";
+import { ProductFeatures } from "@/components/home/product-features";
 import { Footer } from "@/components/home/footer";
 import { Hero } from "@/components/home/hero";
 import Navbar from "@/components/home/navbar";
@@ -29,8 +29,8 @@ export default async function Home() {
       <Navbar />
       <Hero />
       <ViewsShowcase />
-      <SocialProofSection />
-      <FeaturesSection />
+      {/* <SocialProofSection /> */}
+      <ProductFeatures />
       <PricingSection />
       <FaqSection />
       <Footer />
