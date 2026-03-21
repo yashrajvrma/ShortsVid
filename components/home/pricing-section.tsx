@@ -1,100 +1,100 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Check, Zap, Crown, Gift } from "lucide-react";
+import {
+  Check,
+  Zap,
+  Video,
+  Mic,
+  Film,
+  Gamepad2,
+  Captions,
+  LayoutTemplate,
+  RefreshCcw,
+  Clapperboard,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { cn } from "@/lib/utils";
 
 type Period = "monthly" | "yearly";
 
-interface PlanFeature {
-  text: string;
-  included: boolean;
-}
+const FEATURES = [
+  { icon: Zap, label: "Optimized for YouTube Shorts" },
+  { icon: Film, label: "Instagram Reels & TikTok Compatibility" },
+  { icon: Captions, label: "Faceless Shorts, Fake Text, Split Screen" },
+  { icon: Mic, label: "10+ languages" },
+  { icon: Mic, label: "40+ AI voices" },
+  { icon: Film, label: "Story-Driven Short Videos" },
+  { icon: Film, label: "Facts-Based Video Shorts" },
+  { icon: Gamepad2, label: "Gameplay-Focused Shorts" },
+  { icon: Captions, label: "Subtitled Video Shorts" },
+];
 
 interface Plan {
   key: string;
   name: string;
-  icon: React.ElementType;
+  tagline: string;
+  description: string;
+  monthlyPrice: number;
+  monthlyOldPrice: number;
+  yearlyPrice: number;
+  yearlyOldPrice: number;
   monthlyProductId: string;
   yearlyProductId: string;
-  monthlyPrice: number;
-  yearlyPrice: number; // per month equiv
-  yearlyTotal: number;
   monthlyCredits: number;
   yearlyCredits: number;
-  description: string;
-  features: PlanFeature[];
+  videosPerMonth: number;
   highlighted?: boolean;
-  cta: string;
+  badge?: string;
 }
 
 const PLANS: Plan[] = [
   {
     key: "basic",
     name: "Basic",
-    icon: Zap,
+    tagline: "For Beginners",
+    description: "Perfect for getting started with AI short videos.",
+    monthlyPrice: 19,
+    monthlyOldPrice: 49,
+    yearlyPrice: 17,
+    yearlyOldPrice: 35,
     monthlyProductId: process.env.NEXT_PUBLIC_POLAR_BASIC_MONTHLY_PRODUCT_ID!,
     yearlyProductId: process.env.NEXT_PUBLIC_POLAR_BASIC_YEARLY_PRODUCT_ID!,
-    monthlyPrice: 19,
-    yearlyPrice: 15, // billed annually
-    yearlyTotal: 180,
     monthlyCredits: 150,
     yearlyCredits: 1800,
-    description: "Perfect for individual creators just getting started.",
-    features: [
-      { text: "150 credits / month", included: true },
-      { text: "AI Script Generation", included: true },
-      { text: "50+ AI Voices", included: true },
-      { text: "10 Video Themes", included: true },
-      { text: "720p Export", included: true },
-      { text: "Watermark on export", included: true },
-      { text: "Priority rendering", included: false },
-      { text: "Custom branding", included: false },
-      { text: "Direct social publish", included: false },
-    ],
-    cta: "Get Basic Plan",
+    videosPerMonth: 30,
+    badge: "LIMITED OFFER",
   },
   {
     key: "pro",
     name: "Pro",
-    icon: Crown,
+    tagline: "For Short-Form Creators",
+    description: "Best for creators making Shorts, Reels & TikToks.",
+    monthlyPrice: 67,
+    monthlyOldPrice: 99,
+    yearlyPrice: 58,
+    yearlyOldPrice: 85,
     monthlyProductId: process.env.NEXT_PUBLIC_POLAR_PRO_MONTHLY_PRODUCT_ID!,
     yearlyProductId: process.env.NEXT_PUBLIC_POLAR_PRO_YEARLY_PRODUCT_ID!,
-    monthlyPrice: 49,
-    yearlyPrice: 39,
-    yearlyTotal: 468,
     monthlyCredits: 500,
     yearlyCredits: 6000,
-    description: "For serious creators scaling their short-form content.",
-    features: [
-      { text: "500 credits / month", included: true },
-      { text: "AI Script Generation", included: true },
-      { text: "50+ AI Voices", included: true },
-      { text: "All Video Themes", included: true },
-      { text: "1080p Export", included: true },
-      { text: "No watermark", included: true },
-      { text: "Priority rendering", included: true },
-      { text: "Custom branding", included: true },
-      { text: "Direct social publish", included: true },
-    ],
-    cta: "Get Pro Plan",
+    videosPerMonth: 100,
     highlighted: true,
+    badge: "BEST VALUE",
   },
 ];
 
 export function PricingSection() {
-  const [period, setPeriod] = useState<Period>("monthly");
   const router = useRouter();
+  const [period, setPeriod] = useState<Period>("monthly");
 
-  const handleCheckout = async (productId: string) => {
+  const isYearly = period === "yearly";
+
+  const handleSubscribe = async (productId: string) => {
     try {
       const response = await axios.post("/api/create-checkout-session", {
         productId,
@@ -107,246 +107,172 @@ export function PricingSection() {
     }
   };
 
-  const savings = (plan: Plan) =>
-    Math.round(
-      ((plan.monthlyPrice - plan.yearlyPrice) / plan.monthlyPrice) * 100,
-    );
-
   return (
     <section
       id="pricing"
-      className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-background border-t"
+      className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-background border-b"
     >
       <div className="mx-auto max-w-4xl">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
-          <Badge
-            variant="outline"
-            className="mb-4 px-4 py-1.5 text-sm font-medium border-primary/30 text-primary"
-          >
-            <Gift className="w-3.5 h-3.5 mr-2" />
-            Simple pricing
-          </Badge>
-          <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground text-balance max-w-2xl mx-auto mb-4">
-            Grow your shorts channel faster, for less
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-lg mx-auto mb-10">
-            Start free, scale when ready. No hidden fees, cancel anytime.
-          </p>
-
-          {/* Billing toggle */}
-          <div className="inline-flex items-center gap-4 bg-muted/60 rounded-full px-6 py-3 border border-border/60">
-            <Label
-              htmlFor="billing-toggle"
-              className={cn(
-                "text-sm font-medium cursor-pointer transition-colors",
-                period === "monthly"
-                  ? "text-foreground"
-                  : "text-muted-foreground",
-              )}
-            >
-              Monthly
-            </Label>
-            <Switch
-              id="billing-toggle"
-              checked={period === "yearly"}
-              onCheckedChange={(v) => setPeriod(v ? "yearly" : "monthly")}
-              className="data-[state=checked]:bg-primary"
-            />
-            <Label
-              htmlFor="billing-toggle"
-              className={cn(
-                "text-sm font-medium cursor-pointer transition-colors flex items-center gap-2",
-                period === "yearly"
-                  ? "text-foreground"
-                  : "text-muted-foreground",
-              )}
-            >
-              Yearly
-              <span className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400 text-[11px] font-bold px-2 py-0.5 rounded-full">
-                Save 20%
-              </span>
-            </Label>
+        <div className="text-center mb-20">
+          <div className="text-4xl sm:text-5xl font-semibold tracking-tighter text-foreground mb-4">
+            Pricing
           </div>
-        </motion.div>
+        </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {PLANS.map((plan, i) => {
-            const Icon = plan.icon;
-            const productId =
-              period === "monthly"
-                ? plan.monthlyProductId
-                : plan.yearlyProductId;
-            const price =
-              period === "monthly" ? plan.monthlyPrice : plan.yearlyPrice;
-            const credits =
-              period === "monthly" ? plan.monthlyCredits : plan.yearlyCredits;
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-md sm:max-w-full mx-auto">
+          {PLANS.map((plan) => {
+            const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
+            const oldPrice = isYearly
+              ? plan.yearlyOldPrice
+              : plan.monthlyOldPrice;
+            const credits = isYearly ? plan.yearlyCredits : plan.monthlyCredits;
+            const productId = isYearly
+              ? plan.yearlyProductId
+              : plan.monthlyProductId;
 
             return (
-              <motion.div
+              <Card
                 key={plan.key}
-                initial={{ opacity: 0, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.12, duration: 0.55 }}
-                className={cn(plan.highlighted ? "sm:-mt-3" : "")}
+                className={cn(
+                  "relative flex flex-col overflow-visible transition-all duration-300 p-6",
+                  plan.highlighted
+                    ? "border-primary bg-primary/5 shadow-lg sm:scale-105"
+                    : "border-border hover:border-primary/40",
+                )}
               >
-                <Card
-                  className={cn(
-                    "relative flex flex-col overflow-hidden transition-all duration-300 h-full",
-                    plan.highlighted
-                      ? "border-primary shadow-xl shadow-primary/10 bg-primary/[0.03]"
-                      : "border-border hover:border-primary/40 hover:shadow-md",
-                  )}
-                >
-                  {plan.highlighted && (
-                    <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent" />
-                  )}
-
-                  {plan.highlighted && (
-                    <div className="absolute top-4 right-4">
-                      <Badge className="bg-primary/10 text-primary border border-primary/20 text-xs font-semibold">
-                        Most Popular
-                      </Badge>
-                    </div>
-                  )}
-
-                  <div className="p-8 flex flex-col flex-1">
-                    {/* Plan header */}
-                    <div className="mb-8">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div
-                          className={cn(
-                            "w-10 h-10 rounded-xl flex items-center justify-center",
-                            plan.highlighted ? "bg-primary/10" : "bg-muted",
-                          )}
-                        >
-                          <Icon
-                            className={cn(
-                              "w-5 h-5",
-                              plan.highlighted
-                                ? "text-primary"
-                                : "text-muted-foreground",
-                            )}
-                          />
-                        </div>
-                        <h3 className="text-xl font-bold text-foreground">
-                          {plan.name}
-                        </h3>
-                      </div>
-
-                      <AnimatePresence mode="wait">
-                        <motion.div
-                          key={`${plan.key}-${period}`}
-                          initial={{ opacity: 0, y: 8 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -8 }}
-                          transition={{ duration: 0.2 }}
-                          className="flex items-baseline gap-2 mb-2"
-                        >
-                          <span className="text-5xl font-black text-foreground">
-                            ${price}
-                          </span>
-                          <div className="text-muted-foreground">
-                            <div className="text-sm font-medium">/month</div>
-                            {period === "yearly" && (
-                              <div className="text-xs text-emerald-600 font-semibold">
-                                Save {savings(plan)}%
-                              </div>
-                            )}
-                          </div>
-                        </motion.div>
-                      </AnimatePresence>
-
-                      {period === "yearly" && (
-                        <p className="text-sm text-muted-foreground mb-1">
-                          Billed{" "}
-                          <span className="font-semibold text-foreground">
-                            ${plan.yearlyTotal}/year
-                          </span>
-                        </p>
-                      )}
-
-                      <p className="text-sm text-muted-foreground">
-                        {plan.description}
-                      </p>
-
-                      <div className="mt-3 inline-flex items-center gap-1.5 bg-muted/80 rounded-full px-3 py-1 text-xs font-semibold text-foreground">
-                        <Zap className="w-3 h-3 text-primary" />
-                        {credits.toLocaleString()} credits{" "}
-                        {period === "yearly" ? "(credited upfront)" : "/ month"}
-                      </div>
-                    </div>
-
-                    {/* CTA */}
-                    <Button
+                {/* Top badge */}
+                {plan.badge && (
+                  <div className="absolute -top-3 left-4">
+                    <span
                       className={cn(
-                        "w-full mb-8 h-11 font-semibold text-sm",
-                        plan.highlighted ? "shadow-lg shadow-primary/20" : "",
+                        "text-sm font-semibold  tracking-tight uppercase px-3 py-1 rounded-sm",
+                        plan.highlighted
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-muted-foreground border border-border",
                       )}
-                      variant={plan.highlighted ? "default" : "outline"}
-                      onClick={() => handleCheckout(productId)}
                     >
-                      {plan.cta}
-                    </Button>
+                      {plan.badge}
+                    </span>
+                  </div>
+                )}
 
-                    {/* Features */}
-                    <ul className="space-y-3 flex-1">
-                      {plan.features.map((feature) => (
+                <div className="mt-2">
+                  {/* Plan name row — with inline toggle */}
+                  <div className="flex items-center justify-between mb-1">
+                    <h3 className="text-3xl font-semibold text-foreground tracking-tighter">
+                      {plan.name}
+                    </h3>
+                    {/* Per-card toggle — controls global period state */}
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs font-medium text-muted-foreground">
+                        YEARLY
+                      </span>
+                      <Switch
+                        checked={isYearly}
+                        onCheckedChange={(v) =>
+                          setPeriod(v ? "yearly" : "monthly")
+                        }
+                        className="data-[state=checked]:bg-primary scale-90"
+                      />
+                    </div>
+                  </div>
+
+                  <p className="text-sm font-medium text-muted-foreground">
+                    {plan.tagline}
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-0.5">
+                    {plan.description}
+                  </p>
+
+                  {/* Price */}
+                  <div className="flex items-baseline gap-2 mt-5">
+                    <span className="text-xl font-medium line-through text-muted-foreground">
+                      ${oldPrice}
+                    </span>
+                    <div className="flex items-center gap-x-1">
+                      <div className="text-5xl font-semibold text-foreground">
+                        ${price}
+                      </div>
+                      <div className="flex flex-col text-sm">
+                        <span className="text-muted-foreground">USD</span>
+                        <span className="text-muted-foreground">Per Month</span>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Billed today: ${isYearly ? price * 12 : price}
+                  </p>
+
+                  {/* CTA */}
+                  <Button
+                    className="w-full mt-5 font-semibold"
+                    variant={plan.highlighted ? "default" : "outline"}
+                    onClick={() => handleSubscribe(productId)}
+                  >
+                    Subscribe →
+                  </Button>
+
+                  {/* Videos per month/year pill */}
+                  <div className="mt-5">
+                    <div className="flex items-center gap-1.5 rounded-full border border-border bg-muted/50 px-3 py-1 text-xs font-medium text-foreground w-fit">
+                      <Video className="w-3.5 h-3.5" />
+                      {isYearly
+                        ? (plan.videosPerMonth * 12).toLocaleString()
+                        : plan.videosPerMonth}{" "}
+                      Short Videos / {isYearly ? "year" : "month"}
+                    </div>
+                  </div>
+
+                  {/* Get access to */}
+                  <div className="mt-4">
+                    <p className="text-xs font-semibold text-muted-foreground mb-2">
+                      Get access to
+                    </p>
+                    <div className="flex items-center gap-1.5 rounded-md border border-border bg-muted/30 px-3 py-1.5 text-xs font-medium text-foreground w-fit">
+                      <Clapperboard className="w-3.5 h-3.5 text-primary" />
+                      AI Shorts
+                    </div>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="my-5 border-t border-border" />
+
+                  {/* Features */}
+                  <div>
+                    <p className="text-sm font-semibold text-foreground mb-3">
+                      What&apos;s included:
+                    </p>
+                    <ul className="space-y-2.5">
+                      <li className="flex items-center gap-2.5 text-sm text-foreground">
+                        <Check className="w-4 h-4 text-emerald-500 shrink-0" />
+                        {isYearly
+                          ? (plan.videosPerMonth * 12).toLocaleString()
+                          : plan.videosPerMonth}{" "}
+                        Short Videos per {isYearly ? "year" : "month"}
+                      </li>
+                      <li className="flex items-center gap-2.5 text-sm text-foreground">
+                        <Check className="w-4 h-4 text-emerald-500 shrink-0" />
+                        {credits.toLocaleString()} Credits per{" "}
+                        {isYearly ? "Year" : "Month"}
+                      </li>
+                      {FEATURES.map((f) => (
                         <li
-                          key={feature.text}
-                          className={cn(
-                            "flex items-center gap-3 text-sm",
-                            feature.included
-                              ? "text-foreground"
-                              : "text-muted-foreground/50",
-                          )}
+                          key={f.label}
+                          className="flex items-center gap-2.5 text-sm text-foreground"
                         >
-                          {feature.included ? (
-                            <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                              <Check className="w-3 h-3 text-primary" />
-                            </div>
-                          ) : (
-                            <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
-                              <div className="w-2.5 h-0.5 bg-muted-foreground/30 rounded-full" />
-                            </div>
-                          )}
-                          <span
-                            className={feature.included ? "" : "line-through"}
-                          >
-                            {feature.text}
-                          </span>
+                          <Check className="w-4 h-4 text-emerald-500 shrink-0" />
+                          {f.label}
                         </li>
                       ))}
                     </ul>
                   </div>
-                </Card>
-              </motion.div>
+                </div>
+              </Card>
             );
           })}
         </div>
-
-        {/* Bottom note */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.4 }}
-          className="text-center text-sm text-muted-foreground mt-8"
-        >
-          All plans include a{" "}
-          <span className="font-semibold text-foreground">
-            7-day free trial
-          </span>
-          . No credit card required to start.
-        </motion.p>
       </div>
     </section>
   );
