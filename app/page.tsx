@@ -5,6 +5,7 @@ import { Hero } from "@/components/home/hero";
 import Navbar from "@/components/home/navbar";
 import { PricingSection } from "@/components/home/pricing-section";
 import { SocialProofSection } from "@/components/home/social-proof";
+import { ViewsShowcase } from "@/components/home/views-showcase";
 import { auth } from "@/lib/auth-server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -27,6 +28,7 @@ export default async function Home() {
     <main className="min-h-screen bg-background">
       <Navbar />
       <Hero />
+      <ViewsShowcase />
       <SocialProofSection />
       <FeaturesSection />
       <PricingSection />
