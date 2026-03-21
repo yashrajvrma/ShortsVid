@@ -1,5 +1,8 @@
 import Link from "next/link";
-import { Zap, Twitter, Linkedin, Youtube } from "lucide-react";
+import Image from "next/image";
+import { Twitter, Linkedin, Youtube } from "lucide-react";
+import logo from "@/public/shortsvid-icon.png";
+import buildfastIcon from "@/public/buildfast-icon.png";
 
 const NAV_LINKS = [
   { label: "Features", href: "#features" },
@@ -26,66 +29,79 @@ const SOCIAL_LINKS = [
 export function Footer() {
   return (
     <footer className="w-full border-t border-border bg-background">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-8">
-          {/* Brand */}
-          <div className="flex flex-col items-center md:items-start gap-3">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shadow-md">
-                <Zap className="w-4 h-4 text-primary-foreground fill-primary-foreground" />
-              </div>
-              <span className="text-lg font-bold tracking-tight text-foreground">
+      <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10">
+          {/* Brand — full width on mobile, 2 cols on lg */}
+          <div className="col-span-2 lg:col-span-2 flex flex-col gap-1">
+            <Link href="/" className="flex items-center gap-1 w-fit">
+              <Image
+                src={logo}
+                alt="ShortsVid"
+                className="w-8 rotate-[-5deg]"
+              />
+              <span className="text-xl font-semibold tracking-tighter text-foreground">
                 ShortsVid
               </span>
             </Link>
-            <p className="text-sm text-muted-foreground max-w-[220px] text-center md:text-left">
-              AI shorts generator for YouTube, TikTok & Instagram.
+
+            <p className="text-base text-muted-foreground max-w-[280px] mt-1">
+              AI-powered shorts generator for YouTube, TikTok & Instagram Reels.
             </p>
-            {/* Social icons */}
-            <div className="flex items-center gap-3 mt-1">
-              {SOCIAL_LINKS.map((s) => {
-                const Icon = s.icon;
-                return (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={s.label}
-                    className="w-8 h-8 rounded-lg border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
-                  >
-                    <Icon className="w-3.5 h-3.5" />
-                  </a>
-                );
-              })}
-            </div>
+
+            <p className="text-base text-muted-foreground mt-1">
+              Copyright © {new Date().getFullYear()} - All rights reserved
+            </p>
+
+            <p className="text-base text-muted-foreground mt-1">
+              Made with ❤️ by{" "}
+              <a
+                href="https://twitter.com/yashrajvrma"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-2 hover:text-foreground transition-colors"
+              >
+                Yashraj
+              </a>
+            </p>
+
+            <a
+              href="https://buildfast.shop/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-1 flex items-center gap-1.5 w-fit rounded-lg border border-border bg-muted/50 px-3 py-1.5 text-sm font-medium text-foreground hover:border-primary/40 hover:bg-muted transition-colors "
+            >
+              Built with
+              <Image src={buildfastIcon} alt="buildfast-icon" className="w-3" />
+              Buildfast
+            </a>
           </div>
 
-          {/* Nav links */}
-          <nav className="flex flex-wrap justify-center md:justify-end gap-x-8 gap-y-2">
+          {/* Links — col 1 on mobile */}
+          <div className="col-span-1 flex flex-col gap-3">
+            <span className="text-xs font-semibold uppercase tracking-tight text-muted-foreground">
+              Links
+            </span>
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors w-fit"
               >
                 {link.label}
               </Link>
             ))}
-          </nav>
-        </div>
+          </div>
 
-        {/* Bottom bar */}
-        <div className="mt-10 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} ShortsVid. All rights reserved.
-          </p>
-          <div className="flex items-center gap-5">
+          {/* Legal — col 2 on mobile */}
+          <div className="col-span-1 flex flex-col gap-3">
+            <span className="text-xs font-semibold uppercase tracking-tight text-muted-foreground">
+              Legal
+            </span>
             {LEGAL_LINKS.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors w-fit"
               >
                 {link.label}
               </Link>

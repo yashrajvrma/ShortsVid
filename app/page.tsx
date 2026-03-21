@@ -28,9 +28,10 @@ export default async function Home() {
     <main className="min-h-screen bg-background">
       <Navbar />
       <Hero />
+      <ProductFeatures />
+
       <ViewsShowcase />
       {/* <SocialProofSection /> */}
-      <ProductFeatures />
       <PricingSection />
       <FaqSection />
       <Footer />

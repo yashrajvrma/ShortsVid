@@ -28,7 +28,7 @@ const Navbar = () => {
   return (
     <>
       <nav className="fixed z-50 w-full bg-background/95 backdrop-blur-4xl shadow-sm h-16">
-        <div className="flex items-center justify-between max-w-5xl mx-auto h-full px-4 md:px-6">
+        <div className="flex items-center justify-between max-w-6xl mx-auto h-full px-4 md:px-12">
           {/* Logo */}
           <Link className="flex" href="/" onClick={() => setOpen(false)}>
             <div className="flex items-center text-2xl font-semibold tracking-tighter leading-tight gap-1">
