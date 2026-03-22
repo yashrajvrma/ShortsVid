@@ -9,18 +9,20 @@ import {
   Film,
   Gamepad2,
   Captions,
-  LayoutTemplate,
-  RefreshCcw,
   Clapperboard,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import { cn } from "@/lib/utils";
+import { useTRPC } from "@/trpc/client";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { z } from "zod"; // or wherever your toast comes from
 
 type Period = "monthly" | "yearly";
+type PlanKey = "BASIC_MONTHLY" | "BASIC_YEARLY" | "PRO_MONTHLY" | "PRO_YEARLY";
 
 const FEATURES = [
   { icon: Zap, label: "Optimized for YouTube Shorts" },
@@ -43,13 +45,22 @@ interface Plan {
   monthlyOldPrice: number;
   yearlyPrice: number;
   yearlyOldPrice: number;
-  monthlyProductId: string;
-  yearlyProductId: string;
   monthlyCredits: number;
   yearlyCredits: number;
   videosPerMonth: number;
   highlighted?: boolean;
   badge?: string;
+}
+
+// Maps plan.key + period → the planKey enum tRPC expects
+function getPlanKey(planKey: string, period: Period): PlanKey {
+  const map: Record<string, PlanKey> = {
+    basic_monthly: "BASIC_MONTHLY",
+    basic_yearly: "BASIC_YEARLY",
+    pro_monthly: "PRO_MONTHLY",
+    pro_yearly: "PRO_YEARLY",
+  };
+  return map[`${planKey}_${period}`];
 }
 
 const PLANS: Plan[] = [
@@ -62,8 +73,6 @@ const PLANS: Plan[] = [
     monthlyOldPrice: 49,
     yearlyPrice: 17,
     yearlyOldPrice: 35,
-    monthlyProductId: process.env.NEXT_PUBLIC_POLAR_BASIC_MONTHLY_PRODUCT_ID!,
-    yearlyProductId: process.env.NEXT_PUBLIC_POLAR_BASIC_YEARLY_PRODUCT_ID!,
     monthlyCredits: 150,
     yearlyCredits: 1800,
     videosPerMonth: 30,
@@ -78,8 +87,6 @@ const PLANS: Plan[] = [
     monthlyOldPrice: 99,
     yearlyPrice: 58,
     yearlyOldPrice: 85,
-    monthlyProductId: process.env.NEXT_PUBLIC_POLAR_PRO_MONTHLY_PRODUCT_ID!,
-    yearlyProductId: process.env.NEXT_PUBLIC_POLAR_PRO_YEARLY_PRODUCT_ID!,
     monthlyCredits: 500,
     yearlyCredits: 6000,
     videosPerMonth: 100,
@@ -89,22 +96,24 @@ const PLANS: Plan[] = [
 ];
 
 export function PricingSection() {
+  const trpc = useTRPC();
   const router = useRouter();
   const [period, setPeriod] = useState<Period>("monthly");
 
   const isYearly = period === "yearly";
 
-  const handleSubscribe = async (productId: string) => {
-    try {
-      const response = await axios.post("/api/create-checkout-session", {
-        productId,
-      });
-      if (response.data?.checkoutUrl) {
-        router.push(response.data.checkoutUrl);
-      }
-    } catch (error) {
-      console.error("Checkout error:", error);
-    }
+  const checkoutMutation = useMutation(
+    trpc.billing.createCheckout.mutationOptions({
+      onSuccess: ({ url }) => router.push(url),
+      onError: (error) => {
+        toast.error(error.message || "Failed to create checkout");
+      },
+    }),
+  );
+
+  const handleSubscribe = (planKey: string) => {
+    const resolvedPlanKey = getPlanKey(planKey, period);
+    checkoutMutation.mutate({ planKey: resolvedPlanKey });
   };
 
   return (
@@ -128,9 +137,12 @@ export function PricingSection() {
               ? plan.yearlyOldPrice
               : plan.monthlyOldPrice;
             const credits = isYearly ? plan.yearlyCredits : plan.monthlyCredits;
-            const productId = isYearly
-              ? plan.yearlyProductId
-              : plan.monthlyProductId;
+
+            // Whether THIS card's button is loading
+            const isLoading =
+              checkoutMutation.isPending &&
+              checkoutMutation.variables?.planKey ===
+                getPlanKey(plan.key, period);
 
             return (
               <Card
@@ -147,7 +159,7 @@ export function PricingSection() {
                   <div className="absolute -top-3 left-4">
                     <span
                       className={cn(
-                        "text-sm font-semibold  tracking-tight uppercase px-3 py-1 rounded-sm",
+                        "text-sm font-semibold tracking-tight uppercase px-3 py-1 rounded-sm",
                         plan.highlighted
                           ? "bg-primary text-primary-foreground"
                           : "bg-muted text-muted-foreground border border-border",
@@ -164,7 +176,6 @@ export function PricingSection() {
                     <h3 className="text-3xl font-semibold text-foreground tracking-tighter">
                       {plan.name}
                     </h3>
-                    {/* Per-card toggle — controls global period state */}
                     <div className="flex items-center gap-1.5">
                       <span className="text-xs font-medium text-muted-foreground">
                         YEARLY
@@ -209,9 +220,10 @@ export function PricingSection() {
                   <Button
                     className="w-full mt-5 font-semibold"
                     variant={plan.highlighted ? "default" : "outline"}
-                    onClick={() => handleSubscribe(productId)}
+                    disabled={isLoading}
+                    onClick={() => handleSubscribe(plan.key)}
                   >
-                    Subscribe →
+                    {isLoading ? "Redirecting..." : "Subscribe →"}
                   </Button>
 
                   {/* Videos per month/year pill */}

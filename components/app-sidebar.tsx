@@ -28,7 +28,7 @@ import {
   PlusIcon,
   Play,
 } from "lucide-react";
-import { useSession } from "@/lib/auth-client";
+import { useSession } from "@/lib/auth/client";
 import Image from "next/image";
 import ShortsVidLogo from "@/public/shortsvid-icon.png";
 import Link from "next/link";

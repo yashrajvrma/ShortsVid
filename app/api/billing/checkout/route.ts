@@ -1,5 +1,5 @@
 // src/app/api/billing/checkout/route.ts
-import { auth } from "@/lib/auth-server";
+import { auth } from "@/lib/auth/server";
 import { polar, SUBSCRIPTION_PLAN_CONFIG } from "@/lib/polar";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
   const config = SUBSCRIPTION_PLAN_CONFIG[body.data.planKey];
 
   const checkout = await polar.checkouts.create({
-    products: [config.productId], // ← fix: array not productId
+    products: [config.productId],
     successUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/app`,
     customerEmail: session.user.email,
     metadata: {

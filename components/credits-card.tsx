@@ -1,5 +1,5 @@
 import { prisma } from "@/db";
-import { auth } from "@/lib/auth-server";
+import { auth } from "@/lib/auth/server";
 import { headers } from "next/headers";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";

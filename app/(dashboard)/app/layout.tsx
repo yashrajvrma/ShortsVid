@@ -16,7 +16,7 @@ import { Separator } from "@/components/ui/separator";
 import ShortsVidLogo from "@/public/shortsvid-icon.png";
 import React from "react";
 import Image from "next/image";
-import { auth } from "@/lib/auth-server";
+import { auth } from "@/lib/auth/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 

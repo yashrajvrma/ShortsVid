@@ -6,7 +6,7 @@ import Navbar from "@/components/home/navbar";
 import { PricingSection } from "@/components/home/pricing-section";
 import { SocialProofSection } from "@/components/home/social-proof";
 import { ViewsShowcase } from "@/components/home/views-showcase";
-import { auth } from "@/lib/auth-server";
+import { auth } from "@/lib/auth/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 

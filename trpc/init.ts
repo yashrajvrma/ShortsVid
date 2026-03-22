@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth-server";
+import { auth } from "@/lib/auth/server";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { headers } from "next/headers";
 import { cache } from "react";
@@ -43,6 +43,9 @@ export const authProcedure = t.procedure.use(async ({ next }) => {
   return next({
     ctx: {
       userId: session.user.id,
+      name: session.user.name,
+      email: session.user.email,
+      role: session.user.role,
     },
   });
 });

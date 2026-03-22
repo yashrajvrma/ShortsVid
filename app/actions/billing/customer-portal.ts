@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/db";
-import { auth } from "@/lib/auth-server";
+import { auth } from "@/lib/auth/server";
 import { polar } from "@/lib/polar";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";

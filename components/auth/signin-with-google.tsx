@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { signIn } from "@/lib/auth-client";
+import { signIn } from "@/lib/auth/client";
 import { useState } from "react";
 import toast from "react-hot-toast";
 

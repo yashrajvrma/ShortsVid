@@ -1,69 +1,54 @@
 // src/server/routers/billing.ts
 import { z } from "zod";
 import { authProcedure, createTRPCRouter } from "../init";
+import { polar, SUBSCRIPTION_PLAN_CONFIG } from "@/lib/polar";
+import { TRPCError } from "@trpc/server";
 import { prisma } from "@/db";
-import { CREDITS_PER_VIDEO, SUBSCRIPTION_PLAN_CONFIG } from "@/lib/polar";
 
 export const billingRouter = createTRPCRouter({
-  // current subscription + plan info
-  getSubscription: authProcedure.query(async ({ ctx }) => {
-    const user = await prisma.user.findUniqueOrThrow({
-      where: { id: ctx.userId },
-      select: {
-        plan: true,
-        credit: true,
-        subscription: true,
-      },
+  createCheckout: authProcedure
+    .input(
+      z.object({
+        planKey: z.enum(
+          ["BASIC_MONTHLY", "BASIC_YEARLY", "PRO_MONTHLY", "PRO_YEARLY"],
+          { error: "Invalid plan" },
+        ),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const config = SUBSCRIPTION_PLAN_CONFIG[input.planKey];
+
+      const checkout = await polar.checkouts.create({
+        products: [config.productId],
+        successUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/app`,
+        customerEmail: ctx.email,
+        metadata: {
+          userId: ctx.userId,
+          planKey: input.planKey,
+        },
+      });
+
+      return { url: checkout.url };
+    }),
+  cancelSubscription: authProcedure.mutation(async ({ ctx }) => {
+    const subscription = await prisma.subscription.findUnique({
+      where: { userId: ctx.userId },
+    });
+
+    if (!subscription || subscription.status === "CANCELLED") {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "No active subscription found",
+      });
+    }
+
+    await polar.subscriptions.revoke({
+      id: subscription.polarSubscriptionId,
     });
 
     return {
-      plan: user.plan,
-      credits: user.credit,
-      creditsPerVideo: CREDITS_PER_VIDEO,
-      videosRemaining: Math.floor(user.credit / CREDITS_PER_VIDEO),
-      subscription: user.subscription
-        ? {
-            status: user.subscription.status,
-            interval: user.subscription.period,
-            cancelAtPeriodEnd: user.subscription.cancelAtPeriodEnd,
-            currentPeriodEnd: user.subscription.currentPeriodEnd,
-          }
-        : null,
+      success: true,
     };
-  }),
-
-  // credit transaction history
-  getCreditHistory: authProcedure
-    .input(
-      z.object({
-        limit: z.number().min(1).max(50).default(20),
-        cursor: z.string().optional(),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      const items = await prisma.creditHistory.findMany({
-        where: { userId: ctx.userId },
-        orderBy: { createdAt: "desc" },
-        take: input.limit + 1,
-        cursor: input.cursor ? { id: input.cursor } : undefined,
-      });
-
-      let nextCursor: string | undefined;
-      if (items.length > input.limit) {
-        nextCursor = items.pop()!.id;
-      }
-
-      return { items, nextCursor };
-    }),
-
-  // available plans for pricing page
-  getPlans: authProcedure.query(() => {
-    return Object.entries(SUBSCRIPTION_PLAN_CONFIG).map(([key, config]) => ({
-      key,
-      label: config.label,
-      plan: config.plan,
-      interval: config.period,
-      credits: config.credits,
-    }));
+    // do NOT update DB here — webhook handles state
   }),
 });

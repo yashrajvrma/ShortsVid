@@ -1,7 +1,7 @@
 // src/app/api/billing/cancel/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { polar } from "@/lib/polar";
-import { auth } from "@/lib/auth-server";
+import { auth } from "@/lib/auth/server";
 import { prisma } from "@/db";
 
 export async function POST(req: NextRequest) {
