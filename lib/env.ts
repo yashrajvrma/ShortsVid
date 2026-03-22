@@ -8,14 +8,22 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: z.string().min(1),
     GOOGLE_CLIENT_ID: z.string().min(1),
     OPENAI_API_KEY: z.string().min(1),
+
+    // cloudflare api key
     R2_ACCOUNT_ID: z.string().min(1),
     R2_ACCESS_KEY_ID: z.string().min(1),
     R2_SECRET_ACCESS_KEY: z.string().min(1),
     R2_BUCKET_NAME: z.string().min(1),
+
+    // fish audio
     FISH_AUDIO_API_KEY: z.string().min(1),
 
     // polar
     POLAR_SERVER_ENV: z.enum(["sandbox", "production"]).default("sandbox"),
+    POLAR_BASIC_MONTHLY_PRODUCT_ID: z.string().min(1),
+    POLAR_BASIC_YEARLY_PRODUCT_ID: z.string().min(1),
+    POLAR_PRO_MONTHLY_PRODUCT_ID: z.string().min(1),
+    POLAR_PRO_YEARLY_PRODUCT_ID: z.string().min(1),
   },
   experimental__runtimeEnv: {},
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
