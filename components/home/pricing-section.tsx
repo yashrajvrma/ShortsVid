@@ -110,7 +110,7 @@ export function PricingSection() {
   return (
     <section
       id="pricing"
-      className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-background border-b"
+      className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-background"
     >
       <div className="mx-auto max-w-4xl">
         {/* Header */}

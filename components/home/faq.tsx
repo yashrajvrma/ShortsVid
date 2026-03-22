@@ -39,8 +39,8 @@ export function FAQ() {
     <section id="faq" className="w-full py-20 px-4">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl sm:text-5xl font-medium tracking-tighter text-foreground">
+        <div className="text-center mb-20">
+          <h2 className="text-4xl sm:text-5xl font-semibold tracking-tighter text-foreground">
             Questions We Get Asked
           </h2>
           {/* <p className="mt-3 text-base text-muted-foreground">
