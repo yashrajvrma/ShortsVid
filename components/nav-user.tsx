@@ -28,8 +28,8 @@ import {
   EllipsisVertical,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 import { Skeleton } from "./ui/skeleton";
+import { toast } from "sonner";
 
 export function NavUser() {
   const { isMobile } = useSidebar();

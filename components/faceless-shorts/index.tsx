@@ -14,7 +14,6 @@ import {
 } from "@/hooks/use-faceless-form";
 import { useRouter } from "next/navigation";
 import { useTRPC } from "@/trpc/client";
-import { toast } from "react-hot-toast";
 
 import { LanguageSelector } from "./language-selector";
 import { TopicDuration } from "./topic-duration";
@@ -27,6 +26,7 @@ import { ScriptSection } from "./script-section";
 import type { AppRouter } from "@/trpc/routers/_app";
 import Header from "@/components/header";
 import { CaptionStyle } from "@/types";
+import { toast } from "sonner";
 
 export default function FacelessShorts() {
   const router = useRouter();

@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { generateScript } from "@/actions/faceless-shorts/generate-script";
 import { AlertTriangle, Loader2, Sparkles, WandSparkles } from "lucide-react";
 import { LANGUAGES } from "@/lib/constants";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 
 const MAX_CHARS = 1200;
 
