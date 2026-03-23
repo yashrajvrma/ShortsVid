@@ -23,11 +23,11 @@ export default function FetchAllVideo({ videoData }: { videoData: AllShorts }) {
   return (
     <div
       onClick={handleClick}
-      className="w-full max-w-[180px] cursor-pointer hover:scale-[1.03] transition-transform"
+      className="w-full max-w-[200px] cursor-pointer hover:scale-[1.03] transition-transform"
     >
       <AspectRatio
         ratio={9 / 16}
-        className="relative rounded-xl overflow-hidden bg-muted"
+        className="relative rounded-xl overflow-hidden bg-muted border-2 border-double"
       >
         {/* Thumbnail */}
         {videoData.signedThumbnailUrl && (

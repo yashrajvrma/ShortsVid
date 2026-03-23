@@ -35,7 +35,7 @@ export default async function CreditUsageCard() {
         <span className="text-sm font-normal tracking-tight text-muted-foreground">
           Current Plan
         </span>
-        <span className="text-sm font-semibold tracking-tight uppercase text-foreground">
+        <span className="text-base font-semibold tracking-tight uppercase text-foreground">
           {plan}
         </span>
       </div>
@@ -43,13 +43,15 @@ export default async function CreditUsageCard() {
       <Separator />
 
       {/* Credits Body */}
-      <div className="px-3 py-2 space-y-2">
-        <p className="text-sm font-normal tracking-tight text-muted-foreground">
-          Remaining Credits
-        </p>
-        <p className="text-3xl font-semibold tracking-tight text-foreground leading-none">
-          {credits.toLocaleString()}
-        </p>
+      <div className="flex flex-col px-3 py-2 space-y-1">
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-normal tracking-tight text-muted-foreground">
+            Remaining Credits
+          </p>
+          <p className="text-base font-semibold tracking-tight text-foreground leading-none">
+            {credits.toLocaleString()}
+          </p>
+        </div>
         {billingEnd && (
           <p className="text-sm text-muted-foreground font-normal tracking-tight leading-relaxed pt-1 max-w-[260px]">
             Billing cycle ends on {billingEnd}. Unused credits will roll over to
@@ -57,6 +59,20 @@ export default async function CreditUsageCard() {
           </p>
         )}
       </div>
+      {/* <div className="px-3 py-2 space-y-1">
+        <p className="text-sm font-normal tracking-tight text-muted-foreground">
+          Remaining Credits
+        </p>
+        <p className="text-3xl font-semibold tracking-tight text-foreground leading-none">
+          {credits.toLocaleString()}
+        </p>
+        {billingEnd && (
+          <p className="text-xs text-muted-foreground font-normal tracking-tight leading-relaxed pt-1 max-w-[260px]">
+            Billing cycle ends on {billingEnd}. Unused credits will roll over to
+            the next period.
+          </p>
+        )}
+      </div> */}
 
       <Separator />
 

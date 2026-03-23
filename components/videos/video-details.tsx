@@ -37,6 +37,7 @@ import {
 } from "lucide-react";
 
 import type { VideoDetail, VideoStatus } from "@/types";
+import Header from "../header";
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -227,67 +228,69 @@ export default function VideoDetailClient({
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-6">
+      <div className="min-h-screen bg-background w-full">
+        <div className="container pb-6">
           {/* ── top nav bar ── */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="mb-4 flex items-center justify-between"
-          >
-            <Button
-              variant="ghost"
-              size="sm"
-              className="gap-1.5 text-muted-foreground hover:text-foreground"
-              onClick={() => router.back()}
+          <Header>
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="mb-4 flex justify-between w-full"
             >
-              <ArrowLeft className="size-4" />
-              Back
-            </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="gap-1.5 text-muted-foreground hover:text-foreground"
+                onClick={() => router.back()}
+              >
+                <ArrowLeft className="size-4" />
+                Back
+              </Button>
 
-            <div className="flex items-center gap-1">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="gap-1.5 text-muted-foreground hover:text-foreground disabled:opacity-40"
-                    onClick={handleCopy}
-                    disabled={!hasDownloadUrl}
-                  >
-                    <Copy className="size-4" />
-                    Copy
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  {hasDownloadUrl
-                    ? "Copy video download link"
-                    : "Available after export"}
-                </TooltipContent>
-              </Tooltip>
+              <div className="flex items-center gap-2">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="gap-1.5 text-muted-foreground hover:text-foreground disabled:opacity-40"
+                      onClick={handleCopy}
+                      disabled={!hasDownloadUrl}
+                    >
+                      <Copy className="size-4" />
+                      Copy
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {hasDownloadUrl
+                      ? "Copy video download link"
+                      : "Available after export"}
+                  </TooltipContent>
+                </Tooltip>
 
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="gap-1.5 text-muted-foreground hover:text-foreground disabled:opacity-40"
-                    onClick={handleShare}
-                    disabled={!hasDownloadUrl}
-                  >
-                    <Share2 className="size-4" />
-                    Share
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  {hasDownloadUrl
-                    ? "Share video download link"
-                    : "Available after export"}
-                </TooltipContent>
-              </Tooltip>
-            </div>
-          </motion.div>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="default"
+                      className="gap-1.5 text-muted-foreground hover:text-foreground disabled:opacity-40"
+                      onClick={handleShare}
+                      disabled={!hasDownloadUrl}
+                    >
+                      <Share2 className="size-4" />
+                      Share
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {hasDownloadUrl
+                      ? "Share video download link"
+                      : "Available after export"}
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </motion.div>
+          </Header>
 
           <Separator className="mb-6" />
 
@@ -445,8 +448,12 @@ export default function VideoDetailClient({
                 )}
 
                 {isSuccess && downloadUrl && (
-                  <Button className="w-full gap-2" onClick={handleDownload}>
-                    <Download className="size-5" />
+                  <Button
+                    size="lg"
+                    className="w-full gap-2 bg-foreground text-background hover:bg-foreground hover:text-muted cursor-pointer"
+                    onClick={handleDownload}
+                  >
+                    <Download className="size-4" />
                     Download Video
                   </Button>
                 )}
