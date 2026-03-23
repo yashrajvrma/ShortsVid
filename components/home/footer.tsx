@@ -10,8 +10,8 @@ const NAV_LINKS = [
 ];
 
 const LEGAL_LINKS = [
-  { label: "Privacy Policy", href: "/privacy-policy" },
-  { label: "Terms of Service", href: "/terms-of-service" },
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Terms of Service", href: "/terms" },
 ];
 
 export function Footer() {
@@ -33,7 +33,7 @@ export function Footer() {
               </span>
             </Link>
 
-            <p className="text-base text-muted-foreground max-w-[280px] mt-2">
+            <p className="text-base text-muted-foreground sm:max-w-[400px] max-w-[350px] mt-2">
               AI-powered shorts generator for YouTube, TikTok & Instagram Reels.
             </p>
 
