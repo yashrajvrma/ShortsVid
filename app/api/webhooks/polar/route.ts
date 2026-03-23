@@ -226,7 +226,7 @@ async function handleSubscriptionUncanceled(data: any) {
     },
   });
 }
-  
+
 async function handleSubscriptionRevoked(data: any) {
   // day 30 — period truly ended, downgrade to free now
   const subscription = await prisma.subscription.findUnique({

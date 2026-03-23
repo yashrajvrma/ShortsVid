@@ -49,6 +49,5 @@ export const billingRouter = createTRPCRouter({
     return {
       success: true,
     };
-    // do NOT update DB here — webhook handles state
   }),
 });
