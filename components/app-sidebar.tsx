@@ -34,8 +34,8 @@ import ShortsVidLogo from "@/public/shortsvid-icon.png";
 import Link from "next/link";
 import { NavShorts } from "./nav-shorts";
 import { Button } from "./ui/button";
-import { customerPortal } from "@/app/actions/billing/customer-portal";
-import CreditUsageCard from "./credits-card";
+import { customerPortal } from "@/actions/billing/customer-portal";
+import CreditUsageCard from "./credit-usage-card";
 
 const data = {
   // user: {

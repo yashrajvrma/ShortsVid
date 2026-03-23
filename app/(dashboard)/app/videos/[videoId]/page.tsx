@@ -6,7 +6,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Suspense } from "react";
 
 import VideoDetailClient from "@/components/videos/video-details";
-import { getVideoDetailsById } from "@/app/actions/faceless-shorts/get-video-detail-by-id";
+import { getVideoDetailsById } from "@/actions/faceless-shorts/get-video-detail-by-id";
 import { Loader2 } from "lucide-react";
 
 interface VideoDetailPageProps {

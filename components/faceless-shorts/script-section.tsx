@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { generateScript } from "@/app/actions/faceless-shorts/generate-script";
+import { generateScript } from "@/actions/faceless-shorts/generate-script";
 import { AlertTriangle, Loader2, Sparkles, WandSparkles } from "lucide-react";
 import { LANGUAGES } from "@/lib/constants";
 import { toast } from "react-hot-toast";
