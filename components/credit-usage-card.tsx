@@ -35,7 +35,7 @@ export default async function CreditUsageCard() {
         <span className="text-sm font-normal tracking-tight text-muted-foreground">
           Current Plan
         </span>
-        <span className="text-base font-semibold tracking-tight uppercase text-foreground">
+        <span className="text-sm font-semibold tracking-tight uppercase text-foreground">
           {plan}
         </span>
       </div>
@@ -48,12 +48,12 @@ export default async function CreditUsageCard() {
           <p className="text-sm font-normal tracking-tight text-muted-foreground">
             Remaining Credits
           </p>
-          <p className="text-base font-semibold tracking-tight text-foreground leading-none">
+          <p className="text-sm font-semibold tracking-tight text-foreground leading-none">
             {credits.toLocaleString()}
           </p>
         </div>
         {billingEnd && (
-          <p className="text-sm text-muted-foreground font-normal tracking-tight leading-relaxed pt-1 max-w-[260px]">
+          <p className="text-xs text-muted-foreground font-normal tracking-tight leading-relaxed pt-1 max-w-[260px]">
             Billing cycle ends on {billingEnd}. Unused credits will roll over to
             the next period.
           </p>

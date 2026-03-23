@@ -27,6 +27,7 @@ import {
   Gamepad2Icon,
   PlusIcon,
   Play,
+  UserRound,
 } from "lucide-react";
 import { useSession } from "@/lib/auth/client";
 import Image from "next/image";
@@ -158,7 +159,7 @@ const data = {
     {
       name: "Faceless Shorts",
       url: "/app/shorts/faceless-shorts",
-      icon: <PencilLineIcon />,
+      icon: <UserRound />,
     },
     {
       name: "Gameplay Videos",
