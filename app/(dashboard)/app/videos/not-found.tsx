@@ -82,13 +82,13 @@ export default function VideoNotFound() {
           className="flex w-full flex-col gap-3 sm:flex-row"
         >
           <Button asChild className="flex-1 gap-2">
-            <Link href="/dashboard/create">
+            <Link href="/app/shorts/faceless-shorts">
               <Plus className="h-4 w-4" />
               Create New Video
             </Link>
           </Button>
           <Button asChild variant="outline" className="flex-1 gap-2">
-            <Link href="/dashboard">
+            <Link href="/app">
               <ArrowLeft className="h-4 w-4" />
               Back to Dashboard
             </Link>
@@ -106,7 +106,7 @@ export default function VideoNotFound() {
             size="sm"
             className="gap-1.5 text-muted-foreground"
           >
-            <Link href="/dashboard">
+            <Link href="/app/videos">
               <Search className="h-3.5 w-3.5" />
               Browse all your videos
             </Link>
