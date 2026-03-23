@@ -119,11 +119,11 @@ export function PricingSection() {
   return (
     <section
       id="pricing"
-      className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-background"
+      className="w-full sm:py-20 py-12 px-4 sm:px-6 lg:px-8 bg-background"
     >
       <div className="mx-auto max-w-4xl">
         {/* Header */}
-        <div className="text-center mb-20">
+        <div className="text-center sm:mb-24 mb-16">
           <div className="text-4xl sm:text-5xl font-semibold tracking-tighter text-foreground mb-4">
             Pricing
           </div>

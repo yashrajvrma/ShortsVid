@@ -64,7 +64,7 @@ const cardVariants = {
 
 export function ProductFeatures() {
   return (
-    <section id="features" className="w-full py-36 px-4">
+    <section id="features" className="w-full sm:py-20 py-12 px-4">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <motion.div
@@ -72,12 +72,12 @@ export function ProductFeatures() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="mb-14"
+          className="mb-10"
         >
           <h2 className="text-4xl sm:text-5xl font-semibold tracking-tighter text-foreground">
             Create viral videos in few clicks
           </h2>
-          <p className="mt-3 text-base sm:text-2xl text-muted-foreground tracking-tight">
+          <p className="mt-3 text-lg sm:text-2xl text-muted-foreground">
             No Need of switching tools and manual editing.
           </p>
           <p className="text-base sm:text-2xl text-muted-foreground tracking-tight">
@@ -99,7 +99,7 @@ export function ProductFeatures() {
               key={i}
               // @ts-ignore
               variants={cardVariants}
-              className="group flex flex-col gap-4 rounded-2xl border border-border bg-card p-3 hover:border-primary/40 hover:shadow-md transition-all duration-300 hover:cursor-pointer"
+              className="group flex flex-col gap-4 rounded-2xl border-2 border-border bg-card p-3 hover:border-primary/40 hover:shadow-md transition-all duration-300 hover:cursor-pointer"
             >
               {/* Screenshot container */}
               <div className="relative w-full overflow-hidden rounded-xl bg-muted aspect-video">

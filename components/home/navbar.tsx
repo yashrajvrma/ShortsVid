@@ -27,8 +27,8 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed z-50 w-full bg-background/95 backdrop-blur-4xl shadow-sm h-16">
-        <div className="flex items-center justify-between max-w-6xl mx-auto h-full px-4 md:px-12">
+      <nav className="fixed z-50 w-full bg-background/80 backdrop-blur-3xl shadow-sm sm:h-18 h-16">
+        <div className="flex items-center justify-between max-w-5xl mx-auto h-full px-4 md:px-0">
           {/* Logo */}
           <Link className="flex" href="/" onClick={() => setOpen(false)}>
             <div className="flex items-center text-2xl font-semibold tracking-tighter leading-tight gap-1">
@@ -122,7 +122,7 @@ const Navbar = () => {
                   {link.label}
                 </a>
               ))}
-              <div className="mt-2 pt-2 border-t border-border">
+              <div className="mt-2 pt-2">
                 <Button
                   variant="secondary"
                   size="lg"

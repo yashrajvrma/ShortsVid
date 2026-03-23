@@ -47,7 +47,7 @@ function VideoCard({
       }}
       whileHover={{ y: -6, scale: 1.02 }}
       className={cn(
-        "relative overflow-hidden sm:rounded-4xl rounded-3xl shadow-xl ring-1 ring-white/10 flex-shrink-0",
+        "relative overflow-hidden sm:rounded-4xl rounded-3xl shadow-xl flex-shrink-0 border-stone-300 border-2 border-double",
         !mobileLayout && video.id !== 2 && "mt-28",
       )}
     >
@@ -74,10 +74,10 @@ function VideoCard({
         onClick={toggleMute}
         whileTap={{ scale: 0.85 }}
         className={cn(
-          "absolute top-3 right-3 flex h-7 w-7 items-center justify-center",
+          "absolute right-3 bottom-3 flex h-7 w-7 items-center justify-center",
           "rounded-full bg-black/50 backdrop-blur-sm",
           "text-white/80 hover:text-white hover:bg-black/70 transition-colors",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer",
         )}
         aria-label={muted ? "Unmute" : "Mute"}
       >
@@ -113,7 +113,7 @@ export function VideoShowcase() {
   return (
     <>
       {/* Mobile: horizontal scroll, no offsets */}
-      <div className="sm:hidden flex gap-3 overflow-x-auto px-4 mt-12 pb-2 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <div className="sm:hidden flex gap-2 overflow-x-auto px-4 mt-12 pb-2 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {DEMO_VIDEOS.map((video, index) => (
           <div key={index} className="snap-center flex-shrink-0">
             <VideoCard video={video} index={index} mobileLayout />
@@ -122,7 +122,7 @@ export function VideoShowcase() {
       </div>
 
       {/* Desktop: centered with vertical offsets */}
-      <div className="hidden sm:flex items-center justify-center gap-4 cursor-pointer mt-12">
+      <div className="hidden sm:flex items-center justify-center gap-3 cursor-pointer mt-3">
         {DEMO_VIDEOS.map((video, index) => (
           <VideoCard key={index} video={video} index={index} />
         ))}

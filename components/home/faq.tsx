@@ -36,10 +36,10 @@ const FAQS = [
 
 export function FAQ() {
   return (
-    <section id="faq" className="w-full py-20 px-4">
+    <section id="faq" className="w-full sm:py-20 py-12 px-4">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-20">
+        <div className="text-center sm:mb-20 mb-12">
           <h2 className="text-4xl sm:text-5xl font-semibold tracking-tighter text-foreground">
             Questions We Get Asked
           </h2>
