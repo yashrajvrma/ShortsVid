@@ -170,14 +170,36 @@ export default function VideoDetailClient({
   }, [exportMutation, videoDetail.id]);
 
   // ── download ──────────────────────────────────────────────────────────────
-  const handleDownload = useCallback(() => {
+  // const handleDownload = useCallback(() => {
+  //   if (!downloadUrl) return;
+  //   const a = document.createElement("a");
+  //   a.href = downloadUrl;
+  //   a.download = `shorts-${videoDetail.id}.mp4`;
+  //   document.body.appendChild(a);
+  //   a.click();
+  //   document.body.removeChild(a);
+  // }, [downloadUrl, videoDetail.id]);
+  const handleDownload = useCallback(async () => {
     if (!downloadUrl) return;
-    const a = document.createElement("a");
-    a.href = downloadUrl;
-    a.download = `shorts-${videoDetail.id}.mp4`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    try {
+      toast.loading("Preparing download…", { id: "download" });
+      const response = await fetch(downloadUrl);
+      if (!response.ok) throw new Error("Failed to fetch video");
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = `shorts-${videoDetail.id}.mp4`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      // Release the object URL after a short delay
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+      toast.success("Download started!", { id: "download" });
+    } catch (err) {
+      console.error("Download failed", err);
+      toast.error("Download failed. Please try again.", { id: "download" });
+    }
   }, [downloadUrl, videoDetail.id]);
 
   // ── copy video download URL ───────────────────────────────────────────────
