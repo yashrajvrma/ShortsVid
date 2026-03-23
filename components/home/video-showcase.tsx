@@ -47,7 +47,7 @@ function VideoCard({
       }}
       whileHover={{ y: -6, scale: 1.02 }}
       className={cn(
-        "relative overflow-hidden sm:rounded-4xl rounded-3xl shadow-xl flex-shrink-0 border-stone-300 border-2 border-double",
+        "relative overflow-hidden sm:rounded-4xl rounded-3xl shadow-xl flex-shrink-0 border-stone-400/80 border-4  border-double",
         !mobileLayout && video.id !== 2 && "mt-28",
       )}
     >

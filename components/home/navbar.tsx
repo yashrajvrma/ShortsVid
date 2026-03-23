@@ -28,7 +28,7 @@ const Navbar = () => {
   return (
     <>
       <nav className="fixed z-50 w-full bg-background/80 backdrop-blur-3xl shadow-sm sm:h-18 h-16">
-        <div className="flex items-center justify-between max-w-5xl mx-auto h-full px-4 md:px-0">
+        <div className="flex items-center justify-between max-w-5xl mx-auto h-full px-4 sm:px-3">
           {/* Logo */}
           <Link className="flex" href="/" onClick={() => setOpen(false)}>
             <div className="flex items-center text-2xl font-semibold tracking-tighter leading-tight gap-1">
@@ -48,7 +48,7 @@ const Navbar = () => {
               <a
                 key={link.href}
                 href={link.href}
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="text-foreground hover:text-muted-foreground tracking-tight text-lg transition-colors"
               >
                 {link.label}
               </a>
@@ -60,7 +60,7 @@ const Navbar = () => {
             <Button
               variant="secondary"
               size="lg"
-              className="hidden md:inline-flex rounded-lg font-medium text-base px-4"
+              className="hidden md:inline-flex rounded-lg font-medium text-base px-4 cursor-pointer"
               onClick={handleLogin}
             >
               Login
@@ -126,7 +126,7 @@ const Navbar = () => {
                 <Button
                   variant="secondary"
                   size="lg"
-                  className="w-full rounded-lg font-medium text-base"
+                  className="w-full rounded-lg font-medium text-base cursor-pointer"
                   onClick={handleLogin}
                 >
                   Login
