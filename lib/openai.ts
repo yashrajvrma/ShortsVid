@@ -1,5 +1,6 @@
 import { Topic, VideoStyle } from "@/types";
 import OpenAI from "openai";
+import Together from "together-ai";
 import { zodTextFormat } from "openai/helpers/zod";
 import { z } from "zod";
 
@@ -7,128 +8,188 @@ export const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY!,
 });
 
-// ─── Enums (mirrored from Prisma schema) ────────────────────────────────────
+const together = new Together({
+  apiKey: process.env.TOGETHER_AI_API_KEY!,
+});
 
-// ─── Zod Schemas for Structured Outputs ─────────────────────────────────────
+const CharacterSchema = z.object({
+  name: z.string(),
+  description: z.string(), // fixed visual identity
+});
 
 const ImageSceneSchema = z.object({
-  sceneIndex: z.number().int().describe("Zero-based index for ordering scenes"),
-  scriptSegment: z
-    .string()
-    .describe(
-      "The exact portion of the script this scene visually represents (one fact, idea, or beat)",
-    ),
-  prompt: z
-    .string()
-    .describe(
-      "Highly detailed image generation prompt for this scene — no text or logos in the image",
-    ),
-  mood: z
-    .string()
-    .describe(
-      "One or two words describing the emotional mood of this scene (e.g. 'tense', 'hopeful')",
-    ),
+  sceneIndex: z.number().int(),
+  scriptSegment: z.string(),
+  prompt: z.string(),
+  mood: z.string(),
 });
 
 const ImagePromptsResponseSchema = z.object({
-  scenes: z
-    .array(ImageSceneSchema)
-    .describe(
-      "One scene per distinct fact, idea, or narrative beat extracted from the script. Aim for 6–8 scenes for a rich short video.",
-    ),
+  characters: z.array(CharacterSchema),
+  scenes: z.array(ImageSceneSchema),
 });
 
 export type ImagePromptResult = z.infer<typeof ImageSceneSchema>;
 
-// ─── Topic → Prompt Style Guide ─────────────────────────────────────────────
-
 const TOPIC_STYLE_GUIDE: Record<Topic, string> = {
   MOTIVATIONAL:
-    "Uplifting, energetic visuals — sunrise, determined people, achievement moments, bold colours",
+    "uplifting, energetic, high emotion, inspiring moments, strong visual contrast",
   HORROR_STORY:
-    "Dark, eerie, suspenseful atmosphere — shadowy environments, fog, unsettling details, high contrast",
+    "dark, eerie, unsettling, suspenseful, shadows, tension, horror atmosphere",
   HISTORY_FACTS:
-    "Period-accurate, documentary style — historical settings, artifacts, maps, aged textures",
+    "historical realism, period accuracy, documentary feel, authentic environments",
   PHILOSOPHY:
-    "Abstract, thought-provoking imagery — cosmic scenes, silhouettes, metaphorical compositions",
+    "abstract, symbolic, minimal, metaphor-driven, thought-provoking imagery",
   STORYTELLING:
-    "Narrative, scene-setting visuals — rich environments, character-driven moments, cinematic framing",
-  MYSTERY_STORY:
-    "Suspenseful, noir-like atmosphere — dim lighting, hidden clues, shadowy figures, intrigue",
-  LIFE_HACKS:
-    "Clean, practical, everyday settings — clear demonstrations, bright lighting, relatable objects",
-  ANY_TOPIC:
-    "Versatile, visually compelling — match the tone and emotion of the script line closely",
+    "narrative-driven, expressive characters, emotionally rich scenes",
+  MYSTERY_STORY: "noir, suspense, hidden details, investigative tone, intrigue",
+  LIFE_HACKS: "clean, practical, bright, everyday relatable environments",
+  ANY_TOPIC: "visually engaging, emotionally aligned with the script",
 };
 
-// ─── VideoStyle → Visual Style Guide ────────────────────────────────────────
-
-const VIDEO_STYLE_GUIDE: Record<VideoStyle, string> = {
-  PHOTO_REALISTIC:
-    "ultra-photorealistic photography, shot on full-frame DSLR, natural lighting, 8K detail, hyper-realistic textures",
-  CARTOON:
-    "vibrant cartoon illustration, bold clean outlines, flat cel-shaded colours, playful and expressive characters",
-  ANIME:
-    "Japanese anime art style, cel-shaded, expressive characters, dynamic action poses, Studio Ghibli / Makoto Shinkai quality",
-  CYBERPUNK:
-    "cyberpunk aesthetic, neon-lit rain-soaked streets, holographic overlays, dystopian megacity, high-contrast neon palette (purple, cyan, pink), blade runner atmosphere",
-  CINEMATIC:
-    "dramatic cinematic lighting, anamorphic lens flares, film grain, shallow depth-of-field, Hollywood blockbuster colour grade",
-  PIXEL_ART:
-    "retro pixel art style, 16-bit or 32-bit palette, chunky pixels, clean sprite-like characters, nostalgic video-game aesthetic",
-  COLORFUL_COMICS:
-    "vibrant comic book illustration, bold ink outlines, halftone dot shading, saturated pop-art colours, dynamic panel-style composition",
+const VIDEO_STYLE_GUIDE: Record<
+  VideoStyle,
+  {
+    base: string;
+    rules: string;
+  }
+> = {
+  PHOTO_REALISTIC: {
+    base: "ultra realistic, DSLR photography, natural textures, real-world detail",
+    rules:
+      "use real-world lighting, camera angles allowed, physically accurate details",
+  },
+  CARTOON: {
+    base: "cartoon illustration, bold outlines, flat colors, stylized characters",
+    rules:
+      "no realistic camera jargon, use expressive poses, exaggerated emotions",
+  },
+  ANIME: {
+    base: "anime style, cel shading, expressive eyes, detailed backgrounds",
+    rules: "dynamic angles allowed, vibrant lighting, stylized emotion",
+  },
+  CYBERPUNK: {
+    base: "cyberpunk aesthetic, neon lights, futuristic dystopia, high contrast",
+    rules:
+      "use neon glow, reflections, dramatic lighting, tech-heavy environments",
+  },
+  CINEMATIC: {
+    base: "cinematic film still, dramatic lighting, film grain, depth of field",
+    rules:
+      "use camera angles, lens terms, lighting techniques, movie-like framing",
+  },
+  PIXEL_ART: {
+    base: "pixel art, 16-bit style, low resolution sprites, retro game look",
+    rules: "NO camera/lens terms, describe composition simply, blocky visuals",
+  },
+  COLORFUL_COMICS: {
+    base: "comic book style, bold ink lines, halftone shading, vibrant pop-art colors",
+    rules: "dynamic poses, panel-like composition, exaggerated action",
+  },
 };
 
-// ─── Image Prompt Generation (Structured Output) ─────────────────────────────
-
-/**
- * Accepts the FULL script as a single string (joined paragraphs).
- * The model reads the script holistically, identifies each distinct fact /
- * idea / narrative beat, and generates one image prompt per beat.
- *
- * This produces 6-8 images for a typical 60-second short, regardless of how
- * many paragraphs the text was split into.
- */
 export async function generateImagePrompts(
   scriptParagraphs: string[],
   videoStyle: VideoStyle,
   topic: Topic,
-): Promise<ImagePromptResult[]> {
-  const topicGuide = TOPIC_STYLE_GUIDE[topic] ?? TOPIC_STYLE_GUIDE.ANY_TOPIC;
-  const styleGuide =
-    VIDEO_STYLE_GUIDE[videoStyle] ?? VIDEO_STYLE_GUIDE.PHOTO_REALISTIC;
+): Promise<{
+  characters: z.infer<typeof CharacterSchema>[];
+  scenes: ImagePromptResult[];
+}> {
+  const topicGuide = TOPIC_STYLE_GUIDE[topic];
+  const styleGuide = VIDEO_STYLE_GUIDE[videoStyle];
 
-  // Join paragraphs into one continuous script — let the model do the
-  // scene-boundary detection instead of inheriting paragraph structure.
   const fullScript = scriptParagraphs.join("\n\n");
 
-  const systemPrompt = `You are a creative director specialising in short-form vertical video (9:16, YouTube Shorts / TikTok).
+  const systemPrompt = `You are an expert visual storyteller and prompt engineer for Stable Diffusion 3.
 
-You will receive a complete short-video script. Your job is to:
-1. Read the ENTIRE script and identify every distinct fact, idea, or narrative beat that deserves its own visual.
-2. Generate ONE detailed image-generation prompt per beat.
-3. Aim for 6-8 scenes total — never fewer than 4, never more than 8. Also decide the number based on the script length.
-   • For fact-based scripts (biology, history, life hacks, etc.) every individual fact = its own scene.
-   • For story scripts, every story beat or location change = its own scene.
-4. Each scene must:
-   • Match the topic mood: ${topicGuide}
-   • Use the visual style: ${styleGuide}
-   • Be optimised for 9:16 vertical composition
-   • Contain NO text, watermarks, logos, or UI elements in the scene
-   • Be vivid, specific, and cinematic — describe lighting, camera angle, atmosphere, and subject clearly
-5. Include the exact script segment that this scene covers in the \`scriptSegment\` field.
-6. Number scenes from 0 upward in the order they appear in the script.`;
+Your job is to convert a short-form video script into structured image prompts.
+
+---
+
+STEP 1 — CHARACTER DESIGN
+
+- Extract ALL recurring characters
+- Give each a FIXED visual identity:
+  age, gender, height, hairstyle, clothing, defining traits
+- These MUST remain identical across ALL scenes
+
+---
+
+STEP 2 — SCENE BREAKDOWN
+
+- Break script into 4-8 scenes
+- Each scene = one clear visual moment
+- Scenes must show progression (not static repetition)
+
+---
+
+STEP 3 — PROMPT CREATION
+
+Each prompt must follow:
+
+[subject + character description]
+[action]
+[environment]
+[lighting or visual mood]
+[composition or framing (ONLY if style allows)]
+[style keywords]
+
+---
+
+STYLE APPLICATION
+
+Topic tone:
+${topicGuide}
+
+Visual style:
+${styleGuide.base}
+
+Style rules:
+${styleGuide.rules}
+
+---
+
+STRICT RULES
+
+- Maintain EXACT same character appearance across scenes
+- Do NOT randomly change outfit, face, or body
+- ALL prompts must repeat FULL character descriptions in EVERY scene
+- NEVER shorten character descriptions
+- NEVER say "same person" or "same character"
+- ALWAYS restate full appearance explicitly in each prompt
+- Keep prompts VISUAL (not poetic, not narrative)
+- Avoid unnecessary storytelling words
+- Optimize for Stable Diffusion 3
+
+- ALWAYS include:
+  "vertical 9:16 composition"
+
+- NEVER include:
+  text, subtitles, watermark, logo, UI
+
+---
+
+OUTPUT FORMAT
+
+Return JSON with:
+- characters[]
+- scenes[]
+
+sceneIndex must start from 0
+`;
 
   const userPrompt = `Topic: ${topic}
 Video Style: ${videoStyle}
 
-Full script:
+Script:
 """
 ${fullScript}
 """
 
-Analyse the script and generate image scene prompts (one per distinct fact, idea, or beat). Do NOT group multiple facts into a single scene.`;
+Generate structured SD3 prompts with strong visual clarity.
+
+Maintain character consistency strictly.`;
 
   const response = await openai.responses.parse({
     model: "gpt-4o-mini",
@@ -142,40 +203,45 @@ Analyse the script and generate image scene prompts (one per distinct fact, idea
   });
 
   const parsed = response.output_parsed;
-  if (!parsed)
-    throw new Error("Structured output parsing failed for image prompts");
 
-  // Guarantee ordering by sceneIndex
-  return parsed.scenes.sort((a, b) => a.sceneIndex - b.sceneIndex);
+  if (!parsed) {
+    throw new Error("Failed to parse structured image prompts");
+  }
+
+  return {
+    characters: parsed.characters,
+    scenes: parsed.scenes.sort((a, b) => a.sceneIndex - b.sceneIndex),
+  };
 }
 
-// ─── Image Generation — gpt-image-1 (medium quality) ────────────────────────
-
-/**
- * Generates a single image using gpt-image-1 at medium quality
- * and returns the raw PNG buffer.
- */
 export async function generateImageBuffer(
   prompt: string,
   mood: string,
+  referenceImage?: string,
 ): Promise<Buffer> {
-  const enrichedPrompt = [
+  const finalPrompt = [
     prompt,
-    `Mood: ${mood}.`,
-    "Vertical 9:16 aspect ratio. No text, no watermarks, no logos, no UI elements.",
-  ].join(" ");
+    `mood: ${mood}`,
+    "high detail",
+    "sharp focus",
+  ].join(", ");
 
-  const response = await openai.images.generate({
-    model: "gpt-image-1",
-    prompt: enrichedPrompt,
-    size: "1024x1536", // 9:16 vertical
-    quality: "low",
+  const response = await together.images.generate({
+    model: "stabilityai/stable-diffusion-3-medium",
+    prompt: finalPrompt,
+    width: 768,
+    height: 1344,
+    steps: 35,
+    seed: 15,
+    negative_prompt:
+      "low quality, blurry, pixelated, distorted, extra limbs, watermark, text, deformed hands",
+    response_format: "base64",
   });
 
-  if (!response.data || !response.data[0])
-    throw new Error("No image data returned from gpt-image-1");
+  if (!response.data || !response.data[0]) {
+    throw new Error("No image returned from Together AI");
+  }
 
-  const b64 = response.data[0].b64_json!;
-
+  const b64 = response.data[0].b64_json;
   return Buffer.from(b64, "base64");
 }

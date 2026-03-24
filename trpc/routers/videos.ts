@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { authProcedure, createTRPCRouter } from "../init";
+import { authProcedure, baseProcedure, createTRPCRouter } from "../init";
 import { TRPCError } from "@trpc/server";
 import { prisma } from "@/db";
 import { inngest } from "@/inngest/client";
@@ -240,13 +240,13 @@ export const videoRouter = createTRPCRouter({
 
     return videosWithSignedUrls;
   }),
-  getShortsById: authProcedure
+  getShortsById: baseProcedure
     .input(z.object({ videoId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { userId } = ctx;
+      // const { userId } = ctx;
 
       const video = await prisma.video.findUnique({
-        where: { id: input.videoId, userId },
+        where: { id: input.videoId },
         include: {
           script: true,
           captionConfig: true,
@@ -428,9 +428,15 @@ export const videoRouter = createTRPCRouter({
           },
         });
 
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        const videoStatus = await prisma.video.findUnique({
+          where: { id: input.videoId, userId },
+        });
+
         return {
           id: video.id,
-          status: video.status,
+          status: videoStatus?.status,
           message:
             "Video export started, We will notify you once it's ready for download",
         };

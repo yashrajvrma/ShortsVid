@@ -81,14 +81,19 @@ export const generateShort = inngest.createFunction(
 
     // // ── STEP 3: Generate per-scene image prompts (GPT-4o structured output) ──
 
-    const imagePrompts = await step.run(
+    const { characters, scenes } = await step.run(
       "generate-image-prompts",
-      async (): Promise<ImagePromptResult[]> => {
-        return generateImagePrompts(
+      async (): Promise<{
+        characters: { name: string; description: string }[];
+        scenes: ImagePromptResult[];
+      }> => {
+        const result = await generateImagePrompts(
           videoData.scriptParagraphs,
           videoData.videoStyle,
           videoData.scriptTopic,
         );
+
+        return result;
       },
     );
 
@@ -100,19 +105,32 @@ export const generateShort = inngest.createFunction(
     const imageR2Keys = await step.run(
       "generate-and-upload-images",
       async (): Promise<string[]> => {
-        const sorted = [...imagePrompts].sort(
+        const sortedScenes = [...scenes].sort(
           (a, b) => a.sceneIndex - b.sceneIndex,
         );
 
-        const keys: string[] = [];
+        const keys: string[] = new Array(sortedScenes.length);
 
-        // TODO : send all the req parallely
+        // ✅ Minimal character context (clean, not noisy)
+        const characterContext = characters.length
+          ? characters.map((c) => `${c.name}: ${c.description}`).join("\n")
+          : "";
 
-        for (const scene of sorted) {
+        for (const scene of sortedScenes) {
+          const enrichedPrompt = characterContext
+            ? `${scene.prompt}\n\nCharacters:\n${characterContext}`
+            : scene.prompt;
+
+          const buffer = await generateImageBuffer(enrichedPrompt, scene.mood);
+
           const key = `videos/${videoId}/images/scene_${scene.sceneIndex}.png`;
-          const buffer = await generateImageBuffer(scene.prompt, scene.mood);
-          await uploadImageToR2({ buffer, key, contentType: "image/png" });
-          // Store the R2 key at the exact sceneIndex position
+
+          await uploadImageToR2({
+            buffer,
+            key,
+            contentType: "image/png",
+          });
+
           keys[scene.sceneIndex] = key;
         }
 
@@ -125,7 +143,10 @@ export const generateShort = inngest.createFunction(
     await step.run("save-images-to-db", async () => {
       await prisma.video.update({
         where: { id: videoId },
-        data: { images: imageR2Keys },
+        data: {
+          images: imageR2Keys,
+          thumbnailR2ObjectKey: imageR2Keys[0],
+        },
       });
     });
 
@@ -178,7 +199,7 @@ export const generateShort = inngest.createFunction(
 
     // ── STEP 10: Mark video as READY ────────────────────────────────────────
 
-    await step.run("set-status-success", async () => {
+    await step.run("set-status-ready", async () => {
       await prisma.video.update({
         where: { id: videoId },
         data: { status: "READY" },
@@ -257,6 +278,12 @@ export const renderShorts = inngest.createFunction(
         compatibleOnly: true,
       });
 
+      const durationInFrames = video.duration
+        ? Math.ceil(video.duration * 30)
+        : 1;
+
+      console.log("video duration is", durationInFrames);
+
       const serviceName = services[0].serviceName;
 
       const result = await renderMediaOnCloudrun({
@@ -275,6 +302,7 @@ export const renderShorts = inngest.createFunction(
             caption: videoDataWithSignedUrl.caption,
             captionConfig: videoDataWithSignedUrl.captionConfig,
           },
+          durationInFrames,
         },
         codec: "h264",
       });

@@ -1,10 +1,10 @@
-import { CaptionStyle, ShortsVideo } from "@/types";
+import { CaptionStyle, ShortsVideo } from "../../types/index";
 import { useMemo } from "react";
-import { AbsoluteFill, Html5Audio, useVideoConfig } from "remotion";
+import { AbsoluteFill, Html5Audio, Audio, useVideoConfig } from "remotion";
 
 import { CaptionData, CaptionsLayer } from "./captions-layer";
 import { ImagesLayer } from "./images-layer";
-import { CAPTION_PRESETS, DEFAULT_CAPTION_STYLE } from "@/lib/constants";
+import { CAPTION_PRESETS, DEFAULT_CAPTION_STYLE } from "../../lib/constants";
 
 // ─── DEV TESTING ──────────────────────────────────────────────────────────────
 // Set this to any preset id from caption-types.ts to force that style in the
@@ -120,11 +120,11 @@ export default function RemotionComposition({
       )}
 
       {/* ── Voiceover audio ── */}
-      {videoData?.audioUrl && <Html5Audio src={videoData.audioUrl} />}
+      {videoData?.audioUrl && <Audio src={videoData.audioUrl} />}
 
       {/* ── Background Music ── */}
       {videoData?.backgroundMusicUrl && (
-        <Html5Audio volume={0.3} src={videoData.backgroundMusicUrl} />
+        <Audio volume={0.3} src={videoData.backgroundMusicUrl} />
       )}
     </AbsoluteFill>
   );
