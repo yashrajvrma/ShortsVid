@@ -1,4 +1,10 @@
-import type { CaptionPreset, CaptionStyle, Duration, Language } from "@/types";
+import type {
+  CaptionPreset,
+  CaptionStyle,
+  Duration,
+  Language,
+  Topic,
+} from "@/types";
 
 export const LANGUAGES: Language[] = [
   { code: "en", name: "English", flag: "🇺🇸" },
@@ -345,4 +351,59 @@ export const DEFAULT_CAPTION_STYLE: CaptionStyle = {
 
   lightLeakHue: 0,
   lightLeakSeed: 0,
+};
+
+// topic
+export const TOPIC_DIRECTIVE_MAP_FOR_SCRIPT: Record<
+  Topic,
+  { openingStyle: string; toneAndCraft: string }
+> = {
+  MOTIVATIONAL: {
+    openingStyle:
+      "Open in the darkest moment — mid-struggle, mid-failure. No setup, no context. Drop the viewer into the pain first.",
+    toneAndCraft:
+      "Build from rock bottom to a turning point that feels earned, not given. The triumph must cost something. End with a single line that makes the viewer feel unstoppable.",
+  },
+  HORROR_STORY: {
+    openingStyle:
+      "Open with something subtly wrong — a detail that shouldn't be there, a sound that doesn't fit. No jump scares in the opening. Just wrongness.",
+    toneAndCraft:
+      "Build dread slowly. Let the horror creep in through small details. Atmosphere over gore, always. End with a reveal or twist that makes the viewer reprocess everything they just heard.",
+  },
+  HISTORY_FACTS: {
+    openingStyle:
+      "Open with the most unbelievable sentence from the story — the fact that sounds like fiction. Make it impossible to scroll past.",
+    toneAndCraft:
+      "Frame history as a thriller. Real names, real stakes, real tension. The viewer should feel like they're watching it happen. End with the consequence that echoes into today.",
+  },
+  PHILOSOPHY: {
+    openingStyle:
+      "Open with a single concrete image or scenario that contains the entire idea inside it. No abstract statements. Show, don't define.",
+    toneAndCraft:
+      "Let the idea unfold through the scenario, not through explanation. Trust the viewer to feel the weight of it. End with a question or a reframe that rewires how they see something ordinary.",
+  },
+  STORYTELLING: {
+    openingStyle:
+      "Open mid-scene, mid-emotion. No 'picture this', no 'once upon a time', no meta-narration. The story has already started when the viewer arrives. Drop them inside a moment that already has weight.",
+    toneAndCraft:
+      "Write like a novelist, not a YouTuber. Specific details over generic ones — not 'she was sad' but 'she kept her eyes on the floor and laughed too quickly.' Let the characters breathe. No moral lessons, no life advice. Just the story, raw and real. End on a line that lingers — not a conclusion, but a feeling.",
+  },
+  MYSTERY_STORY: {
+    openingStyle:
+      "Open with an unanswered question buried inside a scene — something is missing, something doesn't add up. Don't announce the mystery. Let the viewer sense it.",
+    toneAndCraft:
+      "Layer clues naturally into the narrative. Every scene should add tension and deepen the question. The reveal must recontextualise everything that came before it. End with the truth landing like a cold hand on the shoulder.",
+  },
+  LIFE_HACKS: {
+    openingStyle:
+      "Open with the problem — vivid, relatable, slightly painful. The viewer should think 'that's literally me' within the first two seconds.",
+    toneAndCraft:
+      "Frame each insight as a discovery, not a tip. Write like a friend who just figured something out and can't wait to tell you. Save the most powerful insight for the very end.",
+  },
+  ANY_TOPIC: {
+    openingStyle:
+      "Choose the opening that creates the most immediate tension, curiosity, or emotion for this specific story. No generic openings.",
+    toneAndCraft:
+      "Pick the angle, emotion, and style that will make this the most memorable 60 seconds the viewer has today. Surprise us.",
+  },
 };

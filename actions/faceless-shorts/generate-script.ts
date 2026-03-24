@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import OpenAI from "openai";
+import { zodTextFormat } from "openai/helpers/zod";
 import { prisma } from "@/db";
 import { Topic } from "@prisma/client";
 import { genScriptSystemPromptForFacelessShorts } from "@/lib/utils";
@@ -13,8 +14,7 @@ const openAi = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const WORDS_PER_MINUTE = 130;
-
+// ── Language map ─────────────────────────────────────────────────────────────
 const LANGUAGE_MAP: Record<string, string> = {
   en: "English",
   de: "German",
@@ -24,23 +24,36 @@ const LANGUAGE_MAP: Record<string, string> = {
   zh: "Chinese",
 };
 
+// ── Request schema ────────────────────────────────────────────────────────────
 const generateScriptSchema = z.object({
   languageCode: z.string().min(2).max(10),
   topic: z.nativeEnum(Topic),
-  duration: z.number().int().min(15).max(300),
+  /** Supported durations for Shorts: 15 | 30 | 60 seconds */
+  duration: z
+    .number()
+    .int()
+    .refine((v) => [15, 30, 60].includes(v), {
+      message: "Duration must be 15, 30, or 60 seconds.",
+    }),
   prompt: z.string().min(1, "Prompt is required").max(1000),
 });
 
 type GenerateScriptParams = z.infer<typeof generateScriptSchema>;
 
+// ── Structured output schema ──────────────────────────────────────────────────
+const ScriptOutput = z.object({
+  scenes: z
+    .array(z.string())
+    .min(1)
+    .describe("Ordered array of scene paragraphs that form the full script."),
+});
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
 function getLanguageName(code: string): string {
   return LANGUAGE_MAP[code.toLowerCase()] ?? code;
 }
 
-function getTargetWordCount(durationSeconds: number): number {
-  return Math.round((durationSeconds / 60) * WORDS_PER_MINUTE);
-}
-
+// ── Return type ───────────────────────────────────────────────────────────────
 export type GenerateScriptResult =
   | {
       success: true;
@@ -53,10 +66,12 @@ export type GenerateScriptResult =
       error: string;
     };
 
+// ── Server action ─────────────────────────────────────────────────────────────
 export async function generateScript(
   params: GenerateScriptParams,
 ): Promise<GenerateScriptResult> {
   try {
+    // Auth check
     const session = await auth.api.getSession({
       headers: await headers(),
     });
@@ -69,46 +84,47 @@ export async function generateScript(
       generateScriptSchema.parse(params);
 
     const languageName = getLanguageName(languageCode);
-    const targetWordCount = getTargetWordCount(duration);
 
-    const userPrompt = `Topic: ${topic}
-Duration: ${duration} seconds (~${targetWordCount} words)
-Language: ${languageName}
-Creative direction: ${prompt}`;
+    const userPrompt = `Target duration: ${duration} seconds
+Creative direction: ${prompt}
 
-    // ── Call OpenAI ───────────────────────────────────────────────────────
-    const completion = await openAi.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
+Write a viral short-form video script that fits comfortably within ${duration} seconds when spoken aloud.`;
+
+    // ── Structured output call ────────────────────────────────────────────
+    const response = await openAi.responses.parse({
+      model: "gpt-4o-2024-08-06",
+      input: [
         {
           role: "system",
           content: genScriptSystemPromptForFacelessShorts({
-            targetWordCount,
             duration,
             languageName,
+            topic,
           }),
         },
         { role: "user", content: userPrompt },
       ],
-      response_format: { type: "json_object" },
-      temperature: 0.8,
+      text: {
+        format: zodTextFormat(ScriptOutput, "script"),
+      },
     });
 
-    const rawContent = completion.choices[0]?.message?.content;
-    if (!rawContent) {
-      throw new Error("OpenAI returned an empty response.");
+    // output_parsed is null when the model refuses (content policy, etc.)
+    if (!response.output_parsed) {
+      throw new Error(
+        "The model declined to generate a script. Please adjust your prompt and try again.",
+      );
     }
 
-    // ── Parse response ────────────────────────────────────────────────────
-    const parsed = JSON.parse(rawContent);
-    const paragraphs: string[] = (parsed.content ?? []).filter(
-      (p: unknown) => typeof p === "string" && p.trim().length > 0,
+    const paragraphs = response.output_parsed.scenes.filter(
+      (s) => s.trim().length > 0,
     );
 
     if (paragraphs.length === 0) {
       throw new Error("Failed to generate script content.");
     }
 
+    // ── Persist to DB ─────────────────────────────────────────────────────
     const scriptRecord = await prisma.script.create({
       data: {
         userId: session.user.id,
@@ -130,7 +146,7 @@ Creative direction: ${prompt}`;
     const message =
       error instanceof Error ? error.message : "An unexpected error occurred.";
 
-    console.error("Generate Script Error:", error);
+    console.error("Generate script error:", error);
 
     return { success: false, error: message };
   }
