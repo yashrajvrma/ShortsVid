@@ -159,6 +159,10 @@ export const generateShort = inngest.createFunction(
       const audioStream = await fishAudio.textToSpeech.convert({
         text: content,
         reference_id: videoData.voiceModelId,
+        prosody: {
+          speed: 1.25,
+          volume: 0,
+        },
       });
 
       const buffer = Buffer.from(await new Response(audioStream).arrayBuffer());
