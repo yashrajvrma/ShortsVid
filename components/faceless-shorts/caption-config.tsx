@@ -23,6 +23,7 @@ import { Sparkles, Type, Palette, Sliders, Zap } from "lucide-react";
 import { Button } from "../ui/button";
 import { CaptionStyle } from "@/types";
 import { CAPTION_PRESETS, FONT_FAMILIES } from "@/lib/constants";
+import { CaptionPresetSelector } from "../captions/caption-preset-selector";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -185,7 +186,7 @@ export function CaptionConfig({
 
         <div className="flex flex-wrap gap-2">
           {/* None — turns captions off */}
-          <Button
+          {/* <Button
             onClick={() => applyPreset(NONE_PRESET_ID)}
             className={`px-3 py-1.5 text-sm border transition-all duration-200 rouned-lg ${
               !captionsEnabled
@@ -194,9 +195,9 @@ export function CaptionConfig({
             }`}
           >
             None
-          </Button>
+          </Button> */}
 
-          {CAPTION_PRESETS.map((preset) => (
+          {/* {CAPTION_PRESETS.map((preset) => (
             <TooltipProvider key={preset.id} delayDuration={500}>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -211,12 +212,18 @@ export function CaptionConfig({
                     {preset.name}
                   </Button>
                 </TooltipTrigger>
-                {/* <TooltipContent side="top">
+                <TooltipContent side="top">
                   <p className="text-xs">{preset.description}</p>
-                </TooltipContent> */}
+                </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-          ))}
+          ))} */}
+          <CaptionPresetSelector
+            selectedPresetId={selectedPresetId}
+            captionsEnabled={captionsEnabled}
+            onSelectPreset={applyPreset}
+            onSelectNone={() => applyPreset(NONE_PRESET_ID)}
+          />
         </div>
       </div>
 

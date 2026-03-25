@@ -99,32 +99,34 @@ export type FontFamily = (typeof FONT_FAMILIES)[FontKey];
 export const CAPTION_PRESETS: CaptionPreset[] = [
   // ── 1. "Since You Guys Are Curious" style ─────────────────────────────────
   // Green highlight on key word, white resting, dark BG, Impact font
+
   {
-    id: "viral-green",
-    name: "Viral Green",
-    description: "White words, green highlight — classic talking-head style",
+    id: "hormozi-style",
+    name: "Alex Hormozi",
+    description:
+      "Heavy white text with thick black stroke and neon green highlight — punchy creator-style lower thirds",
     style: {
       textColor: "#FFFFFF",
       strokeColor: "#000000",
-      highlightColor: "#00FF85",
+      highlightColor: "#00FF41",
       highlightStrokeColor: "#000000",
       popBackgroundColor: "transparent",
 
-      strokeWidth: 6,
-      fontSize: 96,
-      verticalPosition: 75,
+      strokeWidth: 1,
+      fontSize: 104,
+      verticalPosition: 80,
       horizontalPosition: 50,
       maxLines: 2,
-      maxWordsPerLine: 3,
-      shadowOffsetY: 3,
-      shadowBlur: 8,
+      maxWordsPerLine: 2,
+      shadowOffsetY: 4,
+      shadowBlur: 6,
 
-      fontFamily: FONT_FAMILIES.oswald,
+      fontFamily: FONT_FAMILIES.montserrat,
       fontWeight: "900",
       textTransform: "uppercase",
-      letterSpacing: 1,
+      letterSpacing: -2,
 
-      animationPreset: "pop",
+      animationPreset: "fade",
       lightLeakHue: 0,
       lightLeakSeed: 0,
     },
@@ -143,7 +145,7 @@ export const CAPTION_PRESETS: CaptionPreset[] = [
       highlightStrokeColor: "transparent",
       popBackgroundColor: "#6C3CF7",
 
-      strokeWidth: 0.2,
+      strokeWidth: 0.5,
       fontSize: 85,
       verticalPosition: 80,
       horizontalPosition: 50,
@@ -176,7 +178,7 @@ export const CAPTION_PRESETS: CaptionPreset[] = [
       highlightStrokeColor: "#000000",
       popBackgroundColor: "transparent",
 
-      strokeWidth: 1,
+      strokeWidth: 0.5,
       fontSize: 90,
       verticalPosition: 80,
       horizontalPosition: 50,
@@ -203,9 +205,9 @@ export const CAPTION_PRESETS: CaptionPreset[] = [
     name: "Minimal Clean",
     description: "Soft white, thin font — elegant and distraction-free",
     style: {
-      textColor: "#F0EFE9",
+      textColor: "#000000",
       strokeColor: "transparent",
-      highlightColor: "#F0EFE9",
+      highlightColor: "#000000",
       highlightStrokeColor: "transparent",
       popBackgroundColor: "transparent",
 
@@ -228,6 +230,36 @@ export const CAPTION_PRESETS: CaptionPreset[] = [
       lightLeakSeed: 2,
     },
   },
+  {
+    id: "viral-green",
+    name: "Viral Green",
+    description: "White words, green highlight — classic talking-head style",
+    style: {
+      textColor: "#FFFFFF",
+      strokeColor: "#000000",
+      highlightColor: "#00FF85",
+      highlightStrokeColor: "#000000",
+      popBackgroundColor: "transparent",
+
+      strokeWidth: 0.5,
+      fontSize: 96,
+      verticalPosition: 75,
+      horizontalPosition: 50,
+      maxLines: 2,
+      maxWordsPerLine: 2,
+      shadowOffsetY: 3,
+      shadowBlur: 8,
+
+      fontFamily: FONT_FAMILIES.oswald,
+      fontWeight: "900",
+      textTransform: "uppercase",
+      letterSpacing: -4,
+
+      animationPreset: "pop",
+      lightLeakHue: 0,
+      lightLeakSeed: 0,
+    },
+  },
 
   // ── 5. Yellow highlight — TikTok classic ──────────────────────────────────
   {
@@ -241,7 +273,7 @@ export const CAPTION_PRESETS: CaptionPreset[] = [
       highlightStrokeColor: "#000000",
       popBackgroundColor: "transparent",
 
-      strokeWidth: 2,
+      strokeWidth: 0.5,
       fontSize: 100,
       verticalPosition: 80,
       horizontalPosition: 50,
@@ -268,12 +300,12 @@ export const CAPTION_PRESETS: CaptionPreset[] = [
     description: "Cyan glow highlight — dark aesthetic, high energy",
     style: {
       textColor: "#FFFFFF",
-      strokeColor: "transparent",
+      strokeColor: "#000000",
       highlightColor: "#00F5FF",
       highlightStrokeColor: "transparent",
       popBackgroundColor: "transparent",
 
-      strokeWidth: 0,
+      strokeWidth: 0.5,
       fontSize: 90,
       verticalPosition: 78,
       horizontalPosition: 50,
@@ -310,7 +342,7 @@ export const CAPTION_PRESETS: CaptionPreset[] = [
       verticalPosition: 82,
       horizontalPosition: 50,
       maxLines: 2,
-      maxWordsPerLine: 3,
+      maxWordsPerLine: 2,
       shadowOffsetY: 5,
       shadowBlur: 14,
 
