@@ -8,6 +8,8 @@ import {
   getSignedObjectUrl,
   getSignedUrlInBulk,
 } from "@/lib/r2-bucket";
+import { deductVideoCredits } from "@/lib/credit";
+import { CREDITS_PER_VIDEO } from "@/lib/polar";
 
 export const videoRouter = createTRPCRouter({
   generateFacelessVideo: authProcedure
@@ -82,7 +84,13 @@ export const videoRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { userId } = ctx;
+      // return if user dont have sufficent credits
+      if (ctx.credit < CREDITS_PER_VIDEO) {
+        throw new TRPCError({
+          code: "PAYMENT_REQUIRED",
+          message: "Insufficient credits, Please upgrade your plan",
+        });
+      }
 
       // 1. Validate voice exists
       const voice = await prisma.voice.findUnique({
@@ -130,7 +138,7 @@ export const videoRouter = createTRPCRouter({
         // Create script
         const script = await tx.script.create({
           data: {
-            userId,
+            userId: ctx.userId,
             prompt: input.prompt ?? null,
             languageCode: input.languageCode,
             topic: input.topic,
@@ -183,7 +191,7 @@ export const videoRouter = createTRPCRouter({
         // Create video — captionConfigId is null when captions are disabled
         return tx.video.create({
           data: {
-            userId,
+            userId: ctx.userId,
             videoStyle: input.videoStyle,
             status: "GENERATING",
             scriptId: script.id,
@@ -198,10 +206,13 @@ export const videoRouter = createTRPCRouter({
       await inngest.send({
         name: "shorts/generate",
         data: {
-          userId,
+          userId: ctx.userId,
           videoId: video.id,
         },
       });
+
+      // deduct five credits and check if there are active credits
+      await deductVideoCredits(ctx.userId, video.id);
 
       return {
         success: true,

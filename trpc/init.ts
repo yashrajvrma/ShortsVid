@@ -46,6 +46,7 @@ export const authProcedure = t.procedure.use(async ({ next }) => {
       name: session.user.name,
       email: session.user.email,
       role: session.user.role,
+      credit: session.user.credit,
     },
   });
 });

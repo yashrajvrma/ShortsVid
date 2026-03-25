@@ -9,6 +9,7 @@ import { zodTextFormat } from "openai/helpers/zod";
 import { prisma } from "@/db";
 import { Topic } from "@prisma/client";
 import { genScriptSystemPromptForFacelessShorts } from "@/lib/utils";
+import { CREDITS_PER_VIDEO } from "@/lib/polar";
 
 const openAi = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -78,6 +79,12 @@ export async function generateScript(
 
     if (!session?.user) {
       redirect("/login");
+    }
+
+    const user = session.user;
+
+    if (user.credit < CREDITS_PER_VIDEO) {
+      throw new Error("Insufficient credits. Please upgrade your plan");
     }
 
     const { languageCode, topic, duration, prompt } =
