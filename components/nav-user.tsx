@@ -119,7 +119,7 @@ export function NavUser() {
                   </div>
                 </div>
               </DropdownMenuLabel>
-              <DropdownMenuSeparator />
+              {/* <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem>
                   <SparklesIcon />
@@ -140,7 +140,7 @@ export function NavUser() {
                   <BellIcon />
                   Notifications
                 </DropdownMenuItem>
-              </DropdownMenuGroup>
+              </DropdownMenuGroup> */}
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogOut}>
                 <LogOutIcon />
