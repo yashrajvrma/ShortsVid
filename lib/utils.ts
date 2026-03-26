@@ -61,7 +61,7 @@ TONE & CRAFT:
 ${toneAndCraft}
 
 STRUCTURE (MANDATORY)
-- The script MUST follow this flow:
+- The script MUST follow this flow pattern:
   1. HOOK (first 1-2 lines) → immediate tension, curiosity, or emotion
   2. BUILD → situation develops, details increase, stakes rise
   3. SHIFT → something changes (realisation, conflict, reveal)
@@ -86,6 +86,7 @@ CRITICAL SHORT-FORM RULES
 - Every 2-3 lines should introduce NEW information or emotion
 - The viewer should feel pulled forward constantly
 - The ending MUST hit — emotionally, psychologically, or narratively
+- Only return the script lines
 
 HARD LENGTH LIMIT:
 - Max ${charBudget} characters
