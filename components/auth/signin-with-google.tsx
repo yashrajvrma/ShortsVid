@@ -176,7 +176,7 @@ export default function LoginCard() {
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed">
             AI shorts generator trusted by{" "}
-            <span className="font-medium text-foreground">100+</span> creators
+            <span className="font-medium text-foreground">100K+</span> creators
             making viral content every day.
           </p>
 

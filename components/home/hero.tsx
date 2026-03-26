@@ -20,7 +20,7 @@ export function Hero() {
       <div className="flex justify-center border-2 border-double sm:text-sm text-xs mx-auto sm:w-64 w-54 rounded-xl sm:px-3 px-2 py-1.5 mb-3 font-medium">
         <p className="flex items-center">
           Join
-          <span className="font-semibold">&nbsp;100+&nbsp;</span> creators on
+          <span className="font-semibold">&nbsp;100K+&nbsp;</span> creators on
           ShortsVid
         </p>
       </div>
@@ -68,7 +68,9 @@ export function Hero() {
         className="flex flex-col items-center gap-2"
       >
         <AvatarCircles numPeople={99} avatarUrls={avatarUrls} />
-        <span className="tracking-tight font-medium">Loved by 100+ users</span>
+        <span className="tracking-tight font-medium">
+          Loved by 100K+ creators
+        </span>
       </motion.div>
 
       {/* videos */}

@@ -5,7 +5,7 @@ import { TrendingUp } from "lucide-react";
 
 const STATS = [
   { value: "+1B", label: "Views generated", sub: "across all platforms" },
-  { value: "100+", label: "Active creators", sub: "and growing daily" },
+  { value: "100K+", label: "Active creators", sub: "and growing daily" },
   { value: "50K+", label: "Shorts created", sub: "with ShortsVid AI" },
   { value: "4.9★", label: "User rating", sub: "loved by creators" },
 ];

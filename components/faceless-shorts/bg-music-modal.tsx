@@ -154,9 +154,9 @@ export function BgMusicModal({
               <TabsTrigger value="templates" className="flex-1">
                 Templates
               </TabsTrigger>
-              <TabsTrigger value="uploaded" className="flex-1">
+              {/* <TabsTrigger value="uploaded" className="flex-1">
                 Uploaded Sounds
-              </TabsTrigger>
+              </TabsTrigger> */}
             </TabsList>
           </div>
 
@@ -208,10 +208,9 @@ export function BgMusicModal({
           </TabsContent>
 
           {/* User Uploaded Music */}
-          <TabsContent value="uploaded" className="mt-0">
+          {/* <TabsContent value="uploaded" className="mt-0">
             <div className="px-6 py-4 space-y-4">
               <Button variant="outline" className="w-full gap-2">
-                {/* TODO : Implement upload flow */}
                 <Upload className="size-4" />
                 Upload Music
               </Button>
@@ -238,7 +237,7 @@ export function BgMusicModal({
                 )}
               </ScrollArea>
             </div>
-          </TabsContent>
+          </TabsContent> */}
         </Tabs>
       </AlertDialogContent>
     </AlertDialog>

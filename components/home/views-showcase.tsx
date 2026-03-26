@@ -19,7 +19,7 @@ interface DemoVideo {
 
 const DEMO_VIDEOS: DemoVideo[] = [
   {
-    src: "/videos/shorts-1.mp4",
+    src: "/videos/landing-7.mp4",
     label: "Improve Your English to Speak Like a CEO",
     username: "Health tips",
     handle: "generationbeautytips",
@@ -30,7 +30,7 @@ const DEMO_VIDEOS: DemoVideo[] = [
     followersGrowth: "+32%",
   },
   {
-    src: "/videos/shorts-2.mp4",
+    src: "/videos/landing-8.mp4",
     label: "If your dad is still alive...",
     username: "Amy Morgans",
     handle: "amymorgans",
@@ -41,7 +41,7 @@ const DEMO_VIDEOS: DemoVideo[] = [
     followersGrowth: "+195%",
   },
   {
-    src: "/videos/shorts-3.mp4",
+    src: "/videos/landing-3.mp4",
     label: "KNOWING HISTORY MAKES YOU EXTREMELY INTELLIGENT",
     username: "My IQ · Boost Your Brain",
     handle: "myiq.com",
@@ -94,9 +94,9 @@ function VideoCard({ video, index }: { video: DemoVideo; index: number }) {
         )}
       >
         {/* Top bar */}
-        <div className="flex items-center justify-between px-3 pt-3 pb-2 z-10 relative flex-shrink-0">
+        <div className="flex items-center justify-between px-3 pt-0 pb-2 z-10 relative flex-shrink-0">
           <div className="flex items-center gap-2">
-            <div className="h-7 w-7 rounded-2xl bg-neutral-700 overflow-hidden flex-shrink-0">
+            {/* <div className="h-7 w-7 rounded-2xl bg-neutral-700 overflow-hidden flex-shrink-0">
               <img
                 src={video.avatar}
                 alt={video.username}
@@ -105,17 +105,17 @@ function VideoCard({ video, index }: { video: DemoVideo; index: number }) {
                   (e.target as HTMLImageElement).style.display = "none";
                 }}
               />
-            </div>
-            <span className="text-[11px] font-semibold text-white leading-tight line-clamp-1">
+            </div> */}
+            {/* <span className="text-[11px] font-semibold text-white leading-tight line-clamp-1">
               {video.username}
-            </span>
+            </span> */}
           </div>
-          <div className="flex items-center gap-1">
+          {/* <div className="flex items-center gap-1">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-[9px] font-semibold text-emerald-400 tracking-wide uppercase">
               Active
             </span>
-          </div>
+          </div> */}
         </div>
 
         {/* Video */}
