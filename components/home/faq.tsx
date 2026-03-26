@@ -22,7 +22,7 @@ const FAQS = [
   },
   {
     q: "Do you offer support?",
-    a: "Yes! You can reach us at support@shortsvid.pro. We typically respond within 24 hours and are happy to help with anything from billing to video generation issues.",
+    a: "Yes! You can reach us anytime. We typically respond within 24 hours and are happy to help with anything from billing to video generation issues.",
   },
   {
     q: "Are my payments secure?",

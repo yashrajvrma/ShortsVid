@@ -110,10 +110,10 @@ export default function TermsOfService() {
           For questions about these terms:
         </p>
         <a
-          href="mailto:support@shortsvid.pro"
+          href="mailto:yashrajv.work@gmail.com"
           className="text-primary hover:underline"
         >
-          support@shortsvid.pro
+          mail us
         </a>
       </section>
     </div>
