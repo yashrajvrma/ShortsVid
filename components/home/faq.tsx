@@ -30,7 +30,7 @@ const FAQS = [
   },
   {
     q: "Can I get a refund?",
-    a: "Your satisfaction is our top priority but since its a digital product so no refund will provided.",
+    a: "Your satisfaction is our top priority and generating videos costs us money so we can't provide a refund. But you can cancel your subscription at any time.",
   },
 ];
 

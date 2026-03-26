@@ -1,7 +1,15 @@
+import type { Metadata } from "next";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Gamepad2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Gameplay Videos",
+  description: "AI-powered gameplay video creator — coming soon to ShortsVid.",
+  robots: { index: false, follow: false },
+};
+
 
 export default function GameplayComingSoonPage() {
   return (
