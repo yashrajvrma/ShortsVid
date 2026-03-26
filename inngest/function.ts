@@ -123,7 +123,7 @@ export const generateShort = inngest.createFunction(
 
           const buffer = await generateImageBuffer(enrichedPrompt, scene.mood);
 
-          const key = `videos/${videoId}/images/scene_${scene.sceneIndex}.png`;
+          const key = `shorts/${videoId}/images/scene_${scene.sceneIndex}.png`;
 
           await uploadImageToR2({
             buffer,
@@ -154,7 +154,7 @@ export const generateShort = inngest.createFunction(
 
     const audioR2Key = await step.run("generate-audio", async () => {
       const content = videoData.scriptParagraphs.join("\n\n");
-      const key = `videos/${videoId}/audio/voiceover.mp3`;
+      const key = `shorts/${videoId}/audio/voiceover.mp3`;
 
       const audioStream = await fishAudio.textToSpeech.convert({
         text: content,
@@ -327,15 +327,15 @@ export const renderShorts = inngest.createFunction(
       const response = await fetch(renderShorts);
       const videoBuffer = Buffer.from(await response.arrayBuffer());
 
-      const r2Key = `output/shorts/faceless/${userId}/${videoId}.mp4`;
+      const r2ObjectKey = `output/shorts/faceless/${userId}/${videoId}.mp4`;
 
       await uploadVideoToR2({
         buffer: videoBuffer,
-        key: r2Key,
+        key: r2ObjectKey,
         contentType: "video/mp4",
       });
 
-      return r2Key;
+      return r2ObjectKey;
     });
 
     // save video and thumbnail R2 keys to DB
