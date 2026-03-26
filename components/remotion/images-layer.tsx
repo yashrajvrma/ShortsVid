@@ -238,11 +238,10 @@ const LightLeakOverlay: React.FC<{
 
 export const ImagesLayer: React.FC<{
   imagesList: string[];
-  durationInFrames: number;
   lightLeakHue: number;
   lightLeakSeed: number;
-}> = ({ imagesList, durationInFrames, lightLeakHue, lightLeakSeed }) => {
-  const { fps } = useVideoConfig();
+}> = ({ imagesList, lightLeakHue, lightLeakSeed }) => {
+  const { fps, durationInFrames } = useVideoConfig();
 
   if (!imagesList || imagesList.length === 0) {
     return null;

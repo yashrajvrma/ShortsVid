@@ -92,7 +92,6 @@ export default function RemotionComposition({
       {/* ── Images with Ken Burns zoom + light leak overlays ── */}
       <ImagesLayer
         imagesList={videoData.imagesUrl}
-        durationInFrames={durationInFrames}
         lightLeakHue={
           captionStyle?.lightLeakHue ?? DEFAULT_CAPTION_STYLE.lightLeakHue
         }
