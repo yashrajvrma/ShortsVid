@@ -282,11 +282,7 @@ export const renderShorts = inngest.createFunction(
         compatibleOnly: true,
       });
 
-      const durationInFrames = video.duration
-        ? Math.ceil(video.duration * 30)
-        : 1;
-
-      console.log("video duration is", durationInFrames);
+      console.log("video duration is", video.duration);
 
       const serviceName = services[0].serviceName;
 
@@ -306,7 +302,6 @@ export const renderShorts = inngest.createFunction(
             caption: videoDataWithSignedUrl.caption,
             captionConfig: videoDataWithSignedUrl.captionConfig,
           },
-          durationInFrames,
         },
         codec: "h264",
       });
