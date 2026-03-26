@@ -34,13 +34,13 @@ export default async function Layout({
     redirect("/login");
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    include: { subscription: true },
-  });
+  // const user = await prisma.user.findUnique({
+  //   where: { id: session.user.id },
+  //   include: { subscription: true },
+  // });
 
   // Show pricing modal if user has no active subscription or is on free plan
-  const isFreePlan = !user?.subscription || user.plan === "FREE" || !user.plan;
+  // const isFreePlan = !user?.subscription || user.plan === "FREE" || !user.plan;
 
   return (
     <SidebarProvider>
@@ -73,7 +73,7 @@ export default async function Layout({
       </SidebarInset>
 
       {/* Pricing gate — renders on top of everything for free plan users */}
-      {isFreePlan && <PricingModal />}
+      {/* {isFreePlan && <PricingModal />} */}
     </SidebarProvider>
   );
 }
