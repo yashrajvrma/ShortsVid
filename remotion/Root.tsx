@@ -1,6 +1,11 @@
 import React from "react";
-import { Composition } from "remotion";
 import RemotionComposition from "../components/remotion/remotion-composition";
+import { Composition, CalculateMetadataFunction } from "remotion";
+import { ShortsVideo } from "../types";
+
+type RootProps = {
+  videoData: ShortsVideo;
+};
 
 const videoData = {
   id: "cmn4mis7m000gsgl982yao0tx",
@@ -755,26 +760,28 @@ const videoData = {
   createdAt: "2026-03-24T13:01:36.466Z",
   updatedAt: "2026-03-24T18:12:52.936Z",
 };
-export const RemotionRoot: React.FC = () => {
-  const durationInFrames = videoData.duration
-    ? Math.ceil(videoData.duration * 30)
-    : 1;
 
+const calculateMetadata: CalculateMetadataFunction<RootProps> = ({ props }) => {
+  const duration = props.videoData?.duration ?? 60;
+  return {
+    durationInFrames: Math.ceil(duration * 30),
+  };
+};
+
+export const RemotionRoot: React.FC = () => {
   return (
-    <>
-      <Composition
-        id="renderVideo"
-        component={RemotionComposition}
-        durationInFrames={durationInFrames}
-        fps={30}
-        width={1080}
-        height={1920}
-        defaultProps={{
-          // @ts-ignore
-          videoData: videoData,
-          durationInFrames,
-        }}
-      />
-    </>
+    <Composition
+      id="renderVideo"
+      component={RemotionComposition}
+      durationInFrames={1680} // placeholder only
+      fps={30}
+      width={1080}
+      height={1920}
+      defaultProps={{
+        // @ts-ignore
+        videoData: videoData, // no durationInFrames here anymore
+      }}
+      calculateMetadata={calculateMetadata}
+    />
   );
 };

@@ -75,12 +75,10 @@ function resolveCaptionStyle(
 
 export default function RemotionComposition({
   videoData,
-  durationInFrames,
 }: {
   videoData: ShortsVideo;
-  durationInFrames: number;
 }) {
-  const { width, height } = useVideoConfig();
+  const { width, height, durationInFrames } = useVideoConfig();
 
   const captionStyle = useMemo(
     () => resolveCaptionStyle(videoData.captionConfig),

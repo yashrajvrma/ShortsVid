@@ -160,7 +160,7 @@ export const generateShort = inngest.createFunction(
         text: content,
         reference_id: videoData.voiceModelId,
         prosody: {
-          speed: 1.25,
+          speed: 1.1,
           volume: 0,
         },
       });
