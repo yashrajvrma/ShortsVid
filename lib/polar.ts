@@ -5,8 +5,8 @@ import { env } from "@/lib/env";
 
 export const polar = new Polar({
   // TODO : add all env in env.ts file
-  accessToken: process.env.POLAR_ACCESS_TOKEN!,
-  server: "sandbox", // use "sandbox" for testing
+  accessToken: env.POLAR_ACCESS_TOKEN,
+  server: env.POLAR_SERVER_ENV, // use "sandbox" for testing
 });
 
 export const CREDITS_PER_VIDEO = 5;
