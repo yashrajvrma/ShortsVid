@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { prisma } from "@/db";
 import { inngest } from "@/inngest/client";
 import { FishAudioClient } from "fish-audio";
@@ -38,6 +39,8 @@ export const generateShort = inngest.createFunction(
     timeouts: { finish: "15m" },
     onFailure: async ({ event, step }) => {
       const videoId = event.data.event.data?.videoId;
+
+      Sentry.logger.error("Shorts generation failed", { videoId });
       await prisma.video.update({
         where: { id: videoId },
         data: { status: "FAILED" },
@@ -96,6 +99,8 @@ export const generateShort = inngest.createFunction(
         return result;
       },
     );
+
+    Sentry.logger.info("Image prompt generated", { videoId });
 
     // ── STEP 4: Generate images with gpt-image-1 (medium) + upload to R2 ────
 
@@ -165,6 +170,8 @@ export const generateShort = inngest.createFunction(
         },
       });
 
+      Sentry.logger.info("Audio generated", { videoId });
+
       const buffer = Buffer.from(await new Response(audioStream).arrayBuffer());
       await uploadAudioToR2({ buffer, key, contentType: "audio/mpeg" });
 
@@ -190,6 +197,8 @@ export const generateShort = inngest.createFunction(
     const captionData = await step.run("generate-captions", async () => {
       return generateCaptions(audioR2Key, videoData.languageCode);
     });
+
+    Sentry.logger.info("Captions generated", { videoId });
 
     await step.run("save-captions-to-db", async () => {
       await prisma.video.update({
@@ -275,6 +284,8 @@ export const renderShorts = inngest.createFunction(
       },
     );
 
+    Sentry.logger.info("Rendering started", { videoId });
+
     // render shorts (audioUrl, videoUrl, captions, )
     const renderShorts = await step.run("render-shorts", async () => {
       const services = await getServices({
@@ -314,6 +325,8 @@ export const renderShorts = inngest.createFunction(
       }
     });
 
+    Sentry.logger.info("Shorts rendered successfully", { videoId });
+
     // upload video to cloudflare r2 using render video url
     const uploadVideo = await step.run("upload-video-to-r2", async () => {
       if (!renderShorts) {
@@ -333,6 +346,7 @@ export const renderShorts = inngest.createFunction(
       return r2ObjectKey;
     });
 
+    Sentry.logger.info("Shorts uploaded to r2 successfully", { videoId });
     // save video and thumbnail R2 keys to DB
     await step.run("save-video-to-db", async () => {
       await prisma.video.update({

@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/node";
 import { auth } from "@/lib/auth/server";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { headers } from "next/headers";
@@ -22,13 +23,19 @@ const t = initTRPC.create({
   transformer: superjson,
 });
 
+const sentryMiddleware = t.middleware(
+  Sentry.trpcMiddleware({
+    attachRpcInput: true,
+  }),
+);
+
 // Base router and procedure helpers
 export const createTRPCRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;
-export const baseProcedure = t.procedure;
+export const baseProcedure = t.procedure.use(sentryMiddleware);
 
 // Authenticated procedure
-export const authProcedure = t.procedure.use(async ({ next }) => {
+export const authProcedure = baseProcedure.use(async ({ next }) => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });

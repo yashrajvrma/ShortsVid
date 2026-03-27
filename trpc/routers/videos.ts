@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { z } from "zod";
 import { authProcedure, baseProcedure, createTRPCRouter } from "../init";
 import { TRPCError } from "@trpc/server";
@@ -202,17 +203,30 @@ export const videoRouter = createTRPCRouter({
         });
       });
 
-      // 6. Trigger Inngest workflow
-      await inngest.send({
-        name: "shorts/generate",
-        data: {
+      try {
+        Sentry.logger.info("Pushing video in queue", {
           userId: ctx.userId,
           videoId: video.id,
-        },
-      });
+        });
 
-      // deduct five credits and check if there are active credits
-      await deductVideoCredits(ctx.userId, video.id);
+        // 6. Trigger Inngest workflow
+        await inngest.send({
+          name: "shorts/generate",
+          data: {
+            userId: ctx.userId,
+            videoId: video.id,
+          },
+        });
+
+        // deduct five credits and check if there are active credits
+        await deductVideoCredits(ctx.userId, video.id);
+      } catch (error) {
+        Sentry.logger.error("Failed to enqueue video generation in inngest", {
+          userId: ctx.userId,
+          videoId: video.id,
+          error: (error as Error).message,
+        });
+      }
 
       return {
         success: true,
