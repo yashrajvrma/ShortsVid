@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search, Play, Pause, Mic } from "lucide-react";
 import Image from "next/image";
+import { useVoiceAvatar } from "@/components/voice-avatar/use-voice-avatar";
 
 interface VoiceSelectorProps {
   languageCode: string;
@@ -18,9 +19,65 @@ interface VoiceSelectorProps {
   onSelect: (id: string) => void;
 }
 
-// DiceBear glass avatar URL
-function getDicebearUrl(seed: string) {
-  return `https://api.dicebear.com/9.x/glass/svg?seed=${encodeURIComponent(seed)}`;
+function VoiceItem({
+  voice,
+  isSelected,
+  playingId,
+  onSelect,
+  onPlay,
+}: {
+  voice: any;
+  isSelected: boolean;
+  playingId: string | null;
+  onSelect: (id: string) => void;
+  onPlay: (id: string, audioUrl: string) => void;
+}) {
+  const avatarSvg = useVoiceAvatar(voice.name);
+
+  return (
+    <button
+      type="button"
+      onClick={() => onSelect(voice.id)}
+      className={`w-full flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all duration-150 text-left ${
+        isSelected
+          ? "bg-secondary text-secondary-foreground border border-primary/30"
+          : "hover:bg-muted/50 border border-transparent"
+      }`}
+    >
+      {/* Avatar */}
+      <div className="relative size-11 shrink-0 rounded-full overflow-hidden border border-border bg-muted">
+        <div dangerouslySetInnerHTML={{ __html: avatarSvg }} className="size-full [&>svg]:size-full" />
+      </div>
+
+      <div className="flex-1 min-w-0">
+        <p className="text-md font-medium truncate">{voice.name}</p>
+      </div>
+      <Badge
+        variant="secondary"
+        className="text-xs capitalize shrink-0"
+      >
+        {voice.gender}
+      </Badge>
+
+      {/* Play button */}
+      {voice.audioUrl && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onPlay(voice.id, voice.audioUrl!);
+          }}
+          className="size-7 rounded-full flex items-center justify-center bg-muted transition-colors shrink-0"
+        >
+          {playingId === voice.id ? (
+            <Pause className="size-3.5 text-primary" />
+          ) : (
+            <Play className="size-3.5 text-muted-foreground" />
+          )}
+        </button>
+      )}
+    </button>
+  );
 }
 
 export function VoiceSelector({
@@ -96,58 +153,14 @@ export function VoiceSelector({
           ) : (
             <div className="p-1 space-y-1 w-full">
               {voices.map((voice) => (
-                <button
+                <VoiceItem
                   key={voice.id}
-                  type="button"
-                  onClick={() => onSelect(voice.id)}
-                  className={`w-full flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all duration-150 text-left ${
-                    selectedVoiceId === voice.id
-                      ? "bg-secondary text-secondary-foreground border border-primary/30"
-                      : "hover:bg-muted/50 border border-transparent"
-                  }`}
-                >
-                  {/* Avatar */}
-                  <div className="relative size-11 shrink-0 rounded-full overflow-hidden border border-border bg-muted">
-                    <img
-                      src={getDicebearUrl(voice.name)}
-                      alt={voice.name}
-                      className="size-full"
-                    />
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    <p className="text-md font-medium truncate">{voice.name}</p>
-                    {/* {voice.description && (
-                    <p className="text-xs text-muted-foreground truncate">
-                      {voice.description}
-                    </p>
-                  )} */}
-                  </div>
-                  <Badge
-                    variant="secondary"
-                    className="text-xs capitalize shrink-0"
-                  >
-                    {voice.gender}
-                  </Badge>
-
-                  {/* Play button */}
-                  {voice.audioUrl && (
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handlePlay(voice.id, voice.audioUrl!);
-                      }}
-                      className="size-7 rounded-full flex items-center justify-center bg-muted transition-colors shrink-0"
-                    >
-                      {playingId === voice.id ? (
-                        <Pause className="size-3.5 text-primary" />
-                      ) : (
-                        <Play className="size-3.5 text-muted-foreground" />
-                      )}
-                    </button>
-                  )}
-                </button>
+                  voice={voice}
+                  isSelected={selectedVoiceId === voice.id}
+                  playingId={playingId}
+                  onSelect={onSelect}
+                  onPlay={handlePlay}
+                />
               ))}
             </div>
           )}
