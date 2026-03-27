@@ -67,7 +67,7 @@ export function Hero() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.45, ease: "easeOut" }}
-        className="flex flex-col items-center gap-2"
+        className="flex flex-col items-center gap-2 my-3"
       >
         <AvatarCircles numPeople={99} avatarUrls={avatarUrls} />
         <span className="tracking-tight font-medium">

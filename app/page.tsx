@@ -12,7 +12,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 const APP_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://shortsvid.pro";
 
 export const metadata: Metadata = {
-  title: "ShortsVid – AI Short Video Generator for YouTube, TikTok & Instagram",
+  title: "ShortsVid - AI Short Video Generator for YouTube, TikTok & Instagram",
   description:
     "Create viral YouTube Shorts, Instagram Reels, and TikTok videos in minutes with AI. Auto-generate scripts, voiceovers, captions, and background music. No editing skills needed.",
   alternates: { canonical: APP_URL },
@@ -61,7 +61,7 @@ const softwareSchema = {
     "@type": "Offer",
     price: "0",
     priceCurrency: "USD",
-    description: "Free plan available. Paid plans start at $9/month.",
+    description: "Free plan available. Paid plans start at $19/month.",
   },
   featureList: [
     "AI Script Generation",
