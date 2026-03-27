@@ -5,11 +5,10 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 export const metadata: Metadata = {
-  title: "My Videos",
+  title: "Videos",
   description: "View and manage all your AI-generated short videos.",
   robots: { index: false, follow: false },
 };
-
 
 export default async function Videos() {
   prefetch(trpc.videos.getAllShorts.queryOptions());

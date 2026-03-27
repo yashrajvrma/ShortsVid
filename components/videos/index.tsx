@@ -10,22 +10,27 @@ export default function AllVideos() {
   const trpc = useTRPC();
 
   const { data, isLoading } = useQuery(trpc.videos.getAllShorts.queryOptions());
-  console.log("data is", JSON.stringify(data));
 
   return (
     <div className="flex flex-col h-screen w-full">
       <Header>
-        <div className="text-xl tracking-tight">All Videos</div>
+        <div className="text-xl">All Videos</div>
       </Header>
-      <div className="flex flex-wrap items-center gap-4">
+      <div className="flex flex-wrap items-center gap-4 p-4">
         {isLoading ? (
-          <p>Loading...</p>
+          <div className="flex items-center w-full justify-center py-5">
+            <p className="text-muted-foreground text-lg">Loading...</p>
+          </div>
+        ) : !data || data.length === 0 ? (
+          <div className="flex items-center w-full justify-center py-5">
+            <p className="text-muted-foreground text-lg">
+              No shorts created yet.
+            </p>
+          </div>
         ) : (
-          <>
-            {data?.map((video: AllShorts) => {
-              return <FetchAllVideo key={video.id} videoData={video} />;
-            })}
-          </>
+          data.map((video: AllShorts) => (
+            <FetchAllVideo key={video.id} videoData={video} />
+          ))
         )}
       </div>
     </div>

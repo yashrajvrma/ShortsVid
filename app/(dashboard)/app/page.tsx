@@ -7,8 +7,9 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "Your ShortsVid dashboard — create and manage your AI-powered short videos.",
+  title: "Home",
+  description:
+    "Your ShortsVid dashboard — create and manage your AI generated shorts",
   robots: { index: false, follow: false },
 };
 

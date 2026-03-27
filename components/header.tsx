@@ -1,7 +1,3 @@
 export default function Header({ children }: { children?: React.ReactNode }) {
-  return (
-    <div className="flex font-semibold tracking-tighter h-13 font-sans">
-      {children}
-    </div>
-  );
+  return <div className="flex font-medium tracking-tight h-13">{children}</div>;
 }
