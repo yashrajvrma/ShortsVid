@@ -127,6 +127,13 @@ export function PricingSection() {
           <div className="text-4xl sm:text-5xl font-semibold tracking-tighter text-foreground mb-4">
             Pricing
           </div>
+          <div className="text-lg mt-5 font-medium">
+            Save{" "}
+            <span className="text-primary font-semibold tracking-tight">
+              40% off
+            </span>{" "}
+            on yearly plan
+          </div>
         </div>
 
         {/* Cards */}
