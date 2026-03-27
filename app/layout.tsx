@@ -4,24 +4,24 @@ import "./globals.css";
 import { Providers } from "./provider";
 
 const inter = Inter({
-  variable: "--font-sans",
+  variable: "--font-serif",
   subsets: ["latin"],
 });
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
+  variable: "--font-sans",
   subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+  variable: "--font-mono",
   subsets: ["latin"],
 });
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://shortsvid.app";
+const APP_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://shortsvid.pro";
 const APP_NAME = "ShortsVid";
 const APP_DESCRIPTION =
-  "Create viral YouTube Shorts, Instagram Reels, and TikTok videos in minutes with AI. Generate faceless videos with custom voiceovers, captions, background music, and more — no editing skills required.";
+  "Generate viral YouTube Shorts, TikTok & Instagram Reels in seconds. Script, Visuals, Captions & Voiceover — all done by AI. No editing skills required.";
 
 export const viewport: Viewport = {
   themeColor: [
@@ -35,8 +35,8 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: `${APP_NAME} – AI Short Video Generator`,
-    template: `%s | ${APP_NAME}`,
+    default: `ShortsVid - #1 AI Shorts Generator`,
+    template: `%s | ShortsVid`,
   },
   description: APP_DESCRIPTION,
   keywords: [
@@ -75,14 +75,14 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: APP_URL,
     siteName: APP_NAME,
-    title: `${APP_NAME} – AI Short Video Generator`,
+    title: `ShortsVid - #1 AI Shorts Generator`,
     description: APP_DESCRIPTION,
     images: [
       {
         url: "/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: `${APP_NAME} – Create viral short videos with AI`,
+        alt: `ShortsVid - #1 AI Shorts Generator`,
       },
     ],
   },
@@ -90,7 +90,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@shortsvid",
     creator: "@shortsvid",
-    title: `${APP_NAME} – AI Short Video Generator`,
+    title: `ShortsVid - #1 AI Shorts Generator`,
     description: APP_DESCRIPTION,
     images: ["/opengraph-image.png"],
   },
@@ -119,9 +119,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className="light" lang="en" suppressHydrationWarning={true}>
+    <html lang="en" suppressHydrationWarning={true}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased font-sans`}
       >
         <Providers>{children}</Providers>
       </body>

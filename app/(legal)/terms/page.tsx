@@ -3,7 +3,7 @@ import { Footer } from "@/components/home/footer";
 import Navbar from "@/components/home/navbar";
 import TermsOfService from "@/components/legal/terms-of-service";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://shortsvid.app";
+const APP_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://shortsvid.pro";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
@@ -11,7 +11,6 @@ export const metadata: Metadata = {
     "Read ShortsVid's Terms of Service to understand your rights and responsibilities when using our AI video generation platform.",
   alternates: { canonical: `${APP_URL}/terms` },
 };
-
 
 export default function Page() {
   return (
