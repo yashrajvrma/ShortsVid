@@ -17,7 +17,7 @@ export function Hero() {
   const router = useRouter();
   return (
     <section className="relative sm:pt-36 pt-28 pb-8 text-center">
-      <div className="flex justify-center border-2 border-double sm:text-sm text-xs mx-auto sm:w-64 w-54 rounded-xl sm:px-3 px-2 py-1.5 mb-3 font-medium">
+      <div className="flex justify-center border-2 border-double sm:text-sm text-xs mx-auto sm:w-64 w-54 rounded-xl sm:px-3 px-2 py-1.5 mb-5 font-medium">
         <p className="flex items-center">
           Join
           <span className="font-semibold">&nbsp;100K+&nbsp;</span> creators on
@@ -29,9 +29,11 @@ export function Hero() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
-        className="text-5xl sm:text-7xl tracking-tighter font-medium leading-[1.05] max-w-2xl mx-auto"
+        className="text-6xl sm:text-8xl tracking-tighter font-medium leading-[1.05] max-w-2xl mx-auto"
       >
-        <div>Run your shorts</div> <div>on autopilot</div>
+        {/* <div>Run your shorts</div> <div>on autopilot</div> */}
+        <div>&#35; 1 AI shorts</div>
+        <div>generator</div>
       </motion.h1>
 
       <motion.p
