@@ -16,7 +16,7 @@ export default function AllVideos() {
       <Header>
         <div className="text-xl">All Videos</div>
       </Header>
-      <div className="flex flex-wrap items-center gap-4 p-4">
+      <div className="flex flex-wrap items-center gap-4">
         {isLoading ? (
           <div className="flex items-center w-full justify-center py-5">
             <p className="text-muted-foreground text-lg">Loading...</p>

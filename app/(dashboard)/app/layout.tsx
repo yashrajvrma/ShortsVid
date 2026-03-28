@@ -69,7 +69,7 @@ export default async function Layout({
           </div>
         </header>
 
-        <div className="flex h-full p-4">{children}</div>
+        <div className="flex h-screen px-4">{children}</div>
       </SidebarInset>
 
       {/* Pricing gate — renders on top of everything for free plan users */}

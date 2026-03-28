@@ -14,7 +14,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useVoiceAvatar } from "@/components/voice-avatar/use-voice-avatar";
+import { useVoiceAvatar } from "@/hooks/voice/use-voice-avatar";
 
 interface BgMusicModalProps {
   open: boolean;
@@ -80,26 +80,31 @@ function MusicItem({
     <button
       type="button"
       onClick={onSelect}
-      className={`flex items-center gap-3 font-sans font-medium rounded-xl px-3 py-2.5 transition-all duration-150 text-left w-full ${isSelected
-        ? "bg-secondary text-secondary-foreground border border-primary/30"
-        : "hover:bg-muted/60 bg-transparent"
-        }`}
+      className={`flex items-center gap-3 font-sans font-medium rounded-xl px-3 py-2.5 transition-all duration-150 text-left w-full ${
+        isSelected
+          ? "bg-secondary text-secondary-foreground border border-primary/30"
+          : "hover:bg-muted/60 bg-transparent"
+      }`}
     >
       <div
         className="size-10 shrink-0 rounded-xl overflow-hidden border border-border bg-muted cursor-pointer"
         onClick={handlePlay}
       >
-        <div dangerouslySetInnerHTML={{ __html: avatarSvg }} className="size-full [&>svg]:size-full" />
+        <div
+          dangerouslySetInnerHTML={{ __html: avatarSvg }}
+          className="size-full [&>svg]:size-full"
+        />
       </div>
       <span className="text-sm font-medium truncate flex-1">{name}</span>
       {audioUrl && (
         <button
           type="button"
           onClick={handlePlay}
-          className={`size-7 rounded-full flex items-center justify-center shrink-0 transition-colors ${isSelected
-            ? "bg-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/30"
-            : "bg-muted hover:bg-primary/20"
-            }`}
+          className={`size-7 rounded-full flex items-center justify-center shrink-0 transition-colors ${
+            isSelected
+              ? "bg-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/30"
+              : "bg-muted hover:bg-primary/20"
+          }`}
         >
           {playing ? <Pause className="size-3" /> : <Play className="size-3" />}
         </button>
@@ -172,10 +177,11 @@ export function BgMusicModal({
                   <button
                     type="button"
                     onClick={() => onSelect(null)}
-                    className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all text-left font-medium ${selectedMusicId === null
-                      ? "bg-secondary text-secondary-foreground border border-primary/30"
-                      : "hover:bg-muted/60"
-                      }`}
+                    className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all text-left font-medium ${
+                      selectedMusicId === null
+                        ? "bg-secondary text-secondary-foreground border border-primary/30"
+                        : "hover:bg-muted/60"
+                    }`}
                   >
                     <div className="size-8 rounded-xl flex items-center justify-center bg-muted shrink-0">
                       <X className="size-5 text-muted-foreground" />

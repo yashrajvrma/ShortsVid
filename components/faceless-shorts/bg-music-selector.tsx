@@ -6,7 +6,7 @@ import { BgMusicModal } from "./bg-music-modal";
 import { Music2, VolumeX } from "lucide-react";
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
-import { useVoiceAvatar } from "@/components/voice-avatar/use-voice-avatar";
+import { useVoiceAvatar } from "@/hooks/voice/use-voice-avatar";
 
 interface BgMusicSelectorProps {
   selectedMusicId: string | null;
@@ -62,7 +62,10 @@ export function BgMusicSelector({
           <>
             {/* <Music2 className="size-4 text-muted-foreground shrink-0" /> */}
             <div className="size-6 shrink-0 rounded-md overflow-hidden border border-border bg-muted">
-              <div dangerouslySetInnerHTML={{ __html: avatarSvg }} className="size-full flex items-center justify-center [&>svg]:size-full" />
+              <div
+                dangerouslySetInnerHTML={{ __html: avatarSvg }}
+                className="size-full flex items-center justify-center [&>svg]:size-full"
+              />
             </div>
             <span className="truncate text-foreground text-sm font-medium">
               {selectedMusic.name}

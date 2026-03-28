@@ -14,16 +14,18 @@ export default function RemotionPlayer({
     : 1;
 
   return (
-    <Player
-      className="rounded-xl border-border bg-neutral-300 hover:cursor-pointer"
-      component={RemotionComposition}
-      durationInFrames={durationInFrames}
-      compositionWidth={1080}
-      compositionHeight={1920}
-      fps={30}
-      controls
-      style={{ height: "60vh", width: "auto" }}
-      inputProps={{ videoData, durationInFrames }}
-    />
+    <div className="aspect-9/16 h-[60vh] overflow-hidden rounded-3xl bg-black">
+      <Player
+        component={RemotionComposition}
+        durationInFrames={durationInFrames}
+        compositionWidth={1080}
+        compositionHeight={1920}
+        fps={30}
+        controls
+        style={{ width: "100%", height: "100%" }}
+        inputProps={{ videoData, durationInFrames }}
+        acknowledgeRemotionLicense
+      />
+    </div>
   );
 }

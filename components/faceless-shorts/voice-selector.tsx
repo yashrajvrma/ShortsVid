@@ -3,13 +3,13 @@
 import { useState, useRef } from "react";
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
-import { useDebounce } from "@/hooks/use-debounce";
+import { useDebounce } from "@/hooks/voice/use-debounce";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search, Play, Pause, Mic } from "lucide-react";
 import Image from "next/image";
-import { useVoiceAvatar } from "@/components/voice-avatar/use-voice-avatar";
+import { useVoiceAvatar } from "@/hooks/voice/use-voice-avatar";
 
 interface VoiceSelectorProps {
   languageCode: string;
@@ -46,16 +46,16 @@ function VoiceItem({
     >
       {/* Avatar */}
       <div className="relative size-11 shrink-0 rounded-full overflow-hidden border border-border bg-muted">
-        <div dangerouslySetInnerHTML={{ __html: avatarSvg }} className="size-full [&>svg]:size-full" />
+        <div
+          dangerouslySetInnerHTML={{ __html: avatarSvg }}
+          className="size-full [&>svg]:size-full"
+        />
       </div>
 
       <div className="flex-1 min-w-0">
         <p className="text-md font-medium truncate">{voice.name}</p>
       </div>
-      <Badge
-        variant="secondary"
-        className="text-xs capitalize shrink-0"
-      >
+      <Badge variant="secondary" className="text-xs capitalize shrink-0">
         {voice.gender}
       </Badge>
 

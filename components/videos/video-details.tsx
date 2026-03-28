@@ -229,7 +229,7 @@ export default function VideoDetailClient({
   return (
     <TooltipProvider>
       <div className="min-h-screen bg-background w-full">
-        <div className="container pb-6">
+        <div className="container pb-4">
           {/* ── top nav bar ── */}
           <Header>
             <motion.div
@@ -295,7 +295,7 @@ export default function VideoDetailClient({
           <Separator className="mb-6" />
 
           {/* ── 2-col layout ── */}
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_320px]">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_320px] w-full">
             {/* ── LEFT: content ── */}
             <motion.div
               initial={{ opacity: 0, x: -12 }}
@@ -307,19 +307,19 @@ export default function VideoDetailClient({
               <div className="flex flex-wrap items-center gap-2">
                 <Badge
                   variant="outline"
-                  className="px-3 py-1 text-xs font-semibold uppercase tracking-widest"
+                  className="text-sm px-2 py-3 rounded-sm font-semibold uppercase tracking-tight"
                 >
                   {videoDetail.script.topic}
                 </Badge>
                 <Badge
                   variant="outline"
-                  className="px-3 py-1 text-xs font-semibold uppercase tracking-widest"
+                  className="text-sm px-2 py-3 rounded-sm font-semibold uppercase tracking-tight"
                 >
                   {videoDetail.videoStyle}
                 </Badge>
                 <Badge
                   variant={statusCfg.variant}
-                  className="flex items-center gap-1.5 px-3 py-1 text-xs font-medium"
+                  className="flex items-center gap-1.5 px-2 py-3 text-sm rounded-sm font-medium"
                 >
                   {statusCfg.icon}
                   {statusCfg.label}
@@ -408,7 +408,7 @@ export default function VideoDetailClient({
                 Preview
               </p>
 
-              <div className="overflow-hidden rounded-2xl border">
+              <div className="">
                 <RemotionPlayer
                   videoData={{
                     id: videoDetail.id,
