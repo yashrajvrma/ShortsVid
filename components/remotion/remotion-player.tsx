@@ -24,7 +24,7 @@ export default function RemotionPlayer({
         controls
         style={{ width: "100%", height: "100%" }}
         inputProps={{ videoData, durationInFrames }}
-        acknowledgeRemotionLicense
+        acknowledgeRemotionLicense={true}
       />
     </div>
   );

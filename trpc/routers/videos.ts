@@ -5,6 +5,7 @@ import { TRPCError } from "@trpc/server";
 import { prisma } from "@/db";
 import { inngest } from "@/inngest/client";
 import {
+  deleteFromR2,
   getSignedAudioUrl,
   getSignedObjectUrl,
   getSignedUrlInBulk,
@@ -240,13 +241,20 @@ export const videoRouter = createTRPCRouter({
     const videos = await prisma.video.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
-      select: {
-        id: true,
-        status: true,
-        duration: true,
-        thumbnailR2ObjectKey: true,
-        createdAt: true,
-        updatedAt: true,
+      // select: {
+      //   id: true,
+      //   status: true,
+      //   duration: true,
+      //   thumbnailR2ObjectKey: true,
+      //   createdAt: true,
+      //   updatedAt: true,
+      // },
+      include: {
+        script: {
+          select: {
+            prompt: true,
+          },
+        },
       },
     });
 
@@ -516,5 +524,71 @@ export const videoRouter = createTRPCRouter({
         createdAt: video.createdAt,
         updatedAt: video.updatedAt,
       };
+    }),
+  deleteVideo: authProcedure
+    .input(z.object({ videoId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { userId } = ctx;
+
+      const video = await prisma.video.findUnique({
+        where: { id: input.videoId, userId },
+      });
+
+      if (!video) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Invalid video Id",
+        });
+      }
+
+      const r2KeysToDelete = [
+        video.r2ObjectKey,
+        video.audio,
+        video.thumbnailR2ObjectKey,
+        ...video.images,
+      ].filter(Boolean) as string[];
+
+      // Delete the video first (sets captionConfigId to null via SetNull)
+      await prisma.video.delete({
+        where: { id: input.videoId, userId },
+      });
+
+      // Now safe to delete the orphaned CaptionConfig
+      if (video.captionConfigId) {
+        await prisma.captionConfig
+          .delete({
+            where: { id: video.captionConfigId },
+          })
+          .catch((error) => {
+            Sentry.logger.error(
+              "Failed to delete CaptionConfig during video deletion",
+              {
+                userId,
+                videoId: input.videoId,
+                captionConfigId: video.captionConfigId,
+                error: (error as Error).message,
+              },
+            );
+          });
+      }
+
+      // Delete R2 assets (best-effort, non-blocking)
+      await Promise.allSettled(
+        r2KeysToDelete.map((key) =>
+          deleteFromR2(key).catch((error) => {
+            Sentry.logger.error(
+              "Failed to delete R2 asset during video deletion",
+              {
+                userId,
+                videoId: input.videoId,
+                key,
+                error: (error as Error).message,
+              },
+            );
+          }),
+        ),
+      );
+
+      return { message: "Video deleted successfully" };
     }),
 });
