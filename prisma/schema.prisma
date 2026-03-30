@@ -315,6 +315,7 @@ enum SubscriptionPeriod {
 }
 
 enum SubscriptionStatus {
+  TRIALING
   ACTIVE
   CANCELLED
   PAST_DUE

@@ -32,7 +32,9 @@ export const env = createEnv({
     GCP_SITE: z.string().min(1),
 
     // polar
-    POLAR_SERVER_ENV: z.enum(["sandbox", "production"]).default("sandbox"),
+    POLAR_SERVER_ENVIRONMENT: z
+      .enum(["sandbox", "production"])
+      .default("sandbox"),
 
     POLAR_BASIC_MONTHLY_PRODUCT_ID: z.string().min(1),
     POLAR_BASIC_YEARLY_PRODUCT_ID: z.string().min(1),
