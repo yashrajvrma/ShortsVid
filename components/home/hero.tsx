@@ -31,9 +31,9 @@ export function Hero() {
         transition={{ duration: 0.7, ease: "easeOut" }}
         className="text-6xl sm:text-8xl tracking-tighter font-medium leading-[1.05] max-w-2xl mx-auto"
       >
-        {/* <div>Run your shorts</div> <div>on autopilot</div> */}
-        <div>&#35; 1 AI shorts</div>
-        <div>generator</div>
+        <div>Run your shorts</div> <div>on autopilot</div>
+        {/* <div>&#35; 1 AI shorts</div>
+        <div>generator</div> */}
       </motion.h1>
 
       <motion.p
@@ -43,17 +43,18 @@ export function Hero() {
         className="mt-5 text-lg sm:text-xl font-normal text-muted-foreground max-w-xl mx-auto leading-relaxed"
       >
         Create viral shorts for YouTube, TikTok &amp; Instagram in seconds.
-        Script, Visuals, Captions, Voiceover &mdash; all done by AI.
+        Script Visuals Voiceover Captions &mdash; all done by AI.
       </motion.p>
 
       <motion.div
+        className="mb-6"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
       >
         <Button
           size="lg"
-          className="text-lg font-serif tracking-tight mt-7 mb-5 rounded-xl border-2 font-medium px-8 h-14 sm:w-60 w-50 border-red-300 border-double hover:cursor-pointer"
+          className="text-lg font-serif tracking-tight mt-7  rounded-xl border-2 font-medium px-8 h-14 sm:w-60 w-50 border-red-300 border-double hover:cursor-pointer"
           onClick={() => {
             router.push("/app");
           }}
@@ -61,6 +62,8 @@ export function Hero() {
           Start Creating
           <MoveRight className="ml-2 w-8 h-8" />
         </Button>
+
+        <div className="pt-1 text-lg font-medium">3-days Free trial</div>
       </motion.div>
 
       <motion.div

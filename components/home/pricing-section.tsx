@@ -219,18 +219,19 @@ export function PricingSection() {
                       </div>
                     </div>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className="text-sm text-muted-foreground mt-1">
                     Billed today: ${isYearly ? price * 12 : price}
                   </p>
 
                   {/* CTA */}
                   <Button
-                    className="w-full mt-5 font-semibold"
+                    size="lg"
+                    className="w-full mt-5 font-medium text-base tracking-tight"
                     variant={plan.highlighted ? "default" : "outline"}
                     disabled={isLoading}
                     onClick={() => handleSubscribe(plan.key)}
                   >
-                    {isLoading ? "Redirecting..." : "Subscribe →"}
+                    {isYearly ? "Subscribe →" : "Start 3 days Free trial"}
                   </Button>
 
                   {/* Videos per month/year pill */}
