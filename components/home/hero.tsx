@@ -16,20 +16,38 @@ const avatarUrls = [img1, img2, img3, img4];
 export function Hero() {
   const router = useRouter();
   return (
-    <section className="relative sm:pt-36 pt-28 pb-8 text-center">
-      <div className="flex justify-center border-2 border-double sm:text-sm text-xs mx-auto sm:w-64 w-54 rounded-xl sm:px-3 px-2 py-1.5 mb-5 font-medium">
+    <section className="relative sm:pt-36 pt-24 pb-8 text-center">
+      {/* <div className="flex justify-center border-2 border-double sm:text-sm text-xs mx-auto sm:w-64 w-54 rounded-xl sm:px-3 px-2 py-1.5 mb-5 font-medium">
         <p className="flex items-center">
           Join
           <span className="font-semibold">&nbsp;100K+&nbsp;</span> creators on
           ShortsVid
         </p>
+      </div> */}
+      <div className="flex justify-center mx-auto sm:px-3 px-2 mb-5">
+        <a
+          href="https://peerlist.io/yashrajvrma/project/shortsvid"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img
+            src="https://peerlist.io/api/v1/projects/embed/PRJHEOGAALQ8OMQOLHOEJB6AGKJLD8?showUpvote=true&theme=light"
+            alt="ShortsVid"
+            className="sm:h-18 h-14"
+            // style={"width: auto; height: 72px;"}
+            style={{
+              width: "auto",
+              // height: "72px",
+            }}
+          />
+        </a>
       </div>
 
       <motion.h1
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
-        className="text-6xl sm:text-8xl tracking-tighter font-medium leading-[1.05] max-w-2xl mx-auto"
+        className="text-5xl sm:text-8xl tracking-tighter font-medium leading-[1.05] max-w-2xl mx-auto"
       >
         <div>Run your shorts</div> <div>on autopilot</div>
         {/* <div>&#35; 1 AI shorts</div>
