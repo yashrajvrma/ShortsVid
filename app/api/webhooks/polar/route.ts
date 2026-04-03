@@ -121,14 +121,17 @@ async function handleSubscriptionCreated(data: any) {
     });
   });
 
-  // credit immediately — trial or paid, user can start generating right away
+  // add 20 credits immediately — trial or paid, user can start generating right away
   await addCredits({
     userId,
-    amount: planConfig.credits,
-    description: `${planConfig.label} — ${status === SubscriptionStatus.TRIALING ? "trial started" : "subscription started"}`,
+    amount: status === SubscriptionStatus.TRIALING ? 20 : planConfig.credits,
+    description: `${planConfig.label} — ${
+      status === SubscriptionStatus.TRIALING
+        ? "trial started"
+        : "subscription started"
+    }`,
     polarSubscriptionId: data.id,
   });
-
   console.log("added credits");
 }
 
@@ -154,6 +157,15 @@ async function handleSubscriptionActive(data: any) {
 }
 
 async function handleSubscriptionUpdated(data: any) {
+  const userId = data.metadata?.userId as string;
+
+  if (!userId) {
+    console.error(
+      "[Polar Webhook] subscription.updated — missing userId in metadata",
+    );
+    return;
+  }
+
   const subscription = await prisma.subscription.findUnique({
     where: { polarSubscriptionId: data.id },
   });
@@ -170,6 +182,9 @@ async function handleSubscriptionUpdated(data: any) {
   console.log("is trial", isTrialConversion);
 
   if (isTrialConversion) {
+    const planConfig = getSubscriptionPlanConfigByProductId(data.productId);
+    if (!planConfig) return;
+
     await prisma.subscription.update({
       where: { polarSubscriptionId: data.id },
       data: {
@@ -178,7 +193,14 @@ async function handleSubscriptionUpdated(data: any) {
         currentPeriodEnd: new Date(data.currentPeriodEnd), // real billing period ends
       },
     });
-    // no credits added — already credited at trial start
+
+    // add full plan credits
+    await addCredits({
+      userId,
+      amount: planConfig.credits,
+      description: `${planConfig.label} — ${isTrialConversion && "Trial subscription converted"}`,
+      polarSubscriptionId: data.id,
+    });
     return;
   }
 
