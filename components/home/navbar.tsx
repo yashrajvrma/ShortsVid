@@ -8,7 +8,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
   { href: "#pricing", label: "Pricing" },

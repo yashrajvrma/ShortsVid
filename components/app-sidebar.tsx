@@ -150,7 +150,7 @@ const data = {
       icon: <HomeIcon />,
     },
     {
-      name: "All Videos",
+      name: "Library",
       url: "/app/videos",
       icon: <Play />,
     },
