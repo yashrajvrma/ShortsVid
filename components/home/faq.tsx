@@ -36,7 +36,7 @@ const FAQS = [
 
 export function FAQ() {
   return (
-    <section id="faq" className="w-full sm:py-20 py-12 px-4">
+    <section id="faq" className="w-full sm:py-24 py-12 px-4">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center sm:mb-20 mb-12">

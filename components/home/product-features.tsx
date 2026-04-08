@@ -64,7 +64,7 @@ const cardVariants = {
 
 export function ProductFeatures() {
   return (
-    <section id="features" className="w-full sm:py-20 py-12 px-4">
+    <section id="features" className="w-full sm:py-24 py-12 px-4">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <motion.div

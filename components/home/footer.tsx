@@ -34,7 +34,8 @@ export function Footer() {
             </Link>
 
             <p className="text-base text-muted-foreground sm:max-w-[400px] max-w-[350px] mt-2">
-              AI-powered shorts generator for YouTube, TikTok & Instagram Reels.
+              Get ready to post shorts in seconds with ShortsVid. Script Visuals
+              Voiceover Captions — all done by AI.
             </p>
 
             <a
