@@ -25,7 +25,7 @@ export function Hero() {
         </p>
       </div> */}
       <div className="flex justify-center mx-auto sm:px-3 px-2 mb-5">
-        <a
+        {/* <a
           href="https://peerlist.io/yashrajvrma/project/shortsvid"
           target="_blank"
           rel="noreferrer"
@@ -39,6 +39,20 @@ export function Hero() {
               width: "auto",
               // height: "72px",
             }}
+          />
+        </a> */}
+
+        <a
+          href="https://www.producthunt.com/products/shortsvid?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-shortsvid"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            alt="ShortsVid - Get ready to post viral shorts in seconds | Product Hunt"
+            // width="250"
+            // height="54"
+            className="sm:h-14 h-12 rounded-xl"
+            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1118712&amp;theme=dark&amp;t=1775738243009"
           />
         </a>
       </div>
@@ -58,10 +72,10 @@ export function Hero() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
-        className="mt-5 text-lg sm:text-xl font-normal text-muted-foreground max-w-xl mx-auto leading-relaxed"
+        className="mt-4 text-lg sm:text-xl font-normal text-muted-foreground max-w-xl mx-auto leading-relaxed"
       >
-        Create viral shorts for YouTube, TikTok &amp; Instagram in seconds.
         Script Visuals Voiceover Captions &mdash; all done by AI.
+        <p>No editing skills required!</p>
       </motion.p>
 
       <motion.div
@@ -72,7 +86,7 @@ export function Hero() {
       >
         <Button
           size="lg"
-          className="text-lg font-serif tracking-tight mt-7  rounded-xl border-2 font-medium px-8 h-14 sm:w-60 w-50 border-red-300 border-double hover:cursor-pointer"
+          className="text-lg font-serif tracking-tight mt-8 rounded-xl border-2 font-medium px-8 h-14 sm:w-60 w-50 border-red-300 border-double hover:cursor-pointer"
           onClick={() => {
             router.push("/app");
           }}
