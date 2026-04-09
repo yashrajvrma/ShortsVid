@@ -47,9 +47,9 @@ export function Hero() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
-        className="text-5xl sm:text-7xl tracking-tighter font-medium leading-[1.05] max-w-2xl mx-auto"
+        className="text-5xl sm:text-6xl tracking-tighter font-semibold leading-[1.05] max-w-2xl mx-auto"
       >
-        <div>Ready to post</div> <div>shorts in seconds</div>
+        <div>Automate viral tiktok</div> <div>shorts in seconds</div>
         {/* <div>&#35; 1 AI shorts</div>
         <div>generator</div> */}
       </motion.h1>
