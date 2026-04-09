@@ -192,8 +192,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <span className="truncate font-medium">Acme Inc</span>
                   <span className="truncate text-xs">Enterprise</span>
                 </div> */}
-                <div className="flex items-center text-2xl font-semibold tracking-tighter leading-tight gap-1">
-                  {/* Shorts Vid */}
+                <div className="flex items-center text-xl font-semibold tracking-tighter leading-tight gap-1">
                   <Image
                     src={ShortsVidLogo}
                     alt="shortsVid-logo"
