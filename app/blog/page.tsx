@@ -50,7 +50,7 @@ export default function BlogPage() {
           </div>
 
           {/* CTA Footer — always at bottom */}
-          <div className="rounded-2xl border border-border bg-sidebar flex flex-col items-center text-center gap-4 py-20 mt-10 px-6">
+          <div className="rounded-2xl border border-border bg-sidebar flex flex-col items-center text-center gap-4 py-10 mt-10 px-6">
             <Image
               src={logo}
               alt="ShortsVid logo"

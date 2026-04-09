@@ -37,7 +37,7 @@ const Navbar = () => {
       disabled={isPending}
     >
       {isPending ? (
-        <span className="w-16 h-4 bg-muted-foreground/20 animate-pulse rounded" />
+        <span className="w-16 h-4 bg-muted-foreground/10 animate-pulse rounded" />
       ) : isLoggedIn ? (
         "Open App"
       ) : (

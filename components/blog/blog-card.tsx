@@ -58,7 +58,7 @@ export function BlogCard({ blog, index }: BlogCardProps) {
 
               <p className="text-sm font-medium tracking-tight">ShortsVid</p>
             </div>
-            <h2 className="text-lg font-semibold tracking-tight leading-snug text-card-foreground group-hover:text-muted-foreground transition-colors line-clamp-2">
+            <h2 className="text-lg font-semibold tracking-tight leading-snug text-card-foreground transition-colors line-clamp-2">
               {blog.title}
             </h2>
 
