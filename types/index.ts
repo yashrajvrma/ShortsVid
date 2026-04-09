@@ -156,3 +156,19 @@ export type VideoStyle =
   | "CINEMATIC"
   | "PIXEL_ART"
   | "COLORFUL_COMICS";
+
+// blog types
+export type BlogMeta = {
+  slug: string;
+  title: string;
+  description: string;
+  date: string;
+  tags: string[];
+  coverImage: string;
+  author: string;
+  authorImage?: string;
+  readingTime: string;
+  published: boolean;
+};
+
+export type Blog = BlogMeta & { content: string };
