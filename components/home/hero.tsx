@@ -95,7 +95,7 @@ export function Hero() {
           Get your generated video in less than 5 minutes.
         </div> */}
         <div className="pt-1 sm:text-sm text-xs text-muted-foreground">
-          More than <span className="font-medium">300+</span> shorts have been
+          More than <span className="font-medium">10K+</span> shorts have been
           created.
         </div>
       </motion.div>

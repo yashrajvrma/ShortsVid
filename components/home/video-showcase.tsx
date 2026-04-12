@@ -27,6 +27,7 @@ function VideoCard({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const toggleMute = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -47,21 +48,37 @@ function VideoCard({
       }}
       whileHover={{ y: -6, scale: 1.02 }}
       className={cn(
-        "relative overflow-hidden sm:rounded-4xl rounded-3xl shadow-xl flex-shrink-0 border-stone-400/80 border-4  border-double",
+        "relative overflow-hidden sm:rounded-4xl rounded-3xl shadow-xl flex-shrink-0 border-stone-400/80 border-4 border-double bg-muted",
         !mobileLayout && video.id !== 2 && "mt-28",
       )}
     >
+      {/* Loading spinner overlay */}
+      <AnimatePresence>
+        {isLoading && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="absolute inset-0 z-10 flex items-center justify-center bg-muted"
+          >
+            <div className="w-8 h-8 rounded-full border-2 border-primary/20 border-t-primary animate-spin" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <video
         ref={videoRef}
         className={cn(
           "aspect-9/16 object-cover block",
           mobileLayout ? "w-[44vw]" : "w-[300px]",
+          isLoading && "invisible", // hide until ready to avoid flash
         )}
         playsInline
         muted
         loop
         autoPlay
         preload="auto"
+        onCanPlay={() => setIsLoading(false)}
       >
         <source src={video.src} type="video/mp4" />
       </video>

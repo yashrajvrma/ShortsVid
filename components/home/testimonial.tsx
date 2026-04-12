@@ -126,7 +126,7 @@ const Testimonials = () => {
             {[
               { value: "12K+", label: "Active creators" },
               { value: "4.9★", label: "Average rating" },
-              { value: "2M+", label: "Shorts generated" },
+              { value: "10K+", label: "Shorts generated" },
             ].map(({ value, label }) => (
               <div key={label} className="flex flex-col items-center">
                 <span className="text-xl font-bold text-foreground">
