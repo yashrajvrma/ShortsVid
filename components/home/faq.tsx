@@ -24,11 +24,11 @@ const FAQS = [
     q: "What platforms can I post to?",
     a: "YouTube Shorts, TikTok, Instagram Reels, and Facebook Reels. Every video is exported in 9:16 vertical format so it looks native on all of them. Generate once, post everywhere.",
   },
-  {
-    category: "General",
-    q: "Do you offer a free trial?",
-    a: "Yes! You get a 3 day free trial to create videos, explore all the features, and see how it works before committing to a paid plan.",
-  },
+  // {
+  //   category: "General",
+  //   q: "Do you offer a free trial?",
+  //   a: "Yes! You get a 3 day free trial to create videos, explore all the features, and see how it works before committing to a paid plan.",
+  // },
   {
     category: "General",
     q: "Is AI generated content original? Is it plagiarism free?",
@@ -47,7 +47,7 @@ const FAQS = [
   {
     category: "General",
     q: "Can I get a refund?",
-    a: "We offer a free trial so you can test everything before paying. Because generating videos uses real compute resources, we are not able to offer refunds after a payment has been made. That said, you can cancel anytime and you will not be charged again.",
+    a: "We unfortunately cannot offer refunds because of the high generation costs for AI videos. You can cancel your subscription anytime.",
   },
   {
     category: "General",

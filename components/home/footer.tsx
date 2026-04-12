@@ -93,6 +93,9 @@ export function Footer() {
             Copyright © {new Date().getFullYear()} - All rights reserved
           </p>
           <p className="text-sm text-muted-foreground">
+            Made with ❤️ for creators{" "}
+          </p>
+          {/* <p className="text-sm text-muted-foreground">
             Made with ❤️ by{" "}
             <a
               href="https://twitter.com/yashrajvrma"
@@ -102,7 +105,7 @@ export function Footer() {
             >
               Yashraj
             </a>
-          </p>
+          </p> */}
         </div>
       </div>
     </footer>

@@ -10,6 +10,8 @@ import img2 from "@/public/images/testimonials/2idjdjwkexnxsleke.webp";
 import img3 from "@/public/images/testimonials/hnn7qjbeka98bkikpdokprbp7qq-314-profile (1).webp";
 import img4 from "@/public/images/testimonials/jsjjeoeoeoc.jpg";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import socialImg from "@/public/images/social-icons.png";
 
 const avatarUrls = [img1, img2, img3, img4];
 
@@ -42,9 +44,19 @@ export function Hero() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
-        className="text-4xl sm:text-6xl tracking-tighter font-semibold leading-[1.05] max-w-2xl mx-auto"
+        className="flex flex-col items-center text-4xl sm:text-6xl tracking-tighter font-semibold leading-[1.05] max-w-2xl mx-auto"
       >
-        <div>Automate viral tiktok</div> <div>shorts in seconds</div>
+        <div className="flex">
+          Automate
+          <Image
+            src={socialImg}
+            alt="social Icons"
+            className="inline-block sm:w-40 w-24 mx-2"
+            draggable={false}
+          />
+          viral
+        </div>{" "}
+        <div>shorts in seconds</div>
         {/* <div>&#35; 1 AI shorts</div>
         <div>generator</div> */}
       </motion.h1>
@@ -74,11 +86,11 @@ export function Hero() {
             router.push("/app");
           }}
         >
-          Get started for free
+          Create your first video
           {/* <MoveRight className="ml-2 w-8 h-8" /> */}
         </Button>
 
-        <div className="pt-1 sm:text-base text-sm font-medium">
+        <div className="pt-1 sm:text-base text-sm font-normal">
           No credit card required
         </div>
       </motion.div>
