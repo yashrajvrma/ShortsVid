@@ -97,7 +97,7 @@ const Testimonials = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
-          className="flex flex-col items-center justify-center max-w-[560px] mx-auto"
+          className="flex flex-col items-center justify-center mx-auto"
         >
           {/* Badge */}
           {/* <div className="flex justify-center mb-4">
@@ -107,7 +107,7 @@ const Testimonials = () => {
             </div>
           </div> */}
 
-          <h2 className="text-4xl sm:text-4xl font-medium tracking-tighter text-center mt-2">
+          <h2 className="text-3xl sm:text-5xl font-medium tracking-tighter text-center mt-2">
             Hear what creators say about us
           </h2>
 

@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { VideoShowcase } from "./video-showcase";
 import { Button } from "../ui/button";
-import { MoveRight } from "lucide-react";
+import { MoveRight, Zap } from "lucide-react";
 import { AvatarCircles } from "@/components/ui/avatar-circles";
 import img1 from "@/public/images/testimonials/1690466258472.jpg";
 import img2 from "@/public/images/testimonials/2idjdjwkexnxsleke.webp";
@@ -18,7 +18,7 @@ const avatarUrls = [img1, img2, img3, img4];
 export function Hero() {
   const router = useRouter();
   return (
-    <section className="relative sm:pt-36 pt-24 pb-20 text-center">
+    <section className="relative sm:pt-36 pt-28 pb-20 text-center">
       {/* <div className="flex justify-center border-2 border-double sm:text-sm text-xs mx-auto sm:w-64 w-54 rounded-xl sm:px-3 px-2 py-1.5 mb-5 font-medium">
         <p className="flex items-center">
           Join
@@ -81,17 +81,22 @@ export function Hero() {
       >
         <Button
           size="lg"
-          className="text-lg font-serif tracking-tight mt-6 rounded-xl border-2 font-medium h-12 px-5 border-red-300 border-double hover:cursor-pointer"
+          className="text-lg font-serif tracking-tight mt-6 rounded-xl border-2 font-medium h-12 sm:px-12 px-6 border-red-300 border-double hover:cursor-pointer"
           onClick={() => {
             router.push("/app");
           }}
         >
+          <Zap fill="#ffffff" className="w-12 h-12" />
           Create your first video
           {/* <MoveRight className="ml-2 w-8 h-8" /> */}
         </Button>
 
-        <div className="pt-1 sm:text-base text-sm font-normal">
-          No credit card required
+        {/* <div className="pt-1 sm:text-sm text-xs text-muted-foreground">
+          Get your generated video in less than 5 minutes.
+        </div> */}
+        <div className="pt-1 sm:text-sm text-xs text-muted-foreground">
+          More than <span className="font-medium">300+</span> shorts have been
+          created.
         </div>
       </motion.div>
 

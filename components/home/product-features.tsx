@@ -72,17 +72,14 @@ export function ProductFeatures() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="mb-10"
+          className="flex flex-col justify-center mb-12 text-center"
         >
-          <h2 className="text-4xl sm:text-5xl font-semibold tracking-tighter text-foreground">
+          <h2 className="text-3xl sm:text-5xl font-medium tracking-tighter text-foreground">
             Create viral videos in few clicks
           </h2>
-          <p className="mt-3 text-lg sm:text-2xl text-muted-foreground">
-            No Need of switching tools and manual editing.
-          </p>
-          <p className="text-base sm:text-2xl text-muted-foreground tracking-tight">
-            ShortsVid gives you everything you need to create viral shorts with
-            AI.{" "}
+          <p className="mt-4 sm:text-xl text-base text-muted-foreground text-center mx-auto max-w-2xl">
+            No Need of switching tools and manual editing. ShortsVid gives you
+            everything you need to create viral shorts with AI.{" "}
           </p>
         </motion.div>
 

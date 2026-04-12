@@ -8,6 +8,7 @@ import { PricingSection } from "@/components/home/pricing-section";
 import { ViewsShowcase } from "@/components/home/views-showcase";
 import { JsonLd } from "@/components/seo/json-ld";
 import Testimonials from "@/components/home/testimonial";
+import WhyChooseUs from "@/components/home/why-choose-us";
 
 const APP_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://shortsvid.pro";
 
@@ -85,6 +86,7 @@ export default async function Home() {
       <Hero />
       <ProductFeatures />
       <ViewsShowcase />
+      <WhyChooseUs />
       <Testimonials />
       {/* <SocialProofSection /> */}
       <PricingSection />

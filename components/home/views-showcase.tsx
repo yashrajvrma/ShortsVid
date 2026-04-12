@@ -211,7 +211,7 @@ export function ViewsShowcase() {
           aria-hidden
           className="pointer-events-none absolute inset-x-0 sm:top-10 top-6 flex items-start justify-center overflow-hidden select-none"
         >
-          <span className="text-[clamp(3.5rem,14vw,10rem)] font-semibold leading-none tracking-tighter text-neutral-800">
+          <span className="text-[clamp(3.5rem,14vw,10rem)] font-semibold leading-none tracking-tighter text-neutral-700/80">
             +1B VIEWS
           </span>
         </div>
