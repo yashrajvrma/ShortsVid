@@ -40,7 +40,7 @@ export default async function Layout({
   });
 
   // Show pricing modal if user has no active subscription or is on free plan
-  const isFreePlan = !user?.subscription || user.plan === "FREE" || !user.plan;
+  const isNoCredit = user?.credit === 0;
 
   return (
     <SidebarProvider>
@@ -73,7 +73,7 @@ export default async function Layout({
       </SidebarInset>
 
       {/* Pricing gate — renders on top of everything for free plan users */}
-      {isFreePlan && <PricingModal />}
+      {isNoCredit && <PricingModal />}
     </SidebarProvider>
   );
 }

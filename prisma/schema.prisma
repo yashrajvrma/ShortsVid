@@ -26,7 +26,7 @@ model User {
   image         String?
 
   role   Role @default(USER)
-  credit Int  @default(5) // inital credit for new users
+  credit Int  @default(0) // inital credit for new users
 
   plan SubscriptionPlan @default(FREE)
 

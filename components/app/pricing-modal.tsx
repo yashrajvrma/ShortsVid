@@ -225,7 +225,8 @@ export function PricingModal() {
                       disabled={isLoading}
                       onClick={() => handleSubscribe(plan.key)}
                     >
-                      {isYearly ? "Subscribe →" : "Start 3 days Free trial"}
+                      {/* {isYearly ? "Subscribe →" : "Start 3 days Free trial"} */}
+                      Subscribe →
                     </Button>
 
                     {/* Videos pill */}
