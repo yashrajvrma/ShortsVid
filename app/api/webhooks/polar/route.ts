@@ -12,6 +12,7 @@ import { addCredits } from "@/lib/credit";
 export async function POST(req: NextRequest) {
   const rawBody = await req.text();
 
+  // collect ALL headers as a plain object — SDK needs the full headers record
   const headers: Record<string, string> = {};
   req.headers.forEach((value, key) => {
     headers[key] = value;
@@ -20,7 +21,11 @@ export async function POST(req: NextRequest) {
   let event: ReturnType<typeof validateEvent>;
 
   try {
-    event = validateEvent(rawBody, headers, process.env.POLAR_WEBHOOK_SECRET!);
+    event = validateEvent(
+      rawBody,
+      headers, // ← pass full headers object, not just signature string
+      process.env.POLAR_WEBHOOK_SECRET!,
+    );
   } catch (err) {
     if (err instanceof WebhookVerificationError) {
       console.error("[Polar Webhook] Invalid signature");
@@ -36,21 +41,31 @@ export async function POST(req: NextRequest) {
       case "subscription.created":
         await handleSubscriptionCreated(event.data);
         break;
+
       case "subscription.active":
+        // fires when subscription moves to active state (e.g. after past_due resolves)
         await handleSubscriptionActive(event.data);
         break;
+
       case "subscription.updated":
         await handleSubscriptionUpdated(event.data);
         break;
+
       case "subscription.canceled":
+        // user cancelled — still has access till period end
         await handleSubscriptionCanceled(event.data);
         break;
+
       case "subscription.uncanceled":
+        // user reactivated before period end
         await handleSubscriptionUncanceled(event.data);
         break;
+
       case "subscription.revoked":
+        // period ended — truly over, downgrade to free
         await handleSubscriptionRevoked(event.data);
         break;
+
       default:
         break;
     }
@@ -72,22 +87,12 @@ async function handleSubscriptionCreated(data: any) {
     );
     return;
   }
-  console.log("inside created");
-  console.log("product id", data.productId);
 
   const planConfig = getSubscriptionPlanConfigByProductId(data.productId);
   if (!planConfig) {
     console.error("[Polar Webhook] Unknown productId:", data.productId);
     return;
   }
-
-  // map Polar status → your enum
-  const status =
-    data.status === "trialing"
-      ? SubscriptionStatus.TRIALING
-      : SubscriptionStatus.ACTIVE;
-
-  console.log("status is", status);
 
   await prisma.$transaction(async (tx) => {
     await tx.subscription.upsert({
@@ -98,7 +103,7 @@ async function handleSubscriptionCreated(data: any) {
         polarCustomerId: data.customerId,
         plan: planConfig.plan,
         period: planConfig.period,
-        status,
+        status: SubscriptionStatus.ACTIVE,
         currentPeriodStart: new Date(data.currentPeriodStart),
         currentPeriodEnd: new Date(data.currentPeriodEnd),
         cancelAtPeriodEnd: false,
@@ -108,7 +113,7 @@ async function handleSubscriptionCreated(data: any) {
         polarCustomerId: data.customerId,
         plan: planConfig.plan,
         period: planConfig.period,
-        status,
+        status: SubscriptionStatus.ACTIVE,
         currentPeriodStart: new Date(data.currentPeriodStart),
         currentPeriodEnd: new Date(data.currentPeriodEnd),
         cancelAtPeriodEnd: false,
@@ -121,34 +126,20 @@ async function handleSubscriptionCreated(data: any) {
     });
   });
 
-  // add 20 credits immediately — trial or paid, user can start generating right away
   await addCredits({
     userId,
-    amount: status === SubscriptionStatus.TRIALING ? 20 : planConfig.credits,
-    description: `${planConfig.label} — ${
-      status === SubscriptionStatus.TRIALING
-        ? "trial started"
-        : "subscription started"
-    }`,
+    amount: planConfig.credits,
+    description: `${planConfig.label} — subscription started`,
     polarSubscriptionId: data.id,
   });
-  console.log("added credits");
 }
 
 async function handleSubscriptionActive(data: any) {
-  // fires when past_due resolves back to active — sync status only
+  // fires when past_due resolves back to active — just sync the status
   const subscription = await prisma.subscription.findUnique({
     where: { polarSubscriptionId: data.id },
   });
   if (!subscription) return;
-
-  console.log("inside subsc active");
-
-  console.log("subs is", subscription);
-
-  console.log("status is", data.status);
-
-  if (data.status !== "active") return;
 
   await prisma.subscription.update({
     where: { polarSubscriptionId: data.id },
@@ -157,54 +148,12 @@ async function handleSubscriptionActive(data: any) {
 }
 
 async function handleSubscriptionUpdated(data: any) {
-  const userId = data.metadata?.userId as string;
-
-  if (!userId) {
-    console.error(
-      "[Polar Webhook] subscription.updated — missing userId in metadata",
-    );
-    return;
-  }
-
   const subscription = await prisma.subscription.findUnique({
     where: { polarSubscriptionId: data.id },
   });
   if (!subscription) return;
 
-  // ── trial → active conversion ──────────────────────────────────────────────
-  // period dates update here too — trial window vs first real billing period
-  const isTrialConversion =
-    subscription.status === SubscriptionStatus.TRIALING &&
-    data.status === "active";
-
-  console.log("inside subsc updated");
-
-  console.log("is trial", isTrialConversion);
-
-  if (isTrialConversion) {
-    const planConfig = getSubscriptionPlanConfigByProductId(data.productId);
-    if (!planConfig) return;
-
-    await prisma.subscription.update({
-      where: { polarSubscriptionId: data.id },
-      data: {
-        status: SubscriptionStatus.ACTIVE,
-        currentPeriodStart: new Date(data.currentPeriodStart), // real billing period starts
-        currentPeriodEnd: new Date(data.currentPeriodEnd), // real billing period ends
-      },
-    });
-
-    // add full plan credits
-    await addCredits({
-      userId,
-      amount: planConfig.credits,
-      description: `${planConfig.label} — ${isTrialConversion && "Trial subscription converted"}`,
-      polarSubscriptionId: data.id,
-    });
-    return;
-  }
-
-  // ── renewal — period start moved forward ───────────────────────────────────
+  // detect renewal: period start moved forward compared to what we have stored
   const isRenewal =
     data.status === "active" &&
     !data.cancelAtPeriodEnd &&
@@ -225,7 +174,7 @@ async function handleSubscriptionUpdated(data: any) {
       },
     });
 
-    // rollover is implicit — credits added on top of existing balance
+    // rollover is implicit — we add on top of existing credits
     await addCredits({
       userId: subscription.userId,
       amount: planConfig.credits,
@@ -236,7 +185,6 @@ async function handleSubscriptionUpdated(data: any) {
     return;
   }
 
-  // ── past due ───────────────────────────────────────────────────────────────
   if (data.status === "past_due") {
     await prisma.subscription.update({
       where: { polarSubscriptionId: data.id },
@@ -245,7 +193,7 @@ async function handleSubscriptionUpdated(data: any) {
     return;
   }
 
-  // ── generic date sync fallback ─────────────────────────────────────────────
+  // generic period sync
   await prisma.subscription.update({
     where: { polarSubscriptionId: data.id },
     data: {
@@ -256,8 +204,9 @@ async function handleSubscriptionUpdated(data: any) {
 }
 
 async function handleSubscriptionCanceled(data: any) {
-  // user cancelled — access continues till period end, plan stays unchanged
-  console.log("[Polar Webhook] Subscription cancelled:", data.id);
+  // day 25 — user cancelled, access continues till period end
+  // do NOT touch user.plan here
+  console.log("cancelling subs");
   await prisma.subscription.update({
     where: { polarSubscriptionId: data.id },
     data: {
@@ -268,7 +217,7 @@ async function handleSubscriptionCanceled(data: any) {
 }
 
 async function handleSubscriptionUncanceled(data: any) {
-  // user reactivated before period end
+  // user changed their mind and reactivated before period end
   await prisma.subscription.update({
     where: { polarSubscriptionId: data.id },
     data: {
@@ -279,7 +228,7 @@ async function handleSubscriptionUncanceled(data: any) {
 }
 
 async function handleSubscriptionRevoked(data: any) {
-  // period truly ended — downgrade to free, keep remaining credits
+  // day 30 — period truly ended, downgrade to free now
   const subscription = await prisma.subscription.findUnique({
     where: { polarSubscriptionId: data.id },
   });
@@ -295,7 +244,7 @@ async function handleSubscriptionRevoked(data: any) {
       where: { id: subscription.userId },
       data: {
         plan: SubscriptionPlan.FREE,
-        // credits kept intentionally
+        // credits kept intentionally — user can still use remaining credits
       },
     });
   });
