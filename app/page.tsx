@@ -6,8 +6,8 @@ import { Hero } from "@/components/home/hero";
 import Navbar from "@/components/home/navbar";
 import { PricingSection } from "@/components/home/pricing-section";
 import { ViewsShowcase } from "@/components/home/views-showcase";
-import { TestimonialDemo } from "@/components/home/testimonial-demo";
 import { JsonLd } from "@/components/seo/json-ld";
+import Testimonials from "@/components/home/testimonial";
 
 const APP_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://shortsvid.pro";
 
@@ -85,7 +85,7 @@ export default async function Home() {
       <Hero />
       <ProductFeatures />
       <ViewsShowcase />
-      <TestimonialDemo />
+      <Testimonials />
       {/* <SocialProofSection /> */}
       <PricingSection />
       <FAQ />
