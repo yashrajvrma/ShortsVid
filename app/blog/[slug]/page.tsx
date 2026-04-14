@@ -7,6 +7,7 @@ import { BlogFooter } from "@/components/blog/blog-footer";
 import Navbar from "@/components/home/navbar";
 import Image from "next/image";
 import type { Metadata } from "next";
+import { BlogCTA } from "@/components/blog/blog-cta";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -50,30 +51,44 @@ export default async function BlogPostPage({ params }: Props) {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-background">
-        {/* Header: title + author + date */}
-        <BlogHeader title={blog.title} date={blog.date} author={blog.author} />
 
-        {/* Cover image */}
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 mb-10">
-          <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-muted">
-            <Image
-              src={blog.coverImage}
-              alt={blog.title}
-              fill
-              priority
-              className="object-cover"
+      <main className="min-h-screen bg-background">
+        {/* CONTENT + SIDEBAR */}
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-10">
+          {/* Main Blog Content */}
+          <div>
+            {/* Header */}
+            <BlogHeader
+              title={blog.title}
+              date={blog.date}
+              author={blog.author}
             />
+
+            {/* Cover Image */}
+            {blog.coverImage && (
+              <div className="max-w-5xl mx-auto mb-10">
+                <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-muted">
+                  <Image
+                    src={blog.coverImage}
+                    alt={blog.title}
+                    fill
+                    priority
+                    className="object-cover"
+                  />
+                </div>
+              </div>
+            )}
+            <MDXRemote source={blog.content} components={getMDXComponents()} />
+
+            {/* Footer */}
+            <BlogFooter />
+          </div>
+
+          {/* Sticky CTA Sidebar */}
+          <div className="hidden lg:block">
+            <BlogCTA />
           </div>
         </div>
-
-        {/* MDX Content */}
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <MDXRemote source={blog.content} components={getMDXComponents()} />
-        </div>
-
-        {/* Footer: CTA card + back to all posts */}
-        <BlogFooter />
       </main>
     </>
   );

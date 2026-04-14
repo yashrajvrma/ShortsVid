@@ -13,7 +13,7 @@ export function BlogFooter() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-      className="mt-16 pb-20 max-w-3xl mx-auto px-4 space-y-8"
+      className="mt-16 pb-20 max-w-3xl mx-auto space-y-8"
     >
       {/* CTA Card */}
       <div className="rounded-2xl border border-border bg-muted/40 flex flex-col items-center text-center gap-4 py-10 px-6">

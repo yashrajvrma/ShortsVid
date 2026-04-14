@@ -2,8 +2,26 @@ import type { MDXComponents } from "mdx/types";
 import Image from "next/image";
 import Link from "next/link";
 
+function YouTube({ id }: { id: string }) {
+  return (
+    <div className="my-8">
+      <iframe
+        width="100%"
+        height="400"
+        src={`https://www.youtube.com/embed/${id}`}
+        title="YouTube video"
+        allowFullScreen
+        loading="lazy"
+        className="rounded-xl"
+      />
+    </div>
+  );
+}
+
 export function getMDXComponents(): MDXComponents {
   return {
+    YouTube,
+
     h1: ({ children }) => (
       <h1 className="text-3xl font-bold tracking-tight mt-10 mb-4 text-foreground">
         {children}
@@ -61,13 +79,15 @@ export function getMDXComponents(): MDXComponents {
     hr: () => <hr className="my-8 border-border" />,
     img: ({ src, alt }) => (
       <span className="block my-6 rounded-xl overflow-hidden">
-        <Image
-          src={src ?? ""}
-          alt={alt ?? ""}
-          width={800}
-          height={450}
-          className="w-full object-cover rounded-xl"
-        />
+        {src && (
+          <Image
+            src={src ?? ""}
+            alt={alt ?? ""}
+            width={800}
+            height={450}
+            className="w-full object-cover rounded-xl"
+          />
+        )}
       </span>
     ),
     strong: ({ children }) => (

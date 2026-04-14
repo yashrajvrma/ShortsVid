@@ -26,7 +26,7 @@ export function BlogCard({ blog, index }: BlogCardProps) {
       }}
     >
       <Link href={`/blog/${blog.slug}`} className="group block h-full">
-        <div className="h-full rounded-xl border border-border bg-card hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col w-sm">
+        <div className="h-full rounded-xl border border-border bg-card hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col sm:max-w-[360px] w-full">
           {/* Cover Image */}
           <div className="relative w-full aspect-video overflow-hidden bg-muted">
             <Image
