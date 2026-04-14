@@ -61,7 +61,7 @@ const WhyChooseUs = () => {
           <h2 className="text-3xl sm:text-5xl font-medium tracking-tighter">
             Why creators choose us
           </h2>
-          <p className="mt-2 text-muted-foreground text-base">
+          <p className="mt-3 text-muted-foreground sm:text-lg text-base">
             See how ShortsVid compares to traditional content creation methods.
           </p>
         </motion.div>
