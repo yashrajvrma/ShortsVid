@@ -126,9 +126,10 @@ enum VoiceVariant {
 
 enum StockType {
   VOICE
-  VIDEO
-  IMAGE
-  MUSIC
+  BG_VIDEO
+  BG_MUSIC
+  MUSIC // TODO: remove this after migration
+  AI_AVATAR
 }
 
 enum VoiceService {
@@ -177,7 +178,8 @@ model Stock {
   mimetype String? // for voice and music
   duration Int? // for voice and video
 
-  r2ObjectKey String?
+  thumbnailR2ObjectKey String? // for video, reference to the thumbnail image in r2
+  r2ObjectKey          String?
 
   userId String? // if user generated, reference to the user
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade) // delete all assets from r2 if user is deleted
