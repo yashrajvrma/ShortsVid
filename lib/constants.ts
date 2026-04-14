@@ -79,6 +79,19 @@ export const SYSTEM_BG_MUSIC = [
   "Viral",
 ] as const;
 
+export const SYSTEM_BG_VIDEO = [
+  "minecraft_1",
+  "minecraft_2",
+  "minecraft_3",
+  "minecraft_4",
+  "minecraft_5",
+  "subway_surfer_1",
+  "subway_surfer_2",
+  "subway_surfer_3",
+  "subway_surfer_4",
+  "subway_surfer_5",
+] as const;
+
 // fonts
 export const FONT_FAMILIES = {
   bangers: "Bangers",
