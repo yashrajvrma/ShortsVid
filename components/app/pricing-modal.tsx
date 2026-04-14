@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import {
   Check,
   Zap,
@@ -10,16 +10,12 @@ import {
   Gamepad2,
   Captions,
   Clapperboard,
-  Lock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useTRPC } from "@/trpc/client";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { createCheckout } from "@/actions/billing/create-checkout";
 
 type Period = "monthly" | "yearly";
 type PlanKey = "BASIC_MONTHLY" | "BASIC_YEARLY" | "PRO_MONTHLY" | "PRO_YEARLY";
@@ -95,44 +91,30 @@ const PLANS: Plan[] = [
 ];
 
 export function PricingModal() {
-  const trpc = useTRPC();
-  const router = useRouter();
   const [period, setPeriod] = useState<Period>("monthly");
+  const [pendingPlanKey, setPendingPlanKey] = useState<PlanKey | null>(null); // ← add
+  const [isPending, startTransition] = useTransition(); // ← add
   const isYearly = period === "yearly";
 
-  const checkoutMutation = useMutation(
-    trpc.billing.createCheckout.mutationOptions({
-      onSuccess: ({ url }) => router.push(url),
-      onError: (error) => {
-        toast.error(error.message || "Failed to create checkout");
-      },
-    }),
-  );
-
+  // ← Replace the entire checkoutMutation block with this:
   const handleSubscribe = (planKey: string) => {
     const resolvedPlanKey = getPlanKey(planKey, period);
-    checkoutMutation.mutate({ planKey: resolvedPlanKey });
+    setPendingPlanKey(resolvedPlanKey);
+    startTransition(async () => {
+      await createCheckout(resolvedPlanKey);
+      setPendingPlanKey(null);
+    });
   };
 
   return (
-    /* ── Backdrop ── */
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 backdrop-blur-4xl px-4 h-screen">
-      {/* ── Modal container ── */}
       <div className="w-full max-w-4xl max-h-[95vh] overflow-hidden rounded-2xl border border-border bg-card shadow-2xl">
-        {/* ── Header ── */}
         <div className="sticky top-0 z-10 bg-card border-border px-6 py-8 flex flex-col items-center gap-1 text-center rounded-2xl">
-          {/* <div className="flex items-center justify-center size-9 rounded-xl bg-primary/10 border border-primary/20 mb-1">
-            <Lock className="size-4 text-primary" />
-          </div> */}
           <h2 className="text-2xl font-semibold tracking-tight text-foreground">
             Subscribe to unlock more features
           </h2>
-          {/* <p className="text-sm text-muted-foreground max-w-xs">
-            You're on the free plan. Pick a plan below to unlock all features.
-          </p> */}
         </div>
 
-        {/* ── Plans ── */}
         <div className="p-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
             {PLANS.map((plan) => {
@@ -144,10 +126,9 @@ export function PricingModal() {
                 ? plan.yearlyCredits
                 : plan.monthlyCredits;
 
-              const isLoading =
-                checkoutMutation.isPending &&
-                checkoutMutation.variables?.planKey ===
-                  getPlanKey(plan.key, period);
+              // ← Replace the old isLoading check with this:
+              const resolvedPlanKey = getPlanKey(plan.key, period);
+              const isLoading = isPending && pendingPlanKey === resolvedPlanKey;
 
               return (
                 <Card
@@ -159,12 +140,11 @@ export function PricingModal() {
                       : "border-border hover:border-primary/40",
                   )}
                 >
-                  {/* Badge */}
                   {plan.badge && (
                     <div className="absolute -top-3 left-4">
                       <span
                         className={cn(
-                          "text-sm font-medium tracking- uppertightcase px-2.5 py-1 rounded-sm",
+                          "text-sm font-medium tracking-tight uppercase px-2.5 py-1 rounded-sm",
                           plan.highlighted
                             ? "bg-primary text-primary-foreground"
                             : "bg-muted text-muted-foreground border border-border",
@@ -176,7 +156,6 @@ export function PricingModal() {
                   )}
 
                   <div className="mt-2 flex flex-col gap-4">
-                    {/* Name + toggle */}
                     <div className="flex items-center justify-between">
                       <h3 className="text-2xl font-semibold tracking-tighter text-foreground">
                         {plan.name}
@@ -199,7 +178,6 @@ export function PricingModal() {
                       {plan.tagline} — {plan.description}
                     </p>
 
-                    {/* Price */}
                     <div className="flex items-baseline gap-2">
                       <span className="text-base font-medium line-through text-muted-foreground">
                         ${oldPrice}
@@ -218,18 +196,16 @@ export function PricingModal() {
                       Billed today: ${isYearly ? price * 12 : price}
                     </p>
 
-                    {/* CTA */}
                     <Button
                       className="w-full font-semibold"
                       variant={plan.highlighted ? "default" : "outline"}
                       disabled={isLoading}
                       onClick={() => handleSubscribe(plan.key)}
                     >
-                      {/* {isYearly ? "Subscribe →" : "Start 3 days Free trial"} */}
-                      Subscribe →
+                      {isLoading ? "Redirecting..." : "Subscribe →"}{" "}
+                      {/* ← updated label */}
                     </Button>
 
-                    {/* Videos pill */}
                     <div className="flex items-center gap-1.5 rounded-full border border-border bg-muted/50 px-3 py-1 text-xs font-medium text-foreground w-fit">
                       <Video className="w-3.5 h-3.5" />
                       {isYearly
@@ -238,7 +214,6 @@ export function PricingModal() {
                       videos / {isYearly ? "year" : "month"}
                     </div>
 
-                    {/* Access */}
                     <div>
                       <p className="text-[10px] font-semibold text-muted-foreground uppercase mb-1.5">
                         Get access to
@@ -251,7 +226,6 @@ export function PricingModal() {
 
                     <div className="border-t border-border" />
 
-                    {/* Features */}
                     <div>
                       <p className="text-xs font-semibold text-foreground mb-2.5">
                         What&apos;s included:

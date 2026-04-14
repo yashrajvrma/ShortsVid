@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import {
   Check,
   Zap,
@@ -14,12 +14,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useTRPC } from "@/trpc/client";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { z } from "zod"; // or wherever your toast comes from
+import { createCheckout } from "@/actions/billing/create-checkout";
 
 type Period = "monthly" | "yearly";
 type PlanKey = "BASIC_MONTHLY" | "BASIC_YEARLY" | "PRO_MONTHLY" | "PRO_YEARLY";
@@ -52,7 +48,6 @@ interface Plan {
   badge?: string;
 }
 
-// Maps plan.key + period → the planKey enum tRPC expects
 function getPlanKey(planKey: string, period: Period): PlanKey {
   const map: Record<string, PlanKey> = {
     basic_monthly: "BASIC_MONTHLY",
@@ -96,24 +91,19 @@ const PLANS: Plan[] = [
 ];
 
 export function PricingSection() {
-  const trpc = useTRPC();
-  const router = useRouter();
   const [period, setPeriod] = useState<Period>("monthly");
+  const [pendingPlanKey, setPendingPlanKey] = useState<PlanKey | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   const isYearly = period === "yearly";
 
-  const checkoutMutation = useMutation(
-    trpc.billing.createCheckout.mutationOptions({
-      onSuccess: ({ url }) => router.push(url),
-      onError: (error) => {
-        toast.error(error.message || "Failed to create checkout");
-      },
-    }),
-  );
-
   const handleSubscribe = (planKey: string) => {
     const resolvedPlanKey = getPlanKey(planKey, period);
-    checkoutMutation.mutate({ planKey: resolvedPlanKey });
+    setPendingPlanKey(resolvedPlanKey);
+    startTransition(async () => {
+      await createCheckout(resolvedPlanKey);
+      setPendingPlanKey(null);
+    });
   };
 
   return (
@@ -145,11 +135,8 @@ export function PricingSection() {
               : plan.monthlyOldPrice;
             const credits = isYearly ? plan.yearlyCredits : plan.monthlyCredits;
 
-            // Whether THIS card's button is loading
-            const isLoading =
-              checkoutMutation.isPending &&
-              checkoutMutation.variables?.planKey ===
-                getPlanKey(plan.key, period);
+            const resolvedPlanKey = getPlanKey(plan.key, period);
+            const isLoading = isPending && pendingPlanKey === resolvedPlanKey;
 
             return (
               <Card
@@ -231,8 +218,7 @@ export function PricingSection() {
                     disabled={isLoading}
                     onClick={() => handleSubscribe(plan.key)}
                   >
-                    {/* {isYearly ? "Subscribe →" : "Start 3 days Free trial"} */}
-                    Subscribe →
+                    {isLoading ? "Redirecting..." : "Subscribe →"}
                   </Button>
 
                   {/* Videos per month/year pill */}
