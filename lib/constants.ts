@@ -92,6 +92,29 @@ export const SYSTEM_BG_VIDEO = [
   "subway_surfer_5",
 ] as const;
 
+export const SYSTEM_AI_AVATAR = [
+  "andrewtate_1",
+  "andrewtate_2",
+  "briangriffin_1",
+  "briangriffin_2",
+  "donaldtrump_1",
+  "donaldtrump_2",
+  "elonmusk_1",
+  "elonmusk_2",
+  "joebiden_1",
+  "joebiden_2",
+  "joerogan_1",
+  "joerogan_2",
+  "obama_1",
+  "obama_2",
+  "patrickstar_1",
+  "patrickstar_2",
+  "petergriffin_1",
+  "petergriffin_2",
+  "spongebob_1",
+  "spongebob_2",
+] as const;
+
 // fonts
 export const FONT_FAMILIES = {
   bangers: "Bangers",
