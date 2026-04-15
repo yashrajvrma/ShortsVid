@@ -1,13 +1,14 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
-import { useVoiceAvatar } from "@/hooks/voice/use-voice-avatar";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ImageIcon, CheckCircle2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { CheckCircle2, User } from "lucide-react";
 
+// ── Types ─────────────────────────────────────────────────────────────────────
 interface SpeakerAvatarSelectorProps {
   speaker1AvatarId: string | null;
   speaker2AvatarId: string | null;
@@ -15,78 +16,142 @@ interface SpeakerAvatarSelectorProps {
   onSelectSpeaker2: (id: string) => void;
 }
 
-function AvatarThumbnail({ slug, label }: { slug: string; label: string }) {
-  const avatarSvg = useVoiceAvatar(slug);
+type Avatar = {
+  id: string;
+  name: string;
+  mimeType: string | null;
+  avatarUrl: string;
+};
+
+// ── Avatar media — renders img or video depending on mimeType ────────────────
+function AvatarMedia({ avatar }: { avatar: Avatar }) {
+  const isVideo = avatar.mimeType?.startsWith("video/") ?? false;
+
+  if (isVideo) {
+    return (
+      <video
+        src={avatar.avatarUrl}
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="w-full h-full object-cover"
+      />
+    );
+  }
+
   return (
-    <div
-      className="size-full"
-      dangerouslySetInnerHTML={{ __html: avatarSvg }}
+    <img
+      src={avatar.avatarUrl}
+      alt={avatar.name}
+      className="w-full h-full object-cover"
     />
   );
 }
 
-function AvatarGrid({
-  avatars,
-  selectedId,
+// ── Single avatar card ────────────────────────────────────────────────────────
+function AvatarCard({
+  avatar,
+  isSelected,
   onSelect,
 }: {
-  avatars: { id: string; slug: string; label: string; thumbnail: string | null }[];
-  selectedId: string | null;
-  onSelect: (id: string) => void;
+  avatar: Avatar;
+  isSelected: boolean;
+  onSelect: () => void;
 }) {
   return (
-    <ScrollArea className="[&>div>div[style]]:!block h-[180px] rounded-lg border border-border bg-muted/20">
-      <div className="grid grid-cols-3 gap-2 p-2">
-        {avatars.map((avatar) => {
-          const isSelected = selectedId === avatar.id;
-          return (
-            <button
-              key={avatar.id}
-              type="button"
-              onClick={() => onSelect(avatar.id)}
-              className={`group relative aspect-square rounded-lg overflow-hidden border-2 transition-all duration-150 ${
-                isSelected
-                  ? "border-primary shadow-md scale-[1.03]"
-                  : "border-transparent hover:border-border"
-              }`}
-            >
-              {avatar.thumbnail ? (
-                <img
-                  src={avatar.thumbnail}
-                  alt={avatar.label}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full bg-muted flex items-center justify-center overflow-hidden">
-                  <AvatarThumbnail slug={avatar.slug} label={avatar.label} />
-                </div>
-              )}
+    <button
+      type="button"
+      onClick={onSelect}
+      className={`group relative aspect-square rounded-lg overflow-hidden border-2 transition-all duration-150 ${isSelected
+          ? "border-primary shadow-md scale-[1.04]"
+          : "border-transparent hover:border-border"
+        }`}
+    >
+      <AvatarMedia avatar={avatar} />
 
-              {/* Label overlay */}
-              <div
-                className={`absolute inset-x-0 bottom-0 px-1 py-0.5 text-[9px] font-semibold text-white leading-tight text-center truncate transition-opacity ${
-                  isSelected
-                    ? "bg-black/60"
-                    : "bg-black/40 opacity-0 group-hover:opacity-100"
-                }`}
-              >
-                {avatar.label}
-              </div>
-
-              {/* Selected checkmark */}
-              {isSelected && (
-                <div className="absolute top-1 right-1">
-                  <CheckCircle2 className="size-3.5 text-primary drop-shadow-md" />
-                </div>
-              )}
-            </button>
-          );
-        })}
+      {/* Label overlay */}
+      <div
+        className={`absolute inset-x-0 bottom-0 px-1 py-0.5 text-[9px] font-semibold text-white leading-tight text-center truncate transition-opacity ${isSelected
+            ? "bg-black/60"
+            : "bg-black/40 opacity-0 group-hover:opacity-100"
+          }`}
+      >
+        {avatar.name}
       </div>
-    </ScrollArea>
+
+      {/* Selected checkmark */}
+      {isSelected && (
+        <div className="absolute top-1 right-1">
+          <CheckCircle2 className="size-3.5 text-primary drop-shadow-md" />
+        </div>
+      )}
+    </button>
   );
 }
 
+// ── Avatar grid panel (per speaker) ──────────────────────────────────────────
+function AvatarPanel({
+  label,
+  speakerNum,
+  avatars,
+  isLoading,
+  selectedId,
+  onSelect,
+}: {
+  label: string;
+  speakerNum: 1 | 2;
+  avatars: Avatar[];
+  isLoading: boolean;
+  selectedId: string | null;
+  onSelect: (id: string) => void;
+}) {
+  const selectedName = avatars.find((a) => a.id === selectedId)?.name ?? null;
+
+  return (
+    <Card className="flex-1 p-3 space-y-2.5 min-w-0">
+      <div className="flex items-center gap-2 min-w-0">
+        <Badge
+          variant={speakerNum === 1 ? "default" : "secondary"}
+          className="text-xs px-2 py-0.5 rounded-md shrink-0"
+        >
+          {label}
+        </Badge>
+        {selectedName && (
+          <span className="text-[11px] text-muted-foreground truncate">
+            {selectedName}
+          </span>
+        )}
+      </div>
+
+      {isLoading ? (
+        <div className="h-[200px] flex items-center justify-center text-xs text-muted-foreground rounded-lg border border-border bg-muted/20">
+          Loading…
+        </div>
+      ) : avatars.length === 0 ? (
+        <div className="h-[200px] flex flex-col items-center justify-center gap-2 text-xs text-muted-foreground rounded-lg border border-border bg-muted/20">
+          <User className="size-6 opacity-30" />
+          No avatars found
+        </div>
+      ) : (
+        <ScrollArea className="[&>div>div[style]]:!block h-[200px] rounded-lg border border-border bg-muted/10">
+          <div className="grid grid-cols-3 gap-2 p-2">
+            {avatars.map((avatar) => (
+              <AvatarCard
+                key={avatar.id}
+                avatar={avatar}
+                isSelected={selectedId === avatar.id}
+                onSelect={() => onSelect(avatar.id)}
+              />
+            ))}
+          </div>
+        </ScrollArea>
+      )}
+    </Card>
+  );
+}
+
+// ── Main export ───────────────────────────────────────────────────────────────
 export function SpeakerAvatarSelector({
   speaker1AvatarId,
   speaker2AvatarId,
@@ -94,65 +159,52 @@ export function SpeakerAvatarSelector({
   onSelectSpeaker2,
 }: SpeakerAvatarSelectorProps) {
   const trpc = useTRPC();
-  const { data, isLoading } = useQuery(trpc.stocks.getAiAvatars.queryOptions());
-  const avatars = data?.avatars ?? [];
+  const { data, isLoading } = useQuery(
+    trpc.stocks.getSystemAiAvatars.queryOptions(),
+  );
+  const avatars = (data?.avatars ?? []) as Avatar[];
+
+  // ── Auto-select random avatars on first load ──────────────────────────────
+  const hasAutoSelected = useRef(false);
+
+  useEffect(() => {
+    if (hasAutoSelected.current) return;
+    if (!avatars || avatars.length < 2) return;
+    if (speaker1AvatarId && speaker2AvatarId) return; // already chosen
+
+    hasAutoSelected.current = true;
+
+    const idx1 = Math.floor(Math.random() * avatars.length);
+    // Pick a different index for speaker 2
+    const idx2 = (idx1 + Math.floor(Math.random() * (avatars.length - 1)) + 1) % avatars.length;
+
+    if (!speaker1AvatarId) onSelectSpeaker1(avatars[idx1].id);
+    if (!speaker2AvatarId) onSelectSpeaker2(avatars[idx2].id);
+  }, [avatars, speaker1AvatarId, speaker2AvatarId, onSelectSpeaker1, onSelectSpeaker2]);
 
   return (
     <div className="space-y-3">
-      <label className="text-sm font-medium text-foreground">Speaker Avatars</label>
+      <label className="text-sm font-medium text-foreground">
+        Speaker Avatars
+      </label>
 
-      <div className="grid grid-cols-2 gap-3">
-        {/* Speaker 1 */}
-        <Card className="p-3 gap-2.5 space-y-2">
-          <div className="flex items-center gap-2">
-            <Badge variant="default" className="text-xs px-2 py-0.5 rounded-md">
-              Speaker 1
-            </Badge>
-            {speaker1AvatarId && (
-              <span className="text-xs text-muted-foreground truncate">
-                {avatars.find((a) => a.id === speaker1AvatarId)?.label ?? ""}
-              </span>
-            )}
-          </div>
-
-          {isLoading ? (
-            <div className="h-[180px] flex items-center justify-center text-xs text-muted-foreground rounded-lg border border-border bg-muted/20">
-              Loading…
-            </div>
-          ) : (
-            <AvatarGrid
-              avatars={avatars}
-              selectedId={speaker1AvatarId}
-              onSelect={onSelectSpeaker1}
-            />
-          )}
-        </Card>
-
-        {/* Speaker 2 */}
-        <Card className="p-3 gap-2.5 space-y-2">
-          <div className="flex items-center gap-2">
-            <Badge variant="secondary" className="text-xs px-2 py-0.5 rounded-md">
-              Speaker 2
-            </Badge>
-            {speaker2AvatarId && (
-              <span className="text-xs text-muted-foreground truncate">
-                {avatars.find((a) => a.id === speaker2AvatarId)?.label ?? ""}
-              </span>
-            )}
-          </div>
-
-          {isLoading ? (
-            <div className="h-[180px] flex items-center justify-center text-xs text-muted-foreground rounded-lg border border-border bg-muted/20">
-              Loading…
-            </div>
-          ) : (
-            <AvatarGrid
-              avatars={avatars}
-              selectedId={speaker2AvatarId}
-              onSelect={onSelectSpeaker2}
-            />
-          )}
-        </Card>
+      <div className="flex gap-3">
+        <AvatarPanel
+          label="Speaker 1"
+          speakerNum={1}
+          avatars={avatars}
+          isLoading={isLoading}
+          selectedId={speaker1AvatarId}
+          onSelect={onSelectSpeaker1}
+        />
+        <AvatarPanel
+          label="Speaker 2"
+          speakerNum={2}
+          avatars={avatars}
+          isLoading={isLoading}
+          selectedId={speaker2AvatarId}
+          onSelect={onSelectSpeaker2}
+        />
       </div>
     </div>
   );

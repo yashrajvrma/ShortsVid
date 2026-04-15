@@ -14,8 +14,8 @@ export const metadata: Metadata = {
 
 export default async function ConversationVideosPage() {
   prefetch(trpc.stocks.getAllBackgroundMusic.queryOptions());
-  prefetch(trpc.stocks.getBackgroundVideos.queryOptions());
-  prefetch(trpc.stocks.getAiAvatars.queryOptions());
+  prefetch(trpc.stocks.getSystemBackgroundVideos.queryOptions());
+  prefetch(trpc.stocks.getSystemAiAvatars.queryOptions());
   prefetch(
     trpc.voices.getSystemVoice.queryOptions({
       languageCode: LANGUAGES[0].code,

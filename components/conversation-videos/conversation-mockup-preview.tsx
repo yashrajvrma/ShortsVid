@@ -5,7 +5,6 @@ import { useQuery } from "@tanstack/react-query";
 import type { ConversationFormState } from "@/hooks/use-conversation-form";
 import type { CaptionStyle } from "@/types";
 import { CaptionAnimationOverlay } from "../captions/caption-animation-overlay";
-import { useVoiceAvatar } from "@/hooks/voice/use-voice-avatar";
 
 const MOCKUP_WIDTH = 240;
 
@@ -16,41 +15,68 @@ interface ConversationMockupPreviewProps {
   };
 }
 
+// ── Speaker badge ─────────────────────────────────────────────────────────────
 function SpeakerBadge({
   label,
-  avatarSlug,
+  avatarUrl,
+  mimeType,
   variant,
 }: {
   label: string;
-  avatarSlug: string | null;
+  avatarUrl: string | null;
+  mimeType: string | null;
   variant: "primary" | "secondary";
 }) {
-  const avatarSvg = useVoiceAvatar(avatarSlug ?? label);
+  const isVideo = mimeType?.startsWith("video/") ?? false;
+
   return (
     <div className="flex flex-col items-center gap-0.5">
       <div
         className={`size-7 rounded-full overflow-hidden border-2 ${
-          variant === "primary" ? "border-primary" : "border-muted-foreground/40"
+          variant === "primary"
+            ? "border-primary"
+            : "border-muted-foreground/40"
         } bg-muted`}
       >
-        <div
-          dangerouslySetInnerHTML={{ __html: avatarSvg }}
-          className="size-full [&>svg]:size-full"
-        />
+        {avatarUrl ? (
+          isVideo ? (
+            <video
+              src={avatarUrl}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <img
+              src={avatarUrl}
+              alt={label}
+              className="w-full h-full object-cover"
+            />
+          )
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-[8px] font-bold text-muted-foreground">
+            {label}
+          </div>
+        )}
       </div>
       <span className="text-[8px] font-semibold text-white/80">{label}</span>
     </div>
   );
 }
 
-export function ConversationMockupPreview({ form }: ConversationMockupPreviewProps) {
+// ── Main component ────────────────────────────────────────────────────────────
+export function ConversationMockupPreview({
+  form,
+}: ConversationMockupPreviewProps) {
   const trpc = useTRPC();
 
   const { data: videoData } = useQuery(
-    trpc.stocks.getBackgroundVideos.queryOptions(),
+    trpc.stocks.getSystemBackgroundVideos.queryOptions(),
   );
   const { data: avatarData } = useQuery(
-    trpc.stocks.getAiAvatars.queryOptions(),
+    trpc.stocks.getSystemAiAvatars.queryOptions(),
   );
 
   const selectedVideo =
@@ -58,14 +84,21 @@ export function ConversationMockupPreview({ form }: ConversationMockupPreviewPro
       ? (videoData?.videos ?? []).find((v) => v.id === form.backgroundVideoId)
       : null;
 
+  const avatars = (avatarData?.avatars ?? []) as Array<{
+    id: string;
+    name: string;
+    mimeType: string | null;
+    avatarUrl: string;
+  }>;
+
   const speaker1Avatar =
     form.speaker1AvatarId != null
-      ? (avatarData?.avatars ?? []).find((a) => a.id === form.speaker1AvatarId)
+      ? avatars.find((a) => a.id === form.speaker1AvatarId) ?? null
       : null;
 
   const speaker2Avatar =
     form.speaker2AvatarId != null
-      ? (avatarData?.avatars ?? []).find((a) => a.id === form.speaker2AvatarId)
+      ? avatars.find((a) => a.id === form.speaker2AvatarId) ?? null
       : null;
 
   return (
@@ -77,29 +110,19 @@ export function ConversationMockupPreview({ form }: ConversationMockupPreviewPro
       >
         <div className="absolute inset-0 rounded-[30px] border-[5px] border-foreground/10 bg-foreground/5 shadow-xl overflow-hidden">
           <div className="absolute inset-0 overflow-hidden rounded-[25px]">
-            {/* Background */}
-            {selectedVideo?.thumbnail ? (
+            {/* Background thumbnail / gradient */}
+            {selectedVideo?.thumbnailUrl ? (
               <img
-                src={selectedVideo.thumbnail}
+                src={selectedVideo.thumbnailUrl}
                 alt={selectedVideo.name}
                 className="absolute inset-0 w-full h-full object-cover"
               />
-            ) : selectedVideo ? (
-              // Placeholder gradient showing the video name
-              <div className="absolute inset-0 bg-gradient-to-b from-emerald-900 via-green-900 to-slate-950 flex flex-col items-center justify-center gap-1 px-3">
-                <span className="text-[9px] font-bold text-white/50 uppercase tracking-widest">
-                  {selectedVideo.category}
-                </span>
-                <span className="text-[11px] font-semibold text-white/80 text-center leading-tight">
-                  {selectedVideo.name}
-                </span>
-              </div>
             ) : (
-              <div className="absolute inset-0 bg-gradient-to-b from-slate-800 to-slate-950" />
+              <div className="absolute inset-0 bg-gradient-to-b from-emerald-900 via-green-900 to-slate-950" />
             )}
 
             {/* Dark scrim */}
-            <div className="absolute inset-0 bg-black/20" />
+            <div className="absolute inset-0 bg-black/25" />
 
             {/* Caption overlay */}
             {form.captionsEnabled && (
@@ -113,21 +136,23 @@ export function ConversationMockupPreview({ form }: ConversationMockupPreviewPro
             <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-5 z-10">
               <SpeakerBadge
                 label="S1"
-                avatarSlug={speaker1Avatar?.slug ?? null}
+                avatarUrl={speaker1Avatar?.avatarUrl ?? null}
+                mimeType={speaker1Avatar?.mimeType ?? null}
                 variant="primary"
               />
               <SpeakerBadge
                 label="S2"
-                avatarSlug={speaker2Avatar?.slug ?? null}
+                avatarUrl={speaker2Avatar?.avatarUrl ?? null}
+                mimeType={speaker2Avatar?.mimeType ?? null}
                 variant="secondary"
               />
             </div>
 
-            {/* Video badge */}
+            {/* Video name badge at top */}
             {selectedVideo && (
               <div className="absolute top-3 left-0 right-0 flex justify-center z-10">
                 <span className="text-[8px] font-semibold text-white/80 bg-black/40 backdrop-blur-sm px-2 py-0.5 rounded-full">
-                  {selectedVideo.category}
+                  {selectedVideo.name}
                 </span>
               </div>
             )}

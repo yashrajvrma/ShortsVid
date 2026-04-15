@@ -1,6 +1,8 @@
 import { prisma } from "@/db";
 import { authProcedure, createTRPCRouter } from "../init";
 import { getSignedObjectUrl } from "@/lib/r2-bucket";
+import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 
 export const stockRouter = createTRPCRouter({
   getAllBackgroundMusic: authProcedure.query(async ({ ctx }) => {
@@ -56,7 +58,7 @@ export const stockRouter = createTRPCRouter({
     };
   }),
 
-  getSystemBgVideos: authProcedure.query(async () => {
+  getSystemBackgroundVideos: authProcedure.query(async () => {
     const videos = await prisma.stock.findMany({
       where: {
         stockVariant: "SYSTEM",
@@ -96,6 +98,47 @@ export const stockRouter = createTRPCRouter({
     return { videos: systemBgVideos };
   }),
 
+  getBackgroundVideoById: authProcedure
+    .input(
+      z.object({
+        videoId: z.string(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const video = await prisma.stock.findUnique({
+        where: {
+          id: input.videoId,
+        },
+      });
+
+      if (!video) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Video id not found",
+        });
+      }
+
+      const [thumbnailUrl, videoUrl] = await Promise.all([
+        video.thumbnailR2ObjectKey
+          ? getSignedObjectUrl(video.thumbnailR2ObjectKey)
+          : null,
+        video.r2ObjectKey ? getSignedObjectUrl(video.r2ObjectKey) : null,
+      ]);
+
+      return {
+        id: video.id,
+        name: video.name,
+        description: video.description,
+        stockVariant: video.stockVariant,
+        stockType: video.stockType,
+        mimeType: video.mimetype,
+        thumbnailUrl,
+        videoUrl,
+        createdAt: video.createdAt,
+        updatedAt: video.updatedAt,
+      };
+    }),
+
   getSystemAiAvatars: authProcedure.query(async () => {
     const avatar = await prisma.stock.findMany({
       where: {
@@ -108,23 +151,25 @@ export const stockRouter = createTRPCRouter({
     });
 
     const convertR2ObjectKeyToSignedUrl = async (avatarList: typeof avatar) => {
-      return (
-        await Promise.all(avatarList.filter((avatar) => avatar.r2ObjectKey))
-      ).map(async (avatar) => {
-        const avatarUrl = await getSignedObjectUrl(avatar.r2ObjectKey!);
+      return Promise.all(
+        avatarList
+          .filter((avatar) => avatar.r2ObjectKey)
+          .map(async (avatar) => {
+            const avatarUrl = await getSignedObjectUrl(avatar.r2ObjectKey!);
 
-        return {
-          id: avatar.id,
-          name: avatar.name,
-          description: avatar.description,
-          stockVariant: avatar.stockVariant,
-          stockType: avatar.stockType,
-          mimeType: avatar.mimetype,
-          avatarUrl,
-          createdAt: avatar.createdAt,
-          updatedAt: avatar.updatedAt,
-        };
-      });
+            return {
+              id: avatar.id,
+              name: avatar.name,
+              description: avatar.description,
+              stockVariant: avatar.stockVariant,
+              stockType: avatar.stockType,
+              mimeType: avatar.mimetype,
+              avatarUrl,
+              createdAt: avatar.createdAt,
+              updatedAt: avatar.updatedAt,
+            };
+          }),
+      );
     };
 
     const systemAiAvatar = await convertR2ObjectKeyToSignedUrl(avatar);
