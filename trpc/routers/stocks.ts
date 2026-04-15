@@ -1,7 +1,6 @@
 import { prisma } from "@/db";
 import { authProcedure, createTRPCRouter } from "../init";
-import { getSignedAudioUrl } from "@/lib/r2-bucket";
-import { SYSTEM_AI_AVATAR, SYSTEM_BG_VIDEO } from "@/lib/constants";
+import { getSignedObjectUrl } from "@/lib/r2-bucket";
 
 export const stockRouter = createTRPCRouter({
   getAllBackgroundMusic: authProcedure.query(async ({ ctx }) => {
@@ -9,14 +8,14 @@ export const stockRouter = createTRPCRouter({
       prisma.stock.findMany({
         where: {
           stockVariant: "SYSTEM",
-          stockType: "MUSIC",
+          stockType: "BG_MUSIC",
         },
         orderBy: { createdAt: "desc" },
       }),
       prisma.stock.findMany({
         where: {
           stockVariant: "USER",
-          stockType: "MUSIC",
+          stockType: "BG_MUSIC",
           userId: ctx.userId,
         },
         orderBy: { createdAt: "desc" },
@@ -30,7 +29,7 @@ export const stockRouter = createTRPCRouter({
         musicList
           .filter((music) => music.r2ObjectKey)
           .map(async (music) => {
-            const musicUrl = await getSignedAudioUrl(music.r2ObjectKey!);
+            const musicUrl = await getSignedObjectUrl(music.r2ObjectKey!);
 
             return {
               id: music.id,
@@ -57,35 +56,79 @@ export const stockRouter = createTRPCRouter({
     };
   }),
 
-  // ── Background Videos (dummy data — replace with DB/R2 later) ────────────
-  getBackgroundVideos: authProcedure.query(async () => {
-    const videos = SYSTEM_BG_VIDEO.map((name, i) => ({
-      id: String(i + 1),
-      name: name
-        .replace(/_/g, " ")
-        .replace(/\b\w/g, (c) => c.toUpperCase()),
-      slug: name,
-      thumbnail: null as string | null,
-      category: name.startsWith("minecraft") ? "Minecraft" : "Subway Surfer",
-    }));
-    return { videos };
+  getSystemBgVideos: authProcedure.query(async () => {
+    const videos = await prisma.stock.findMany({
+      where: {
+        stockVariant: "SYSTEM",
+        stockType: "BG_VIDEO",
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    const convertR2ObjectKeyToSignedUrl = async (videoList: typeof videos) => {
+      return Promise.all(
+        videoList
+          .filter((video) => video.thumbnailR2ObjectKey)
+          .map(async (video) => {
+            const thumbnailUrl = await getSignedObjectUrl(
+              video.thumbnailR2ObjectKey!,
+            );
+
+            return {
+              id: video.id,
+              name: video.name,
+              description: video.description,
+              stockVariant: video.stockVariant,
+              stockType: video.stockType,
+              mimeType: video.mimetype,
+              thumbnailUrl,
+              createdAt: video.createdAt,
+              updatedAt: video.updatedAt,
+            };
+          }),
+      );
+    };
+
+    const systemBgVideos = await convertR2ObjectKeyToSignedUrl(videos);
+
+    return { videos: systemBgVideos };
   }),
 
-  // ── AI Avatars (dummy data — replace with DB/R2 later) ───────────────────
-  getAiAvatars: authProcedure.query(async () => {
-    const avatars = SYSTEM_AI_AVATAR.map((slug, i) => {
-      // e.g. "andrewtate_1" → "Andrew Tate"
-      const label = slug
-        .replace(/_\d+$/, "")
-        .replace(/([a-z])([A-Z])/g, "$1 $2")
-        .replace(/\b\w/g, (c) => c.toUpperCase());
-      return {
-        id: String(i + 1),
-        slug,
-        label,
-        thumbnail: null as string | null,
-      };
+  getSystemAiAvatars: authProcedure.query(async () => {
+    const avatar = await prisma.stock.findMany({
+      where: {
+        stockVariant: "SYSTEM",
+        stockType: "AI_AVATAR",
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
-    return { avatars };
+
+    const convertR2ObjectKeyToSignedUrl = async (avatarList: typeof avatar) => {
+      return (
+        await Promise.all(avatarList.filter((avatar) => avatar.r2ObjectKey))
+      ).map(async (avatar) => {
+        const avatarUrl = await getSignedObjectUrl(avatar.r2ObjectKey!);
+
+        return {
+          id: avatar.id,
+          name: avatar.name,
+          description: avatar.description,
+          stockVariant: avatar.stockVariant,
+          stockType: avatar.stockType,
+          mimeType: avatar.mimetype,
+          avatarUrl,
+          createdAt: avatar.createdAt,
+          updatedAt: avatar.updatedAt,
+        };
+      });
+    };
+
+    const systemAiAvatar = await convertR2ObjectKeyToSignedUrl(avatar);
+
+    return { avatars: systemAiAvatar };
   }),
 });
