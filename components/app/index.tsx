@@ -14,10 +14,10 @@ const OPTIONS = [
   },
   {
     icon: <Gamepad2 className="size-5" />,
-    title: "Gameplay Videos",
+    title: "Conversation Videos",
     description:
       "Viral gaming clips with captions, background music, and AI narration — ready to post in minutes.",
-    href: "/app/shorts/gameplay-videos",
+    href: "/app/shorts/conversation-videos",
   },
 ];
 

@@ -15,12 +15,12 @@ import {
 import { useRouter } from "next/navigation";
 import { useTRPC } from "@/trpc/client";
 
-import { LanguageSelector } from "./language-selector";
-import { TopicDuration } from "./topic-duration";
+import { LanguageSelector } from "../shorts/language-selector";
+import { TopicDuration } from "../shorts/topic-duration";
 import { VoiceSelector } from "./voice-selector";
-import { BgMusicSelector } from "./bg-music-selector";
+import { BgMusicSelector } from "../shorts/bg-music-selector";
 import { VideoStylePicker } from "./video-style-picker";
-import { CaptionConfig } from "./caption-config";
+import { CaptionConfig } from "../shorts/caption-config";
 import { MockupPreview } from "./mockup-preview";
 import { ScriptSection } from "./script-section";
 import type { AppRouter } from "@/trpc/routers/_app";

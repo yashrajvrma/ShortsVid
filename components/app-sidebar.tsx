@@ -162,8 +162,8 @@ const data = {
       icon: <UserRound />,
     },
     {
-      name: "Gameplay Videos",
-      url: "/app/shorts/gameplay-videos",
+      name: "Conversation Videos",
+      url: "/app/shorts/conversation-videos",
       icon: <Gamepad2Icon />,
     },
   ],

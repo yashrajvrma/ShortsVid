@@ -5,11 +5,7 @@ import { VIDEO_STYLES } from "@/lib/constants";
 import type { CaptionStyle } from "@/types";
 import { CaptionAnimationOverlay } from "../captions/caption-animation-overlay";
 
-// ─── Constants ────────────────────────────────────────────────────────────────
-
 const MOCKUP_WIDTH = 240;
-
-// ─── MockupPreview ────────────────────────────────────────────────────────────
 
 interface MockupPreviewProps {
   form: FacelessFormState & {
