@@ -89,7 +89,7 @@ function MusicItem({
       }`}
     >
       <div
-        className="size-12 shrink-0 rounded-full overflow-hidden bg-muted cursor-pointer"
+        className="size-12 shrink-0 rounded-full overflow-hidden border border-border bg-muted cursor-pointer"
         onClick={handlePlay}
       >
         <div
@@ -99,7 +99,7 @@ function MusicItem({
       </div>
       <div className="flex flex-col gap-1 w-full">
         <span className="text-sm font-medium truncate flex-1">{name}</span>
-        <span className="text-xs font-normal overflow-hidden text-ellipsis">
+        <span className="text-xs overflow-hidden text-ellipsis">
           {description ?? ""}
         </span>
       </div>
@@ -107,7 +107,7 @@ function MusicItem({
       {audioUrl && (
         <button
           type="button"
-          onClick={handlePlay}
+          onClick={handlePlay}  
           className={`size-7 rounded-full flex items-center justify-center shrink-0 transition-colors ${
             isSelected
               ? "bg-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/30"

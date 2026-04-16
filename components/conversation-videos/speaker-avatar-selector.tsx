@@ -125,7 +125,7 @@ function AvatarPanel({
   const selectedName = avatars.find((a) => a.id === selectedId)?.name ?? null;
 
   return (
-    <Card className="flex-1 p-3 space-y-2.5 min-w-0 mt-4">
+    <Card className="flex-1 p-3 gap-3 min-w-0 mt-4">
       <div className="flex justify-between gap-2 min-w-0">
         {/* <Badge
           variant={speakerNum === 1 ? "default" : "secondary"}
@@ -189,14 +189,30 @@ export function SpeakerAvatarSelector({
 
     hasAutoSelected.current = true;
 
-    const idx1 = Math.floor(Math.random() * avatars.length);
-    // Pick a different index for speaker 2
-    const idx2 =
-      (idx1 + Math.floor(Math.random() * (avatars.length - 1)) + 1) %
-      avatars.length;
+    const spongebob1 = avatars.find(
+      (a) => a.name.toLowerCase() === "spongebob 1",
+    );
+    const peterGriffin2 = avatars.find(
+      (a) => a.name.toLowerCase() === "peter griffin 2",
+    );
 
-    if (!speaker1AvatarId) onSelectSpeaker1(avatars[idx1].id);
-    if (!speaker2AvatarId) onSelectSpeaker2(avatars[idx2].id);
+    if (!speaker1AvatarId) {
+      if (peterGriffin2) {
+        onSelectSpeaker1(peterGriffin2.id);
+      } else {
+        const idx1 = Math.floor(Math.random() * avatars.length);
+        onSelectSpeaker1(avatars[idx1].id);
+      }
+    }
+
+    if (!speaker2AvatarId) {
+      if (spongebob1) {
+        onSelectSpeaker2(spongebob1.id);
+      } else {
+        const idx2 = Math.floor(Math.random() * avatars.length);
+        onSelectSpeaker2(avatars[idx2].id);
+      }
+    }
   }, [
     avatars,
     speaker1AvatarId,

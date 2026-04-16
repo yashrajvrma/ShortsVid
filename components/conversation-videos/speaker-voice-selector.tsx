@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search, Play, Pause, Mic2 } from "lucide-react";
+import { Button } from "../ui/button";
 
 // ── Single voice item ─────────────────────────────────────────────────────────
 function VoiceItem({
@@ -31,14 +32,14 @@ function VoiceItem({
     <button
       type="button"
       onClick={() => onSelect(voice.id)}
-      className={`w-full flex items-start gap-2 rounded-lg px-2.5 py-2 transition-all duration-150 text-left ${
+      className={`w-full flex items-center gap-2 rounded-lg px-2.5 py-2 transition-all duration-150 text-left ${
         isSelected
-          ? "bg-secondary text-secondary-foreground border border-primary/30"
+          ? "bg-secondary text-secondary-foreground"
           : "hover:bg-muted/50 border border-transparent"
       }`}
     >
       {/* Avatar */}
-      <div className="relative size-8 shrink-0 rounded-full overflow-hidden border border-border bg-muted mt-0.5">
+      <div className="relative size-10 shrink-0 rounded-full overflow-hidden bg-muted">
         <div
           dangerouslySetInnerHTML={{ __html: avatarSvg }}
           className="size-full [&>svg]:size-full"
@@ -46,8 +47,8 @@ function VoiceItem({
       </div>
 
       {/* Info */}
-      <div className="flex justify-between min-w-0">
-        <div className="flex flex-col gap-2">
+      <div className="flex justify-between items-center min-w-0 w-full">
+        <div className="flex flex-col gap-1">
           <p className="text-xs font-medium truncate">{voice.name}</p>
 
           {/* Tags */}
@@ -65,9 +66,11 @@ function VoiceItem({
           )}
         </div>
 
-        <p className="text-sm text-muted-foreground capitalize mb-1">
+        {/* <p
+          className={`flex items-center text-sm text-muted-foreground capitalize mb-1 ${isSelected ? "text-secondary-foreground" : ""}`}
+        >
           {voice.gender}
-        </p>
+        </p> */}
       </div>
 
       {/* Play button */}
@@ -78,12 +81,16 @@ function VoiceItem({
             e.stopPropagation();
             onPlay(voice.id, voice.audioUrl!);
           }}
-          className="size-6 rounded-full flex items-center justify-center bg-muted transition-colors shrink-0 hover:bg-muted/80 mt-0.5"
+          className="flex size-6 rounded-full  transition-colors shrink-0 mt-0.5"
         >
           {playingId === voice.id ? (
-            <Pause className="size-3 text-primary" />
+            <Pause
+              className={`size-4 text-muted-foreground ${isSelected && "text-primary-foreground"}`}
+            />
           ) : (
-            <Play className="size-3 text-muted-foreground" />
+            <Play
+              className={`size-4 text-muted-foreground ${isSelected && "text-primary-foreground"}`}
+            />
           )}
         </button>
       )}

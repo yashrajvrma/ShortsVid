@@ -3,6 +3,7 @@
 import { create } from "zustand";
 import { DEFAULT_CAPTION_STYLE, DURATIONS, LANGUAGES } from "@/lib/constants";
 import type { CaptionStyle } from "@/types";
+import { Topic } from "@prisma/client";
 
 // ─── Dialogue types ───────────────────────────────────────────────────────────
 export interface DialogueLine {
@@ -17,7 +18,7 @@ export interface ConversationFormState {
   languageCode: string;
 
   // Topic & Duration
-  topic: string;
+  topic: Topic;
   duration: number;
 
   // Script / Dialogue

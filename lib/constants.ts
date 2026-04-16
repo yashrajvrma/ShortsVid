@@ -15,6 +15,15 @@ export const LANGUAGES: Language[] = [
   { code: "zh", name: "Chinese", flag: "🇨🇳" },
 ];
 
+export const LANGUAGE_MAP: Record<string, string> = {
+  en: "English",
+  de: "German",
+  fr: "French",
+  ru: "Russian",
+  ja: "Japanese",
+  zh: "Chinese",
+};
+
 export const VIDEO_STYLES: {
   id: number | string;
   name?: string;
@@ -64,57 +73,6 @@ export const DURATIONS: Duration[] = [
   { id: 3, value: 60, label: "30-60s" },
 ];
 
-export const SYSTEM_BG_MUSIC = [
-  "Children",
-  "Cinematic",
-  "Cinematic 1",
-  "Comedy",
-  "Comic",
-  "Explainer",
-  "Futuristic",
-  "Horror",
-  "Khamzat",
-  "Motivational",
-  "Romantic",
-  "Viral",
-] as const;
-
-export const SYSTEM_BG_VIDEO = [
-  "minecraft_1",
-  "minecraft_2",
-  "minecraft_3",
-  "minecraft_4",
-  "minecraft_5",
-  "subway_surfer_1",
-  "subway_surfer_2",
-  "subway_surfer_3",
-  "subway_surfer_4",
-  "subway_surfer_5",
-] as const;
-
-export const SYSTEM_AI_AVATAR = [
-  "andrewtate_1",
-  "andrewtate_2",
-  "briangriffin_1",
-  "briangriffin_2",
-  "donaldtrump_1",
-  "donaldtrump_2",
-  "elonmusk_1",
-  "elonmusk_2",
-  "joebiden_1",
-  "joebiden_2",
-  "joerogan_1",
-  "joerogan_2",
-  "obama_1",
-  "obama_2",
-  "patrickstar_1",
-  "patrickstar_2",
-  "petergriffin_1",
-  "petergriffin_2",
-  "spongebob_1",
-  "spongebob_2",
-] as const;
-
 // fonts
 export const FONT_FAMILIES = {
   bangers: "Bangers",
@@ -131,11 +89,7 @@ export type FontKey = keyof typeof FONT_FAMILIES;
 export type FontFamily = (typeof FONT_FAMILIES)[FontKey];
 
 // captions
-
 export const CAPTION_PRESETS: CaptionPreset[] = [
-  // ── 1. "Since You Guys Are Curious" style ─────────────────────────────────
-  // Green highlight on key word, white resting, dark BG, Impact font
-
   {
     id: "hormozi-style",
     name: "Alex Hormozi",
@@ -475,3 +429,54 @@ export const TOPIC_DIRECTIVE_MAP_FOR_SCRIPT: Record<
       "Pick the angle, emotion, and style that will make this the most memorable 60 seconds the viewer has today. Surprise us.",
   },
 };
+
+export const SYSTEM_BG_MUSIC = [
+  "Children",
+  "Cinematic",
+  "Cinematic 1",
+  "Comedy",
+  "Comic",
+  "Explainer",
+  "Futuristic",
+  "Horror",
+  "Khamzat",
+  "Motivational",
+  "Romantic",
+  "Viral",
+] as const;
+
+export const SYSTEM_BG_VIDEO = [
+  "minecraft_1",
+  "minecraft_2",
+  "minecraft_3",
+  "minecraft_4",
+  "minecraft_5",
+  "subway_surfer_1",
+  "subway_surfer_2",
+  "subway_surfer_3",
+  "subway_surfer_4",
+  "subway_surfer_5",
+] as const;
+
+export const SYSTEM_AI_AVATAR = [
+  "andrewtate_1",
+  "andrewtate_2",
+  "briangriffin_1",
+  "briangriffin_2",
+  "donaldtrump_1",
+  "donaldtrump_2",
+  "elonmusk_1",
+  "elonmusk_2",
+  "joebiden_1",
+  "joebiden_2",
+  "joerogan_1",
+  "joerogan_2",
+  "obama_1",
+  "obama_2",
+  "patrickstar_1",
+  "patrickstar_2",
+  "petergriffin_1",
+  "petergriffin_2",
+  "spongebob_1",
+  "spongebob_2",
+] as const;

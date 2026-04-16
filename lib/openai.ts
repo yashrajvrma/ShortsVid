@@ -4,7 +4,7 @@ import Together from "together-ai";
 import { zodTextFormat } from "openai/helpers/zod";
 import { z } from "zod";
 
-export const openai = new OpenAI({
+export const openAI = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY!,
 });
 
@@ -191,7 +191,7 @@ Generate structured SD3 prompts with strong visual clarity.
 
 Maintain character consistency strictly.`;
 
-  const response = await openai.responses.parse({
+  const response = await openAI.responses.parse({
     model: "gpt-4o-mini",
     input: [
       { role: "system", content: systemPrompt },

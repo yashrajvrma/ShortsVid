@@ -21,6 +21,7 @@ import { SpeakerAvatarSelector } from "./speaker-avatar-selector";
 import { BackgroundVideoSelector } from "./background-video-selector";
 import { SpeakerVoiceSelector } from "./speaker-voice-selector";
 import { ConversationMockupPreview } from "./conversation-mockup-preview";
+import { Topic } from "@prisma/client";
 
 export default function ConversationVideos() {
   const router = useRouter();
@@ -104,7 +105,7 @@ export default function ConversationVideos() {
               <TopicDuration
                 topic={form.topic}
                 duration={form.duration}
-                onTopicChange={(v) => setField("topic", v)}
+                onTopicChange={(v: Topic) => setField("topic", v)}
                 onDurationChange={(v) => setField("duration", v)}
               />
 
@@ -117,6 +118,8 @@ export default function ConversationVideos() {
                 duration={form.duration}
                 prompt={form.prompt}
                 dialogue={form.dialogue}
+                speaker1AvatarId={form.speaker1AvatarId}
+                speaker2AvatarId={form.speaker2AvatarId}
                 onPromptChange={(v) => setField("prompt", v)}
                 onGeneratedDialogue={(lines, lang) =>
                   setGeneratedDialogue(lines, lang)

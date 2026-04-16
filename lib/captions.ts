@@ -118,8 +118,8 @@
 
 // export { buildChunks as chunkCaptions };
 
-import { openai } from "./openai";
 import { getSignedAudioUrl } from "@/lib/r2-bucket";
+import { openAI } from "./openai";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 //
@@ -177,7 +177,7 @@ export async function generateCaptions(
   // We do NOT request segment granularity — segment data is unused here and
   // only adds response payload size.
 
-  const transcription = await openai.audio.transcriptions.create({
+  const transcription = await openAI.audio.transcriptions.create({
     file: audioFile,
     model: "whisper-1",
     language: languageCode.substring(0, 2), // ISO 639-1 two-letter code
