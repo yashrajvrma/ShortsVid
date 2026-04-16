@@ -125,17 +125,17 @@ function SpeakerVoicePanel({
   return (
     <Card className="flex-1 p-3 space-y-2.5 min-w-0">
       {/* Header */}
-      <div className="flex items-center gap-2">
-        <Badge
-          variant={speakerNum === 1 ? "default" : "secondary"}
-          className="text-xs px-2 py-0.5 rounded-md shrink-0"
-        >
+      <div className="flex justify-between gap-2">
+        <div className="text-sm px-2 py-0.5 rounded-md shrink-0">
           {speakerLabel}
-        </Badge>
+        </div>
         {selectedVoiceName && (
-          <span className="text-[11px] text-muted-foreground truncate">
+          <Badge
+            variant="default"
+            className="rounded-sm p-1 text-sm text-primary-foreground truncate"
+          >
             {selectedVoiceName}
-          </span>
+          </Badge>
         )}
       </div>
 
@@ -151,7 +151,7 @@ function SpeakerVoicePanel({
       </div>
 
       {/* List */}
-      <ScrollArea className="[&>div>div[style]]:!block h-[180px] rounded-md border border-border">
+      <ScrollArea className="[&>div>div[style]]:!block h-[300px] rounded-md border border-border">
         {isLoading ? (
           <div className="flex items-center justify-center h-full py-6 text-xs text-muted-foreground">
             Loading voices…
@@ -206,7 +206,7 @@ export function SpeakerVoiceSelector({
         Speaker Voices
       </label>
 
-      <div className="flex gap-3">
+      <div className="flex gap-3 mt-3">
         <SpeakerVoicePanel
           speakerLabel="Speaker 1"
           speakerNum={1}

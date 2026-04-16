@@ -44,7 +44,7 @@ function AvatarMedia({ avatar }: { avatar: Avatar }) {
     <img
       src={avatar.avatarUrl}
       alt={avatar.name}
-      className="w-full h-full object-cover"
+      className="w-full h-full object-contain"
     />
   );
 }
@@ -63,27 +63,43 @@ function AvatarCard({
     <button
       type="button"
       onClick={onSelect}
-      className={`group relative aspect-square rounded-lg overflow-hidden border-2 transition-all duration-150 ${isSelected
-          ? "border-primary shadow-md scale-[1.04]"
-          : "border-transparent hover:border-border"
-        }`}
+      className={`group relative aspect-square rounded-lg overflow-hidden border transition-all p-2 ${
+        isSelected
+          ? "border-secondary shadow-md scale-[1.04]"
+          : "border-border hover:scale-[1.04]"
+      }`}
     >
       <AvatarMedia avatar={avatar} />
-
       {/* Label overlay */}
-      <div
-        className={`absolute inset-x-0 bottom-0 px-1 py-0.5 text-[9px] font-semibold text-white leading-tight text-center truncate transition-opacity ${isSelected
+      {/* <div
+        className={`absolute inset-x-0 bottom-0 px-1 py-0.5 text-[9px] font-semibold text-white leading-tight text-center truncate transition-opacity ${
+          isSelected
             ? "bg-black/60"
             : "bg-black/40 opacity-0 group-hover:opacity-100"
-          }`}
+        }`}
       >
         {avatar.name}
-      </div>
-
+      </div> */}
       {/* Selected checkmark */}
       {isSelected && (
-        <div className="absolute top-1 right-1">
-          <CheckCircle2 className="size-3.5 text-primary drop-shadow-md" />
+        // <div className="absolute bottom-1 right-1">
+        //   <CheckCircle2 className="size-5 text-secondary drop-shadow-md" />
+        // </div>
+        <div className="absolute top-1 right-1 size-4 rounded-full bg-secondary flex items-center justify-center">
+          <svg
+            viewBox="0 0 12 12"
+            className="size-2.5 text-secondary-foreground"
+            fill="currentColor"
+          >
+            <path
+              d="M10 3L5 8.5 2 5.5"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </div>
       )}
     </button>
@@ -109,18 +125,17 @@ function AvatarPanel({
   const selectedName = avatars.find((a) => a.id === selectedId)?.name ?? null;
 
   return (
-    <Card className="flex-1 p-3 space-y-2.5 min-w-0">
-      <div className="flex items-center gap-2 min-w-0">
-        <Badge
+    <Card className="flex-1 p-3 space-y-2.5 min-w-0 mt-4">
+      <div className="flex justify-between gap-2 min-w-0">
+        {/* <Badge
           variant={speakerNum === 1 ? "default" : "secondary"}
           className="text-xs px-2 py-0.5 rounded-md shrink-0"
         >
           {label}
-        </Badge>
+        </Badge> */}
+        <div className="text-sm px-2 py-0.5 rounded-md shrink-0">{label}</div>
         {selectedName && (
-          <span className="text-[11px] text-muted-foreground truncate">
-            {selectedName}
-          </span>
+          <span className="text-sm text-primary truncate">{selectedName}</span>
         )}
       </div>
 
@@ -134,7 +149,7 @@ function AvatarPanel({
           No avatars found
         </div>
       ) : (
-        <ScrollArea className="[&>div>div[style]]:!block h-[200px] rounded-lg border border-border bg-muted/10">
+        <ScrollArea className="[&>div>div[style]]:!block h-[400px] rounded-lg border border-border bg-muted/10">
           <div className="grid grid-cols-3 gap-2 p-2">
             {avatars.map((avatar) => (
               <AvatarCard
@@ -176,11 +191,19 @@ export function SpeakerAvatarSelector({
 
     const idx1 = Math.floor(Math.random() * avatars.length);
     // Pick a different index for speaker 2
-    const idx2 = (idx1 + Math.floor(Math.random() * (avatars.length - 1)) + 1) % avatars.length;
+    const idx2 =
+      (idx1 + Math.floor(Math.random() * (avatars.length - 1)) + 1) %
+      avatars.length;
 
     if (!speaker1AvatarId) onSelectSpeaker1(avatars[idx1].id);
     if (!speaker2AvatarId) onSelectSpeaker2(avatars[idx2].id);
-  }, [avatars, speaker1AvatarId, speaker2AvatarId, onSelectSpeaker1, onSelectSpeaker2]);
+  }, [
+    avatars,
+    speaker1AvatarId,
+    speaker2AvatarId,
+    onSelectSpeaker1,
+    onSelectSpeaker2,
+  ]);
 
   return (
     <div className="space-y-3">

@@ -63,7 +63,7 @@ function VideoCard({
       onMouseLeave={() => setHovered(false)}
       className={`group relative aspect-9/16 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
         isSelected
-          ? "border-primary shadow-md scale-[1.04]"
+          ? "border-secondary shadow-md scale-[1.04]"
           : "border-transparent hover:border-border"
       }`}
     >
@@ -89,7 +89,7 @@ function VideoCard({
       )}
 
       {/* Overlay gradient + label */}
-      <div
+      {/* <div
         className={`absolute inset-0 flex items-end p-1.5 transition-all ${
           isSelected
             ? "bg-gradient-to-t from-black/70 via-black/20 to-transparent"
@@ -99,14 +99,14 @@ function VideoCard({
         <span className="text-white text-[8px] font-semibold leading-tight line-clamp-2">
           {video.name}
         </span>
-      </div>
+      </div> */}
 
       {/* Selected checkmark */}
       {isSelected && (
-        <div className="absolute top-1 right-1 size-4 rounded-full bg-primary flex items-center justify-center">
+        <div className="absolute top-1 right-1 size-4 rounded-full bg-secondary-foreground flex items-center justify-center">
           <svg
             viewBox="0 0 12 12"
-            className="size-2.5 text-primary-foreground"
+            className="size-2.5 text-secondary"
             fill="currentColor"
           >
             <path
@@ -148,9 +148,9 @@ export function BackgroundVideoSelector({
       <label className="text-sm font-medium text-foreground">
         Background Video
       </label>
-      <p className="text-xs text-muted-foreground -mt-1">
+      {/* <p className="text-xs text-muted-foreground -mt-1">
         Hover a clip to preview it
-      </p>
+      </p> */}
 
       {isLoading ? (
         <div className="h-24 flex items-center justify-center text-sm text-muted-foreground rounded-lg border border-border bg-muted/20">
@@ -161,19 +161,21 @@ export function BackgroundVideoSelector({
           No background videos available
         </div>
       ) : (
-        <ScrollArea className="[&>div>div[style]]:!block h-[300px] rounded-lg border border-border bg-muted/10">
+        <ScrollArea className="[&>div>div[style]]:!block h-[500px] rounded-lg border border-border bg-muted/10 mt-3">
           <div className="p-3 space-y-4">
             {Object.entries(grouped).map(([category, items]) => (
               <div key={category} className="space-y-2">
                 {/* Category label */}
-                <div className="flex items-center gap-1.5">
+                {/* <div className="flex items-center gap-1.5">
                   <span className="text-muted-foreground">
-                    {CATEGORY_ICON[category] ?? <VideoIcon className="size-3" />}
+                    {CATEGORY_ICON[category] ?? (
+                      <VideoIcon className="size-3" />
+                    )}
                   </span>
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     {category}
                   </span>
-                </div>
+                </div> */}
 
                 {/* Grid — 5 cols, aspect-9/16 cards */}
                 <div className="grid grid-cols-5 gap-2">
