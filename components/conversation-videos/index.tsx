@@ -80,7 +80,9 @@ export default function ConversationVideos() {
       style={{ height: "calc(100vh - 2rem)" }}
     >
       <Header>
-        <div className="text-xl tracking-tighter">Create Conversation Videos</div>
+        <div className="text-xl tracking-tighter">
+          Create Conversation Videos
+        </div>
       </Header>
 
       {/* ── Main card ─────────────────────────────────────────────────────── */}
@@ -92,7 +94,6 @@ export default function ConversationVideos() {
         <div className="flex flex-col min-h-0 border-r border-border lg:w-[65%] w-full min-w-0 overflow-hidden">
           <ScrollArea className="[&>div>div[style]]:!block flex-1 min-h-0 h-full overflow-y-auto overflow-x-hidden">
             <div className="sm:p-6 p-4 space-y-4 min-w-0 overflow-hidden w-full">
-
               {/* 1. Language */}
               <LanguageSelector
                 value={form.languageCode}
@@ -150,8 +151,8 @@ export default function ConversationVideos() {
                 languageCode={form.languageCode}
                 speaker1VoiceId={form.speaker1VoiceId}
                 speaker2VoiceId={form.speaker2VoiceId}
-                voiceSearchQuery={form.voiceSearchQuery}
-                onVoiceSearchChange={(v) => setField("voiceSearchQuery", v)}
+                // voiceSearchQuery={form.voiceSearchQuery}
+                // onVoiceSearchChange={(v) => setField("voiceSearchQuery", v)}
                 onSelectSpeaker1Voice={(id) => setField("speaker1VoiceId", id)}
                 onSelectSpeaker2Voice={(id) => setField("speaker2VoiceId", id)}
               />

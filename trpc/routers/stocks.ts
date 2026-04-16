@@ -36,6 +36,7 @@ export const stockRouter = createTRPCRouter({
             return {
               id: music.id,
               name: music.name,
+              description: music.description,
               stockVariant: music.stockVariant,
               stockType: music.stockType,
               mimetype: music.mimetype,

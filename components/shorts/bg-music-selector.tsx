@@ -43,10 +43,8 @@ export function BgMusicSelector({
       <label className="text-sm font-medium text-foreground">
         Background Music
       </label>
-      <Button
-        type="button"
-        variant="outline"
-        className="w-full justify-start mt-2 h-10 rounded-lg gap-2"
+      <div
+        className="flex border justify-start items-center w-full h-full mt-2 rounded-lg gap-2 px-3 py-2 hover:cursor-pointer"
         onClick={() => setOpen(true)}
       >
         {noSoundChosen ? (
@@ -61,15 +59,20 @@ export function BgMusicSelector({
           // A real track is selected
           <>
             {/* <Music2 className="size-4 text-muted-foreground shrink-0" /> */}
-            <div className="size-6 shrink-0 rounded-md overflow-hidden border border-border bg-muted">
+            <div className="relative size-10 shrink-0 rounded-full overflow-hidden bg-muted mt-0.5">
               <div
                 dangerouslySetInnerHTML={{ __html: avatarSvg }}
-                className="size-full flex items-center justify-center [&>svg]:size-full"
+                className="size-full [&>svg]:size-full"
               />
             </div>
-            <span className="truncate text-foreground text-sm font-medium">
-              {selectedMusic.name}
-            </span>
+            <div className="flex flex-col w-full">
+              <span className="text-sm font-medium truncate">
+                {selectedMusic.name}
+              </span>
+              <span className="text-xs overflow-hidden text-ellipsis">
+                {selectedMusic.description ?? ""}
+              </span>
+            </div>
           </>
         ) : (
           // Nothing chosen yet
@@ -80,7 +83,7 @@ export function BgMusicSelector({
             </span>
           </>
         )}
-      </Button>
+      </div>
 
       <BgMusicModal
         open={open}

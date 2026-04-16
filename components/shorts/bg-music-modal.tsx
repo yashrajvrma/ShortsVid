@@ -26,6 +26,7 @@ interface BgMusicModalProps {
 function MusicItem({
   id,
   name,
+  description,
   audioUrl,
   isSelected,
   onSelect,
@@ -33,6 +34,7 @@ function MusicItem({
 }: {
   id: string;
   name: string;
+  description: string | null;
   audioUrl?: string;
   isSelected: boolean;
   onSelect: () => void;
@@ -87,7 +89,7 @@ function MusicItem({
       }`}
     >
       <div
-        className="size-10 shrink-0 rounded-xl overflow-hidden border border-border bg-muted cursor-pointer"
+        className="size-12 shrink-0 rounded-full overflow-hidden bg-muted cursor-pointer"
         onClick={handlePlay}
       >
         <div
@@ -95,7 +97,13 @@ function MusicItem({
           className="size-full [&>svg]:size-full"
         />
       </div>
-      <span className="text-sm font-medium truncate flex-1">{name}</span>
+      <div className="flex flex-col gap-1 w-full">
+        <span className="text-sm font-medium truncate flex-1">{name}</span>
+        <span className="text-xs font-normal overflow-hidden text-ellipsis">
+          {description ?? ""}
+        </span>
+      </div>
+
       {audioUrl && (
         <button
           type="button"
@@ -103,10 +111,10 @@ function MusicItem({
           className={`size-7 rounded-full flex items-center justify-center shrink-0 transition-colors ${
             isSelected
               ? "bg-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/30"
-              : "bg-muted hover:bg-primary/20"
+              : "bg-muted"
           }`}
         >
-          {playing ? <Pause className="size-3" /> : <Play className="size-3" />}
+          {playing ? <Pause className="size-4" /> : <Play className="size-4" />}
         </button>
       )}
     </button>
@@ -137,7 +145,7 @@ export function BgMusicModal({
 
   return (
     <AlertDialog open={open}>
-      <AlertDialogContent className="sm:min-w-2xl p-0 overflow-hidden sm:my-0 my-5">
+      <AlertDialogContent className="sm:min-w-3xl p-0 overflow-hidden sm:my-0 my-5">
         <AlertDialogHeader className="px-6 pt-4">
           <div className="flex items-center justify-between w-full">
             <AlertDialogTitle className="text-lg font-medium">
@@ -166,13 +174,13 @@ export function BgMusicModal({
 
           {/* System Music */}
           <TabsContent value="templates" className="mt-0">
-            <ScrollArea className="h-[420px] px-6 py-4">
+            <ScrollArea className="h-[500px] px-6 py-4">
               {isLoading ? (
                 <div className="flex items-center justify-center h-40 text-muted-foreground text-sm">
                   Loading music…
                 </div>
               ) : (
-                <div className="grid sm:grid-cols-3 gap-1.5">
+                <div className="grid sm:grid-cols-1 gap-1.5">
                   {/* No Sound option */}
                   <button
                     type="button"
@@ -194,6 +202,7 @@ export function BgMusicModal({
                       key={music.id}
                       id={music.id}
                       name={music.name}
+                      description={music.description}
                       audioUrl={music.musicUrl ?? undefined}
                       isSelected={selectedMusicId === music.id}
                       onSelect={() => onSelect(music.id)}

@@ -31,23 +31,41 @@ function VoiceItem({
     <button
       type="button"
       onClick={() => onSelect(voice.id)}
-      className={`w-full flex items-center gap-2 rounded-lg px-2.5 py-2 transition-all duration-150 text-left ${
+      className={`w-full flex items-start gap-2 rounded-lg px-2.5 py-2 transition-all duration-150 text-left ${
         isSelected
           ? "bg-secondary text-secondary-foreground border border-primary/30"
           : "hover:bg-muted/50 border border-transparent"
       }`}
     >
       {/* Avatar */}
-      <div className="relative size-8 shrink-0 rounded-full overflow-hidden border border-border bg-muted">
+      <div className="relative size-8 shrink-0 rounded-full overflow-hidden border border-border bg-muted mt-0.5">
         <div
           dangerouslySetInnerHTML={{ __html: avatarSvg }}
           className="size-full [&>svg]:size-full"
         />
       </div>
 
-      <div className="flex-1 min-w-0">
-        <p className="text-xs font-medium truncate">{voice.name}</p>
-        <p className="text-[10px] text-muted-foreground capitalize">
+      {/* Info */}
+      <div className="flex justify-between min-w-0">
+        <div className="flex flex-col gap-2">
+          <p className="text-xs font-medium truncate">{voice.name}</p>
+
+          {/* Tags */}
+          {voice.tags && voice.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {voice.tags.slice(0, 4).map((tag: string) => (
+                <span
+                  key={tag}
+                  className="inline-block text-xs leading-none px-1.5 py-0.5 rounded-sm bg-muted border border-border text-muted-foreground capitalize"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <p className="text-sm text-muted-foreground capitalize mb-1">
           {voice.gender}
         </p>
       </div>
@@ -60,7 +78,7 @@ function VoiceItem({
             e.stopPropagation();
             onPlay(voice.id, voice.audioUrl!);
           }}
-          className="size-6 rounded-full flex items-center justify-center bg-muted transition-colors shrink-0 hover:bg-muted/80"
+          className="size-6 rounded-full flex items-center justify-center bg-muted transition-colors shrink-0 hover:bg-muted/80 mt-0.5"
         >
           {playingId === voice.id ? (
             <Pause className="size-3 text-primary" />
@@ -74,25 +92,24 @@ function VoiceItem({
 }
 
 // ── Per-speaker voice panel ───────────────────────────────────────────────────
+// Each panel owns its own search state — searching in one never affects the other.
 function SpeakerVoicePanel({
   speakerLabel,
-  speakerNum,
   languageCode,
-  searchQuery,
   selectedVoiceId,
-  onSearchChange,
   onSelect,
 }: {
   speakerLabel: string;
-  speakerNum: 1 | 2;
   languageCode: string;
-  searchQuery: string;
   selectedVoiceId: string | null;
-  onSearchChange: (v: string) => void;
   onSelect: (id: string) => void;
 }) {
   const trpc = useTRPC();
+
+  // ── Independent search state per panel ──────────────────────────────────────
+  const [searchQuery, setSearchQuery] = useState("");
   const debouncedQuery = useDebounce(searchQuery, 400);
+
   const [playingId, setPlayingId] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -125,27 +142,27 @@ function SpeakerVoicePanel({
   return (
     <Card className="flex-1 p-3 space-y-2.5 min-w-0">
       {/* Header */}
-      <div className="flex justify-between gap-2">
+      <div className="flex justify-between gap-2 flex-wrap">
         <div className="text-sm px-2 py-0.5 rounded-md shrink-0">
           {speakerLabel}
         </div>
         {selectedVoiceName && (
           <Badge
             variant="default"
-            className="rounded-sm p-1 text-sm text-primary-foreground truncate"
+            className="rounded-sm p-1 text-sm text-primary-foreground truncate max-w-[140px]"
           >
             {selectedVoiceName}
           </Badge>
         )}
       </div>
 
-      {/* Search */}
+      {/* Search — independent per panel */}
       <div className="relative">
         <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
         <Input
-          placeholder="Search…"
+          placeholder="Search voices…"
           value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
+          onChange={(e) => setSearchQuery(e.target.value)}
           className="pl-8 h-8 text-xs"
         />
       </div>
@@ -185,8 +202,6 @@ interface SpeakerVoiceSelectorProps {
   languageCode: string;
   speaker1VoiceId: string | null;
   speaker2VoiceId: string | null;
-  voiceSearchQuery: string;
-  onVoiceSearchChange: (v: string) => void;
   onSelectSpeaker1Voice: (id: string) => void;
   onSelectSpeaker2Voice: (id: string) => void;
 }
@@ -195,8 +210,6 @@ export function SpeakerVoiceSelector({
   languageCode,
   speaker1VoiceId,
   speaker2VoiceId,
-  voiceSearchQuery,
-  onVoiceSearchChange,
   onSelectSpeaker1Voice,
   onSelectSpeaker2Voice,
 }: SpeakerVoiceSelectorProps) {
@@ -206,23 +219,18 @@ export function SpeakerVoiceSelector({
         Speaker Voices
       </label>
 
-      <div className="flex gap-3 mt-3">
+      {/* Responsive: stacks on mobile, side-by-side on sm+ */}
+      <div className="flex flex-col sm:flex-row gap-3 mt-3">
         <SpeakerVoicePanel
           speakerLabel="Speaker 1"
-          speakerNum={1}
           languageCode={languageCode}
-          searchQuery={voiceSearchQuery}
           selectedVoiceId={speaker1VoiceId}
-          onSearchChange={onVoiceSearchChange}
           onSelect={onSelectSpeaker1Voice}
         />
         <SpeakerVoicePanel
           speakerLabel="Speaker 2"
-          speakerNum={2}
           languageCode={languageCode}
-          searchQuery={voiceSearchQuery}
           selectedVoiceId={speaker2VoiceId}
-          onSearchChange={onVoiceSearchChange}
           onSelect={onSelectSpeaker2Voice}
         />
       </div>

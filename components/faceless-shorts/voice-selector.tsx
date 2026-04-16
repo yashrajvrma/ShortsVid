@@ -45,7 +45,7 @@ function VoiceItem({
       }`}
     >
       {/* Avatar */}
-      <div className="relative size-11 shrink-0 rounded-full overflow-hidden border border-border bg-muted">
+      {/* <div className="relative size-11 shrink-0 rounded-full overflow-hidden border border-border bg-muted">
         <div
           dangerouslySetInnerHTML={{ __html: avatarSvg }}
           className="size-full [&>svg]:size-full"
@@ -57,7 +57,44 @@ function VoiceItem({
       </div>
       <Badge variant="secondary" className="text-xs capitalize shrink-0">
         {voice.gender}
-      </Badge>
+      </Badge> */}
+
+      {/* Avatar */}
+      <div className="relative size-11 shrink-0 rounded-full overflow-hidden bg-muted mt-0.5">
+        <div
+          dangerouslySetInnerHTML={{ __html: avatarSvg }}
+          className="size-full [&>svg]:size-full"
+        />
+      </div>
+
+      {/* Info */}
+      <div className="flex justify-between w-full">
+        <div className="flex flex-col gap-1">
+          <p className="text-sm font-medium truncate">{voice.name}</p>
+
+          {/* Tags */}
+          {voice.tags && voice.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {voice.tags.slice(0, 4).map((tag: string) => (
+                <span
+                  key={tag}
+                  className={`inline-block text-xs leading-none px-1.5 py-0.5 rounded-sm bg-muted border border-border text-muted-foreground capitalize`}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <p
+          className={`flex items-center text-sm text-muted-foreground capitalize mb-1 ${
+            isSelected ? "text-primary-foreground" : ""
+          }`}
+        >
+          {voice.gender}
+        </p>
+      </div>
 
       {/* Play button */}
       {voice.audioUrl && (
@@ -70,7 +107,7 @@ function VoiceItem({
           className="size-7 rounded-full flex items-center justify-center bg-muted transition-colors shrink-0"
         >
           {playingId === voice.id ? (
-            <Pause className="size-3.5 text-primary" />
+            <Pause className="size-3.5 text-muted-foreground" />
           ) : (
             <Play className="size-3.5 text-muted-foreground" />
           )}
