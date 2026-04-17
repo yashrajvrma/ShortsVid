@@ -189,10 +189,6 @@ export const generateShort = inngest.createFunction(
     });
 
     // ── STEP 8: Generate word-level captions via Whisper ─────────────────────
-    //
-    // generateCaptions receives the R2 key and internally generates a
-    // short-lived signed URL to fetch the audio. That signed URL is
-    // never stored anywhere.
 
     const captionData = await step.run("generate-captions", async () => {
       return generateCaptions(audioR2Key, videoData.languageCode);
@@ -222,6 +218,154 @@ export const generateShort = inngest.createFunction(
     return {
       videoId,
       imageCount: imageR2Keys.length,
+      audioR2Key,
+      caption: captionData,
+      durationSeconds: captionData.duration,
+    };
+  },
+);
+
+export const generateConversationVideo = inngest.createFunction(
+  {
+    id: "generate-conversationVideo",
+    retries: 2,
+    timeouts: { finish: "15m" },
+    onFailure: async ({ event, step }) => {
+      const videoId = event.data.event.data?.videoId;
+
+      Sentry.logger.error("Conversation video generation failed", { videoId });
+      await prisma.conversationVideo.update({
+        where: { id: videoId },
+        data: { status: "FAILED" },
+      });
+    },
+  },
+  { event: "conversationVideo/generate" },
+  async ({ event, step }) => {
+    const { userId, videoId } = event.data;
+
+    // STEP 1: fetch video and related data from DB
+    const conversationVideoData = await step.run(
+      "fetch-conversationVideo-data",
+      async () => {
+        const conversationVideo = await prisma.conversationVideo.findUnique({
+          where: {
+            id: videoId,
+            userId,
+          },
+          include: {
+            script: true,
+            voice1: true,
+            voice2: true,
+            captionConfig: true,
+          },
+        });
+
+        if (!conversationVideo) {
+          throw new Error(
+            `Conversation video ${videoId} not found for user ${userId}`,
+          );
+        }
+        if (!conversationVideo.script) {
+          throw new Error(
+            `Conversation video ${videoId} has no script attached`,
+          );
+        }
+        if (!conversationVideo.voice1) {
+          throw new Error(
+            `Conversation video ${videoId} has no voice1 configured`,
+          );
+        }
+        if (!conversationVideo.voice2) {
+          throw new Error(
+            `Conversation video ${videoId} has no voice2 configured`,
+          );
+        }
+
+        return {
+          id: conversationVideo.id,
+          script: conversationVideo.script.content,
+          language: conversationVideo.script.languageCode,
+          voice1ModelId: conversationVideo.voice1.modelId,
+          voice2ModelId: conversationVideo.voice2.modelId,
+          captionConfig: conversationVideo.captionConfig,
+        };
+      },
+    );
+
+    // STEP 2 : generate audio for both speakers
+
+    const audioR2Key = await step.run("generate-audio", async () => {
+      const script = conversationVideoData.script;
+
+      const formattedScript = script
+        .map((line, index) => {
+          const speaker = index % 2 === 0 ? "<|speaker:0|>" : "<|speaker:1|>";
+          return `${speaker}${line}`;
+        })
+        .join("");
+
+      const audioStream = await fishAudio.textToSpeech.convert({
+        text: formattedScript,
+        reference_id: [
+          conversationVideoData.voice1ModelId,
+          conversationVideoData.voice2ModelId,
+        ],
+        prosody: {
+          speed: 1.1,
+          volume: 0,
+        },
+      });
+
+      Sentry.logger.info("Audio generated", { videoId });
+
+      const key = `shorts/${videoId}/audio/voiceover.mp3`;
+
+      const buffer = Buffer.from(await new Response(audioStream).arrayBuffer());
+      await uploadAudioToR2({ buffer, key, contentType: "audio/mpeg" });
+
+      return key;
+    });
+
+    // STEP 3 : save it to DB
+    await step.run("save-audio-to-db", async () => {
+      await prisma.conversationVideo.update({
+        where: { id: videoId },
+        data: { audio: audioR2Key },
+      });
+    });
+
+    // STEP 4 : generate captions and save it to dB
+    const captionData = await step.run("generate-captions", async () => {
+      const captions = await generateCaptions(
+        audioR2Key,
+        conversationVideoData.language,
+      );
+
+      Sentry.logger.info("Captions generated", { videoId });
+
+      await prisma.conversationVideo.update({
+        where: { id: videoId },
+        data: {
+          caption: captions as CaptionData,
+          duration: Math.ceil(captions.duration),
+        },
+      });
+
+      return captions;
+    });
+
+    // STEP 10: Mark video as READY
+
+    await step.run("set-status-ready", async () => {
+      await prisma.conversationVideo.update({
+        where: { id: videoId },
+        data: { status: "READY" },
+      });
+    });
+
+    return {
+      videoId,
       audioR2Key,
       caption: captionData,
       durationSeconds: captionData.duration,

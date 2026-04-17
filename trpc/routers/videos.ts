@@ -109,7 +109,7 @@ export const videoRouter = createTRPCRouter({
       // 2. Validate music exists (if provided)
       if (input.musicId) {
         const music = await prisma.stock.findUnique({
-          where: { id: input.musicId, stockType: "MUSIC" },
+          where: { id: input.musicId, stockType: "BG_MUSIC" },
         });
 
         if (!music) {
@@ -235,6 +235,264 @@ export const videoRouter = createTRPCRouter({
         status: video.status,
       };
     }),
+
+  generateConversationVideo: authProcedure
+    .input(
+      z.object({
+        languageCode: z.string(),
+        topic: z.enum([
+          "MOTIVATIONAL",
+          "HORROR_STORY",
+          "HISTORY_FACTS",
+          "PHILOSOPHY",
+          "STORYTELLING",
+          "MYSTERY_STORY",
+          "LIFE_HACKS",
+          "ANY_TOPIC",
+        ]),
+        prompt: z.string().optional(),
+        duration: z.number(),
+        script: z.array(z.string()),
+        speaker1AvatarId: z.string(),
+        speaker2AvatarId: z.string(),
+        voice1Id: z.string(),
+        voice2Id: z.string(),
+        backgroundVideoId: z.string(),
+        backgroundMusicId: z.string().nullable(),
+
+        // ── Caption ──────────────────────────────────────────────────────────
+        captionsEnabled: z.boolean().default(true),
+        captionConfig: z.object({
+          // Colors
+          textColor: z.string(),
+          strokeColor: z.string(),
+          highlightColor: z.string(),
+          highlightStrokeColor: z.string(),
+          popBackgroundColor: z.string(),
+
+          // Effects — strokeWidth/shadow/fontSize/letterSpacing can be decimals
+          strokeWidth: z.number(),
+          fontSize: z.number(),
+          verticalPosition: z.number().int(),
+          horizontalPosition: z.number().int(),
+          maxLines: z.number().int(),
+          maxWordsPerLine: z.number().int(),
+          shadowOffsetY: z.number(),
+          shadowBlur: z.number(),
+
+          // Typography
+          fontFamily: z.string(),
+          fontWeight: z.string(),
+          textTransform: z.enum([
+            "uppercase",
+            "lowercase",
+            "capitalize",
+            "none",
+          ]),
+          letterSpacing: z.number(),
+
+          animationPreset: z.enum(["pop", "fade", "slide", "none"]),
+
+          // Light leak
+          lightLeakHue: z.number().int(),
+          lightLeakSeed: z.number().int(),
+        }),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      // return if user dont have sufficent credits
+      if (ctx.credit < CREDITS_PER_VIDEO) {
+        throw new TRPCError({
+          code: "PAYMENT_REQUIRED",
+          message: "Insufficient credits, Please upgrade your plan",
+        });
+      }
+
+      // validate background video exist
+      const backgroundVideo = await prisma.stock.findUnique({
+        where: {
+          id: input.backgroundVideoId,
+          stockType: "BG_VIDEO",
+        },
+      });
+
+      if (!backgroundVideo) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Background video not found",
+        });
+      }
+
+      // validate speaker avatar exist
+      const speaker1Avatar = await prisma.stock.findUnique({
+        where: {
+          id: input.speaker1AvatarId,
+        },
+      });
+
+      if (!speaker1Avatar) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Speaker 1 avatar not found",
+        });
+      }
+
+      const speaker2Avatar = await prisma.stock.findUnique({
+        where: {
+          id: input.speaker2AvatarId,
+        },
+      });
+
+      if (!speaker2Avatar) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Speaker 2 avatar not found",
+        });
+      }
+
+      // validate voice exist
+      const voice1 = await prisma.voice.findUnique({
+        where: { id: input.voice1Id },
+      });
+
+      if (!voice1) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Voice 1 not found",
+        });
+      }
+
+      const voice2 = await prisma.voice.findUnique({
+        where: { id: input.voice2Id },
+      });
+
+      if (!voice2) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Voice 2 not found",
+        });
+      }
+
+      // 2. Validate music exists (if provided)
+      if (input.backgroundMusicId) {
+        const backgroundMusic = await prisma.stock.findUnique({
+          where: { id: input.backgroundMusicId, stockType: "BG_MUSIC" },
+        });
+
+        if (!backgroundMusic) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Background music not found",
+          });
+        }
+      }
+
+      // transaction to create script, caption config and video
+
+      const conversationVideo = await prisma.$transaction(async (tx) => {
+        // create script
+
+        const script = await tx.script.create({
+          data: {
+            userId: ctx.userId,
+            prompt: input.prompt ?? null,
+            languageCode: input.languageCode,
+            topic: input.topic,
+            duration: input.duration,
+            content: input.script,
+          },
+        });
+
+        // Only create a CaptionConfig row when captions are enabled
+        let captionConfigId: string | null = null;
+
+        if (input.captionsEnabled) {
+          const captionConfig = await tx.captionConfig.create({
+            data: {
+              // Colors
+              textColor: input.captionConfig.textColor,
+              strokeColor: input.captionConfig.strokeColor,
+              highlightColor: input.captionConfig.highlightColor,
+              highlightStrokeColor: input.captionConfig.highlightStrokeColor,
+              popBackgroundColor: input.captionConfig.popBackgroundColor,
+
+              // Effects
+              strokeWidth: input.captionConfig.strokeWidth,
+              fontSize: input.captionConfig.fontSize,
+              verticalPosition: input.captionConfig.verticalPosition,
+              horizontalPosition: input.captionConfig.horizontalPosition,
+              maxLines: input.captionConfig.maxLines,
+              maxWordsPerLine: input.captionConfig.maxWordsPerLine,
+              shadowOffsetY: input.captionConfig.shadowOffsetY,
+              shadowBlur: input.captionConfig.shadowBlur,
+
+              // Typography
+              fontFamily: input.captionConfig.fontFamily,
+              fontWeight: input.captionConfig.fontWeight,
+              textTransform: input.captionConfig.textTransform,
+              letterSpacing: input.captionConfig.letterSpacing,
+
+              // Animation
+              animationPreset: input.captionConfig.animationPreset,
+
+              // Light leak
+              lightLeakHue: input.captionConfig.lightLeakHue,
+              lightLeakSeed: input.captionConfig.lightLeakSeed,
+            },
+          });
+
+          captionConfigId = captionConfig.id;
+        }
+
+        // Create video — captionConfigId is null when captions are disabled
+        return tx.conversationVideo.create({
+          data: {
+            userId: ctx.userId,
+            status: "GENERATING",
+            scriptId: script.id,
+            speaker1AvatarId: input.speaker1AvatarId,
+            speaker2AvatarId: input.speaker2AvatarId,
+            voice1Id: input.voice1Id,
+            voice2Id: input.voice2Id,
+            backgroundVideoId: input.backgroundVideoId,
+            backgroundMusicId: input.backgroundMusicId ?? null,
+            captionConfigId: captionConfigId,
+          },
+        });
+      });
+
+      try {
+        Sentry.logger.info("Pushing video in queue", {
+          userId: ctx.userId,
+          videoId: conversationVideo.id,
+        });
+
+        // 6. Trigger Inngest workflow
+        await inngest.send({
+          name: "conversationVideo/generate",
+          data: {
+            userId: ctx.userId,
+            videoId: conversationVideo.id,
+          },
+        });
+
+        // deduct five credits and check if there are active credits
+        await deductVideoCredits(ctx.userId, conversationVideo.id);
+      } catch (error) {
+        Sentry.logger.error("Failed to enqueue video generation in inngest", {
+          userId: ctx.userId,
+          videoId: conversationVideo.id,
+          error: (error as Error).message,
+        });
+      }
+
+      return {
+        success: true,
+        videoId: conversationVideo.id,
+        status: conversationVideo.status,
+      };
+    }),
+
   getAllShorts: authProcedure.query(async ({ ctx }) => {
     const { userId } = ctx;
 
@@ -273,6 +531,7 @@ export const videoRouter = createTRPCRouter({
 
     return videosWithSignedUrls;
   }),
+
   getShortsById: baseProcedure
     .input(z.object({ videoId: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -388,6 +647,7 @@ export const videoRouter = createTRPCRouter({
         updatedAt: video.updatedAt,
       };
     }),
+
   exportVideo: authProcedure
     .input(
       z.object({
@@ -475,6 +735,7 @@ export const videoRouter = createTRPCRouter({
         };
       }
     }),
+
   getVideoStatus: authProcedure
     .input(
       z.object({
@@ -525,6 +786,7 @@ export const videoRouter = createTRPCRouter({
         updatedAt: video.updatedAt,
       };
     }),
+
   deleteVideo: authProcedure
     .input(z.object({ videoId: z.string() }))
     .mutation(async ({ ctx, input }) => {
