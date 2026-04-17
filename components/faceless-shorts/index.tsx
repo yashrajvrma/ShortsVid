@@ -118,10 +118,10 @@ export default function FacelessShorts() {
   return (
     <div
       className="w-full flex flex-col font-sans"
-      style={{ height: "calc(100vh - 2rem)" }}
+      style={{ height: "calc(100vh - 3rem)" }}
     >
       <Header>
-        <div className="text-xl tracking-tighter">Create Faceless Shorts</div>
+        <div className="text-base tracking-tight">Create Faceless Shorts</div>
       </Header>
 
       {/* ── Main card ───────────────────────────────────────────────────── */}

@@ -1,10 +1,5 @@
 import { AppSidebar } from "@/components/app-sidebar";
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-} from "@/components/ui/breadcrumb";
+import { DynamicBreadcrumb } from "@/components/app/dynamic-breadcrumb";
 import {
   SidebarInset,
   SidebarProvider,
@@ -18,6 +13,7 @@ import { prisma } from "@/db";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { PricingModal } from "@/components/app/pricing-modal";
+import { Separator } from "@/components/ui/separator";
 
 export const dynamic = "force-dynamic";
 
@@ -46,7 +42,7 @@ export default async function Layout({
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="flex h-16 shrink-0 sticky top-0 items-center gap-2 visible md:hidden bg-background/60 backdrop-blur-sm w-full">
+        {/* <header className="flex h-16 shrink-0 sticky top-0 items-center gap-2 visible md:hidden bg-background/60 backdrop-blur-sm w-full">
           <div className="flex justify-between gap-2 px-4 w-full">
             <Breadcrumb>
               <BreadcrumbList>
@@ -67,8 +63,19 @@ export default async function Layout({
             </Breadcrumb>
             <SidebarTrigger className="-ml-1" />
           </div>
+        </header> */}
+        <header className="flex h-14 shrink-0 items-center align-middle gap-2 border-b sticky top-0 bg-background">
+          <div className="flex items-center gap-2 px-4">
+            <SidebarTrigger className="-ml-1" />
+            <div className="flex items-center">
+              <Separator
+                orientation="vertical"
+                className="mr-2 data-[orientation=vertical]:h-4"
+              />
+            </div>
+            <DynamicBreadcrumb />
+          </div>
         </header>
-
         <div className="flex h-screen px-4">{children}</div>
       </SidebarInset>
 

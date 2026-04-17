@@ -12,23 +12,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import {
-  TerminalSquareIcon,
-  BotIcon,
-  BookOpenIcon,
-  Settings2Icon,
-  LifeBuoyIcon,
-  SendIcon,
-  PieChartIcon,
-  HomeIcon,
-  MapIcon,
-  PencilLineIcon,
-  Gamepad,
-  Gamepad2Icon,
-  PlusIcon,
-  Play,
-  UserRound,
-} from "lucide-react";
+import { navProjects, navShorts } from "@/config/nav";
 import { useSession } from "@/lib/auth/client";
 import Image from "next/image";
 import ShortsVidLogo from "@/public/shortsvid-icon.png";
@@ -38,137 +22,6 @@ import { Button } from "./ui/button";
 import { customerPortal } from "@/actions/billing/customer-portal";
 import CreditUsageCard from "./credit-usage-card";
 
-const data = {
-  // user: {
-  //   name: "shadcn",
-  //   email: "m@example.com",
-  //   avatar: "/avatars/shadcn.jpg",
-  // },
-  navMain: [
-    {
-      title: "Playground",
-      url: "#",
-      icon: <TerminalSquareIcon />,
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Models",
-      url: "#",
-      icon: <BotIcon />,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: <BookOpenIcon />,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: <Settings2Icon />,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Support",
-      url: "#",
-      icon: <LifeBuoyIcon />,
-    },
-    {
-      title: "Feedback",
-      url: "#",
-      icon: <SendIcon />,
-    },
-  ],
-  projects: [
-    {
-      name: "Home",
-      url: "/app",
-      icon: <HomeIcon />,
-    },
-    {
-      name: "Library",
-      url: "/app/videos",
-      icon: <Play />,
-    },
-  ],
-  shorts: [
-    {
-      name: "Faceless Shorts",
-      url: "/app/shorts/faceless-shorts",
-      icon: <UserRound />,
-    },
-    {
-      name: "Conversation Videos",
-      url: "/app/shorts/conversation-videos",
-      icon: <Gamepad2Icon />,
-    },
-  ],
-};
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar variant="sidebar" {...props}>
@@ -177,12 +30,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <div
               className="flex justify-start py-2 hover:bg-transparent"
-              // size="lg"
-              // asChild
-              // <div
-              //   className="flex justify-start py-2 hover:bg-transparent md:block hidden"
-              // size="lg"
-              // asChild
+            // size="lg"
+            // asChild
+            // <div
+            //   className="flex justify-start py-2 hover:bg-transparent md:block hidden"
+            // size="lg"
+            // asChild
             >
               <Link href="/app">
                 {/* <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
@@ -208,8 +61,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent className="gap-0 px-1">
         {/* <NavMain items={data.navMain} /> */}
-        <NavProjects projects={data.projects} />
-        <NavShorts shorts={data.shorts} />
+        <NavProjects projects={navProjects} />
+        <NavShorts shorts={navShorts} />
         {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
