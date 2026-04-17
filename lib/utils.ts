@@ -108,7 +108,7 @@ export const systemPromptForConversationVideos = (
   languageName: string,
   topic: Topic,
   speaker1Name: string = "Speaker 1",
-  speaker2Name: string = "Speaker 2"
+  speaker2Name: string = "Speaker 2",
 ): string => {
   const meta = TOPIC_DIRECTIVE_MAP_FOR_SCRIPT[topic];
 
@@ -153,5 +153,6 @@ VIRAL WRITING PRINCIPLES
 3. START STRONG — drop the viewer into the middle of an interesting or funny conversation.
 4. SHOW, DON'T TELL — use the characters' unique voices to make the conversation catchy without forcing too many inside jokes.
 5. ESCALATE — each exchange should build on the last to keep the energy high.
-6. SATISFYING END — close with a punchline, an intriguing thought, or a memorable exit.`;
+6. SATISFYING END — close with a punchline, an intriguing thought, or a memorable exit.
+7. WRITE IT IN SIMPLE LANGUAGE and TRY TO BE ON TOPIC`;
 };

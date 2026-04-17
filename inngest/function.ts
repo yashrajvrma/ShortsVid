@@ -14,6 +14,7 @@ import {
   uploadImageToR2,
   uploadVideoToR2,
 } from "@/lib/r2-bucket";
+import axios from "axios";
 
 import { getServices, renderMediaOnCloudrun } from "@remotion/cloudrun/client";
 import { CaptionData, generateCaptions } from "@/lib/captions";
@@ -21,6 +22,7 @@ import { Topic, VideoStyle } from "@/types";
 
 const fishAudio = new FishAudioClient({
   apiKey: process.env.FISH_AUDIO_API_KEY!,
+  headers: {},
 });
 
 export const helloWorld = inngest.createFunction(
@@ -295,6 +297,37 @@ export const generateConversationVideo = inngest.createFunction(
 
     // STEP 2 : generate audio for both speakers
 
+    // const audioR2Key = await step.run("generate-audio", async () => {
+    //   const script = conversationVideoData.script;
+
+    //   const formattedScript = script
+    //     .map((line, index) => {
+    //       const speaker = index % 2 === 0 ? "<|speaker:0|>" : "<|speaker:1|>";
+    //       return `${speaker}${line}`;
+    //     })
+    //     .join("");
+
+    //   const audioStream = await fishAudio.textToSpeech.convert({
+    //     text: formattedScript,
+    //     reference_id: [
+    //       conversationVideoData.voice1ModelId,
+    //       conversationVideoData.voice2ModelId,
+    //     ],
+    //     prosody: {
+    //       speed: 1.1,
+    //       volume: 0,
+    //     },
+    //   });
+
+    //   Sentry.logger.info("Audio generated", { videoId });
+
+    //   const key = `shorts/${videoId}/audio/voiceover.mp3`;
+
+    //   const buffer = Buffer.from(await new Response(audioStream).arrayBuffer());
+    //   await uploadAudioToR2({ buffer, key, contentType: "audio/mpeg" });
+
+    //   return key;
+    // });
     const audioR2Key = await step.run("generate-audio", async () => {
       const script = conversationVideoData.script;
 
@@ -303,26 +336,46 @@ export const generateConversationVideo = inngest.createFunction(
           const speaker = index % 2 === 0 ? "<|speaker:0|>" : "<|speaker:1|>";
           return `${speaker}${line}`;
         })
-        .join("");
+        .join("\n");
 
-      const audioStream = await fishAudio.textToSpeech.convert({
-        text: formattedScript,
-        reference_id: [
-          conversationVideoData.voice1ModelId,
-          conversationVideoData.voice2ModelId,
-        ],
-        prosody: {
-          speed: 1.1,
-          volume: 0,
+      const response = await axios.post(
+        "https://api.fish.audio/v1/tts",
+        {
+          text: formattedScript,
+          reference_id: [
+            conversationVideoData.voice1ModelId,
+            conversationVideoData.voice2ModelId,
+          ],
+          temperature: 0.7,
+          top_p: 0.7,
+          prosody: {
+            speed: 1.1,
+            volume: 0,
+            normalize_loudness: true,
+          },
+          format: "mp3",
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.FISH_AUDIO_API_KEY}`,
+            "Content-Type": "application/json",
+            model: "s2-pro",
+          },
+          responseType: "arraybuffer",
+        },
+      );
 
       Sentry.logger.info("Audio generated", { videoId });
 
       const key = `shorts/${videoId}/audio/voiceover.mp3`;
 
-      const buffer = Buffer.from(await new Response(audioStream).arrayBuffer());
-      await uploadAudioToR2({ buffer, key, contentType: "audio/mpeg" });
+      const buffer = Buffer.from(response.data);
+
+      await uploadAudioToR2({
+        buffer,
+        key,
+        contentType: "audio/mpeg",
+      });
 
       return key;
     });

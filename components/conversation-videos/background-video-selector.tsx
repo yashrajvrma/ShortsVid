@@ -135,6 +135,12 @@ export function BackgroundVideoSelector({
   );
   const videos = data?.videos ?? [];
 
+  useEffect(() => {
+    if (!selectedVideoId && videos.length > 0) {
+      onSelect(videos[0].id);
+    }
+  }, [selectedVideoId, videos, onSelect]);
+
   // Group by derived category
   const grouped = videos.reduce<Record<string, typeof videos>>((acc, v) => {
     const cat = getCategory(v.name);

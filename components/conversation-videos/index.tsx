@@ -6,6 +6,22 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Loader2, Zap } from "lucide-react";
 import { toast } from "sonner";
+import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import type { TRPCClientErrorLike } from "@trpc/client";
+import { useTRPC } from "@/trpc/client";
+import type { AppRouter } from "@/trpc/routers/_app";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { CaptionStyle } from "@/types";
 
 import { useConversationForm } from "@/hooks/use-conversation-form";
 import { useRouter } from "next/navigation";
@@ -25,7 +41,25 @@ import { Topic } from "@prisma/client";
 
 export default function ConversationVideos() {
   const router = useRouter();
+  const trpc = useTRPC();
   const form = useConversationForm();
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const mutationOptions = trpc.videos.generateConversationVideo.mutationOptions();
+
+  const generateVideoMutation = useMutation({
+    ...mutationOptions,
+    onSuccess: () => {
+      toast.success("Conversation video generation started!");
+      form.reset();
+      router.push("/app/videos");
+    },
+    onError: (error: TRPCClientErrorLike<AppRouter>) => {
+      toast.error(error.message || "Failed to start conversation video generation");
+    },
+  });
+
+  const isPending = generateVideoMutation.isPending;
 
   const {
     setField,
@@ -46,32 +80,92 @@ export default function ConversationVideos() {
     form.speaker2VoiceId !== null &&
     form.backgroundVideoId !== null;
 
-  // ── Generate handler (placeholder — wire real mutation later) ─────────────
   const handleGenerate = () => {
-    if (!hasDialogue || !hasAllText) {
-      toast.error("Please generate or write a dialogue script first.");
+    if (!canGenerate) {
+      if (!hasDialogue || !hasAllText) {
+        toast.error("Please generate or write a dialogue script first.");
+        return;
+      }
+      if (!form.speaker1VoiceId || !form.speaker2VoiceId) {
+        toast.error("Please select voices for both speakers.");
+        return;
+      }
+      if (!form.backgroundVideoId) {
+        toast.error("Please select a background video.");
+        return;
+      }
       return;
     }
-    if (!form.speaker1VoiceId || !form.speaker2VoiceId) {
-      toast.error("Please select voices for both speakers.");
-      return;
-    }
-    if (!form.backgroundVideoId) {
-      toast.error("Please select a background video.");
-      return;
-    }
-    // TODO: call generateConversationVideo mutation
-    toast.info("Conversation video generation coming soon!");
+    
+    setShowConfirm(true);
+  };
+
+  const onConfirmGenerate = () => {
+    setShowConfirm(false);
+    
+    const { captionConfig } = form;
+
+    generateVideoMutation.mutate({
+      languageCode: form.languageCode,
+      topic: form.topic as any,
+      duration: form.duration,
+      prompt: form.prompt,
+      script: form.dialogue.map((d) => d.text),
+      speaker1AvatarId: form.speaker1AvatarId!,
+      speaker2AvatarId: form.speaker2AvatarId!,
+      voice1Id: form.speaker1VoiceId!,
+      voice2Id: form.speaker2VoiceId!,
+      backgroundVideoId: form.backgroundVideoId!,
+      backgroundMusicId: form.selectedMusicId,
+      captionsEnabled: form.captionsEnabled,
+      captionConfig: {
+        // ── Colors ──────────────────────────────────────────────────────
+        textColor: captionConfig.textColor,
+        strokeColor: captionConfig.strokeColor,
+        highlightColor: captionConfig.highlightColor,
+        // @ts-ignore
+        highlightStrokeColor: captionConfig.highlightStrokeColor,
+        popBackgroundColor: captionConfig.popBackgroundColor,
+        // ── Effects ─────────────────────────────────────────────────────
+        strokeWidth: captionConfig.strokeWidth,
+        fontSize: captionConfig.fontSize,
+        verticalPosition: captionConfig.verticalPosition,
+        horizontalPosition: captionConfig.horizontalPosition,
+        maxLines: captionConfig.maxLines,
+        maxWordsPerLine: captionConfig.maxWordsPerLine,
+        shadowOffsetY: captionConfig.shadowOffsetY,
+        shadowBlur: captionConfig.shadowBlur,
+        // ── Typography ───────────────────────────────────────────────────
+        fontFamily: captionConfig.fontFamily,
+        fontWeight: captionConfig.fontWeight,
+        textTransform: captionConfig.textTransform,
+        letterSpacing: captionConfig.letterSpacing,
+        // ── Animation ───────────────────────────────────────────────────
+        animationPreset: captionConfig.animationPreset,
+        // ── Light leak ───────────────────────────────────────────────────
+        lightLeakHue: captionConfig.lightLeakHue,
+        lightLeakSeed: captionConfig.lightLeakSeed,
+      } satisfies CaptionStyle,
+    });
   };
 
   const GenerateButton = (
     <Button
       className="w-full h-11 font-semibold gap-2 text-sm"
-      disabled={!canGenerate}
+      disabled={isPending || !canGenerate}
       onClick={handleGenerate}
     >
-      <Zap className="size-4" />
-      Generate Video
+      {isPending ? (
+        <>
+          <Loader2 className="size-4 animate-spin" />
+          Generating…
+        </>
+      ) : (
+        <>
+          <Zap className="size-4" />
+          Generate Video
+        </>
+      )}
     </Button>
   );
 
@@ -202,6 +296,23 @@ export default function ConversationVideos() {
 
       {/* ── Mobile generate button ─────────────────────────────────────── */}
       <div className="md:hidden mt-4 shrink-0">{GenerateButton}</div>
+
+      <AlertDialog open={showConfirm} onOpenChange={setShowConfirm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Generate Conversation Video</AlertDialogTitle>
+            <AlertDialogDescription>
+              Generating this video will consume <strong>5 credits</strong>. Are you sure you want to proceed?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={onConfirmGenerate}>
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
