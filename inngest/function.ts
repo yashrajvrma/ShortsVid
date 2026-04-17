@@ -259,6 +259,7 @@ export const generateConversationVideo = inngest.createFunction(
             script: true,
             voice1: true,
             voice2: true,
+            backgroundVideo: true,
             captionConfig: true,
           },
         });
@@ -288,6 +289,7 @@ export const generateConversationVideo = inngest.createFunction(
           id: conversationVideo.id,
           script: conversationVideo.script.content,
           language: conversationVideo.script.languageCode,
+          backgroundVideo: conversationVideo.backgroundVideo,
           voice1ModelId: conversationVideo.voice1.modelId,
           voice2ModelId: conversationVideo.voice2.modelId,
           captionConfig: conversationVideo.captionConfig,
@@ -408,12 +410,16 @@ export const generateConversationVideo = inngest.createFunction(
       return captions;
     });
 
-    // STEP 10: Mark video as READY
+    // STEP 4: Save video thumbnail and mark video as READY
 
     await step.run("set-status-ready", async () => {
       await prisma.conversationVideo.update({
         where: { id: videoId },
-        data: { status: "READY" },
+        data: {
+          thumbnailR2ObjectKey:
+            conversationVideoData.backgroundVideo.thumbnailR2ObjectKey ?? null,
+          status: "READY",
+        },
       });
     });
 
