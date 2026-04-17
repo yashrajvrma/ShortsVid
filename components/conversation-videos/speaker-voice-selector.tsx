@@ -10,7 +10,6 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search, Play, Pause, Mic2 } from "lucide-react";
-import { Button } from "../ui/button";
 
 // ── Single voice item ─────────────────────────────────────────────────────────
 function VoiceItem({
@@ -147,7 +146,7 @@ function SpeakerVoicePanel({
     voices.find((v) => v.id === selectedVoiceId)?.name ?? null;
 
   return (
-    <Card className="flex-1 p-3 space-y-2.5 min-w-0">
+    <Card className="flex-1 p-3 space-y-0 gap-3 min-w-0">
       {/* Header */}
       <div className="flex justify-between gap-2 flex-wrap">
         <div className="text-sm px-2 py-0.5 rounded-md shrink-0">
