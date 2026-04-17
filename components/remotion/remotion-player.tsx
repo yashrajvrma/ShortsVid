@@ -1,3 +1,4 @@
+// components\remotion\remotion-player.tsx
 "use client";
 
 import { Player } from "@remotion/player";

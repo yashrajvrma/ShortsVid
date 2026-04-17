@@ -1,3 +1,4 @@
+// components\remotion\captions-layer.tsx
 import { CaptionStyle } from "@/types";
 import React, { useMemo } from "react";
 import {

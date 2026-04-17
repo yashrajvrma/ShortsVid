@@ -411,7 +411,6 @@ export const generateConversationVideo = inngest.createFunction(
     });
 
     // STEP 4: Save video thumbnail and mark video as READY
-
     await step.run("set-status-ready", async () => {
       await prisma.conversationVideo.update({
         where: { id: videoId },

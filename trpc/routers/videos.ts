@@ -648,6 +648,142 @@ export const videoRouter = createTRPCRouter({
       };
     }),
 
+  getAllConversationVideos: authProcedure.query(async ({ ctx }) => {
+    const { userId } = ctx;
+
+    const coversationVideos = await prisma.conversationVideo.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      include: {
+        script: {
+          select: {
+            prompt: true,
+          },
+        },
+      },
+    });
+
+    const conversationVideosWithSignedUrls = await Promise.all(
+      coversationVideos.map(async (video) => {
+        const signedThumbnailUrl = video.thumbnailR2ObjectKey
+          ? await getSignedObjectUrl(video.thumbnailR2ObjectKey)
+          : null;
+
+        return {
+          ...video,
+          signedThumbnailUrl,
+        };
+      }),
+    );
+
+    return conversationVideosWithSignedUrls;
+  }),
+
+  // TODO: make only one procedure for both faceless and conversation videos
+  getConversationVideosById: baseProcedure
+    .input(z.object({ videoId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      // const { userId } = ctx;
+
+      const conversationVideo = await prisma.conversationVideo.findUnique({
+        where: { id: input.videoId },
+        include: {
+          script: true,
+          voice1: true,
+          voice2: true,
+          captionConfig: true,
+          backgroundMusic: true,
+          backgroundVideo: true,
+          speaker1Avatar: true,
+          speaker2Avatar: true,
+        },
+      });
+
+      if (!conversationVideo) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Conversation Video not found",
+        });
+      }
+
+      // ── While still generating, return lightweight metadata only ──────────
+      // No assets exist yet, so no signed URLs needed
+      if (conversationVideo.status === "GENERATING") {
+        return {
+          id: conversationVideo.id,
+          status: conversationVideo.status,
+          duration: conversationVideo.duration,
+          script: {
+            id: conversationVideo.script.id,
+            languageCode: conversationVideo.script.languageCode,
+            topic: conversationVideo.script.topic,
+            prompt: conversationVideo.script.prompt,
+            content: conversationVideo.script.content,
+          },
+          // No asset URLs yet
+          audioUrl: conversationVideo.audio,
+          backgroundVideo: conversationVideo.backgroundVideo,
+          caption: conversationVideo.caption,
+          captionConfig: conversationVideo.captionConfig,
+          createdAt: conversationVideo.createdAt,
+          updatedAt: conversationVideo.updatedAt,
+        };
+      }
+
+      // ── Generate signed URLs for all R2 assets
+      // speaker avatar
+      const [speaker1AvatarUrl, speaker2AvatarUrl] = await Promise.all([
+        getSignedObjectUrl(conversationVideo.speaker1Avatar.r2ObjectKey!),
+        getSignedObjectUrl(conversationVideo.speaker2Avatar.r2ObjectKey!),
+      ]);
+
+      // Audio
+      const audioUrl = conversationVideo.audio
+        ? await getSignedObjectUrl(conversationVideo.audio)
+        : null;
+
+      // Thumbnail
+      const thumbnailUrl = conversationVideo.thumbnailR2ObjectKey
+        ? await getSignedObjectUrl(conversationVideo.thumbnailR2ObjectKey)
+        : null;
+
+      // Final rendered video (only exists on SUCCESS)
+      const videoUrl =
+        conversationVideo.status === "SUCCESS" && conversationVideo.r2ObjectKey
+          ? await getSignedObjectUrl(conversationVideo.r2ObjectKey)
+          : null;
+
+      // Background music
+      const backgroundMusicUrl = conversationVideo.backgroundMusic?.r2ObjectKey
+        ? await getSignedObjectUrl(
+            conversationVideo.backgroundMusic.r2ObjectKey,
+          )
+        : null;
+
+      return {
+        id: conversationVideo.id,
+        status: conversationVideo.status,
+        duration: conversationVideo.duration,
+        script: {
+          id: conversationVideo.script.id,
+          languageCode: conversationVideo.script.languageCode,
+          topic: conversationVideo.script.topic,
+          prompt: conversationVideo.script.prompt,
+          content: conversationVideo.script.content,
+        },
+        // Signed asset URLs — ready for Remotion
+        captionConfig: conversationVideo.captionConfig,
+        caption: conversationVideo.caption,
+        speaker1AvatarUrl,
+        speaker2AvatarUrl,
+        audioUrl,
+        videoUrl,
+        backgroundMusicUrl,
+        createdAt: conversationVideo.createdAt,
+        updatedAt: conversationVideo.updatedAt,
+      };
+    }),
+
   exportVideo: authProcedure
     .input(
       z.object({

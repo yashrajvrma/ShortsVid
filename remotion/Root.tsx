@@ -1,3 +1,4 @@
+// remotion\Root.tsx
 import React from "react";
 import RemotionComposition from "../components/remotion/remotion-composition";
 import { Composition, CalculateMetadataFunction } from "remotion";

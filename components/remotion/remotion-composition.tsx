@@ -1,3 +1,4 @@
+// components\remotion\remotion-composition.tsx
 import { CaptionStyle, ShortsVideo } from "../../types/index";
 import { useMemo } from "react";
 import { AbsoluteFill, Html5Audio, Audio, useVideoConfig } from "remotion";
