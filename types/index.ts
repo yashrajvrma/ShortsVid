@@ -19,6 +19,28 @@ export type ShortsVideo = {
   captionConfig: CaptionStyle | null;
 };
 
+export type ConversationVideo = {
+  id: string;
+  duration: number | null;
+  /** Signed URL for the combined dialogue audio (both speakers, sequential) */
+  audioUrl: string | null;
+  /** Signed URL for the looping background video */
+  backgroundVideoUrl: string | null;
+  /** Signed URL for optional background music */
+  backgroundMusicUrl: string | null;
+  /** Signed URL for Speaker 1's PNG avatar */
+  speaker1AvatarUrl: string;
+  /** Signed URL for Speaker 2's PNG avatar */
+  speaker2AvatarUrl: string;
+  /** Flat word-level caption — same structure as faceless video */
+  caption: Prisma.JsonValue | null;
+  captionConfig: CaptionStyle | null;
+  /** Script lines in order. Even index (0,2,4…) = Speaker 1; Odd (1,3,5…) = Speaker 2 */
+  script: {
+    content: string[];
+  };
+};
+
 export type VideoDetail = {
   id: string;
   status: VideoStatus;

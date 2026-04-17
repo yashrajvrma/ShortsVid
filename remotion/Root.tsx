@@ -1,11 +1,24 @@
 // remotion\Root.tsx
+//
+// ALL compositions are registered here — Remotion bundles everything once.
+// Server-side rendering picks the right composition via compositionId:
+//   "renderVideo"             → faceless / AI-image shorts
+//   "renderConversationVideo" → dual-speaker conversation videos
+
 import React from "react";
 import RemotionComposition from "../components/remotion/remotion-composition";
+import ConversationVideoComposition from "../components/remotion/conversation/conversation-composition";
 import { Composition, CalculateMetadataFunction } from "remotion";
-import { ShortsVideo } from "../types";
+import { ShortsVideo, ConversationVideo } from "../types";
 
-type RootProps = {
+// ─── Faceless video props type ────────────────────────────────────────────────
+type FacelessRootProps = {
   videoData: ShortsVideo;
+};
+
+// ─── Conversation video props type ───────────────────────────────────────────
+type ConversationRootProps = {
+  videoData: ConversationVideo;
 };
 
 const videoData = {
@@ -762,27 +775,1189 @@ const videoData = {
   updatedAt: "2026-03-24T18:12:52.936Z",
 };
 
-const calculateMetadata: CalculateMetadataFunction<RootProps> = ({ props }) => {
-  const duration = props.videoData?.duration ?? 60;
+// ─── calculateMetadata: Faceless ─────────────────────────────────────────────
+// Duration comes from the caption data's last word end-time (most accurate)
+// or falls back to the video.duration stored in DB.
+
+const calculateFacelessMetadata: CalculateMetadataFunction<
+  FacelessRootProps
+> = ({ props }) => {
+  const caption = props.videoData?.caption as {
+    words?: { end: number }[];
+    duration?: number;
+  } | null;
+  const captionDuration =
+    caption?.duration ??
+    (caption?.words?.length
+      ? caption.words[caption.words.length - 1].end
+      : null);
+  const duration = captionDuration ?? props.videoData?.duration ?? 60;
   return {
     durationInFrames: Math.ceil(duration * 30),
   };
 };
 
+// ─── calculateMetadata: Conversation ─────────────────────────────────────────
+// Same strategy: use last word's end-time from the flat caption words array.
+
+const calculateConversationMetadata: CalculateMetadataFunction<
+  ConversationRootProps
+> = ({ props }) => {
+  const caption = props.videoData?.caption as {
+    words?: { end: number }[];
+    duration?: number;
+  } | null;
+  const captionDuration =
+    caption?.duration ??
+    (caption?.words?.length
+      ? caption.words[caption.words.length - 1].end
+      : null);
+  const duration = captionDuration ?? props.videoData?.duration ?? 60;
+  return {
+    durationInFrames: Math.ceil(duration * 30),
+  };
+};
+
+// ─── Dev defaultProps: Conversation video ─────────────────────────────────────
+// These are used only in Remotion Studio preview. Replace URLs with fresh
+// signed URLs when testing; they expire after 1 hour.
+
+const conversationVideoData: ConversationVideo = {
+  id: "cmo2ywxby000204l9d5gioggz",
+  duration: 64,
+  script: {
+    content: [
+      "Hey, uh, SpongeBob, I've been hearin' all this buzz about 'React.' What is it, some new dance move I should know about?",
+      "Oh, Peter, it's not a dance! React is this amazing JavaScript library! It helps you build cool, interactive user interfaces. Perfect for organizing your thoughts, almost like putting jellyfish in a perfect line.",
+      "Ah, gotcha! So, it's like, I can use it to make those menus at the Drunken Clam dance across the screen or something?",
+      "Exactly! You can make your menus appear, disappear, and even do backflips if you want! It’s all about rendering efficiently and keeping things fresh.",
+      "Wow, I've been rendering efficiently by just finding the remote faster, but this sounds more impressive. Does it help with, uh, say, keeping track of TV shows I've binged?",
+      "Totally! You could create a nifty tracker. Each time you watch, React can update your list instantly without reloading the whole page. It's magic, really.",
+      "Geez, with all these options, I might become a tech wizard in my own right. Can I build a virtual Quahog with it?",
+      "Haha, you sure can! Add a few more tools with React, and you've got yourself a bustling digital metropolis. The possibilities are as endless as a Krabby Patty's flavor combinations!",
+    ],
+  },
+  captionConfig: {
+    textColor: "#FFFFFF",
+    strokeColor: "#000000",
+    highlightColor: "#FFFFFF",
+    highlightStrokeColor: "transparent",
+    popBackgroundColor: "#6C3CF7",
+    strokeWidth: 0.5,
+    fontSize: 85,
+    verticalPosition: 53,
+    horizontalPosition: 50,
+    maxLines: 2,
+    maxWordsPerLine: 2,
+    shadowOffsetY: 0,
+    shadowBlur: 0,
+    fontFamily: "Montserrat",
+    fontWeight: "800",
+    textTransform: "none",
+    letterSpacing: 0,
+    animationPreset: "pop",
+    lightLeakHue: 240,
+    lightLeakSeed: 3,
+  },
+  caption: {
+    words: [
+      {
+        end: 0.4000000059604645,
+        word: "Hey",
+        start: 0,
+      },
+      {
+        end: 0.9599999785423279,
+        word: "uh",
+        start: 0.47999998927116394,
+      },
+      {
+        end: 1.2400000095367432,
+        word: "Spongebob",
+        start: 0.9599999785423279,
+      },
+      {
+        end: 1.5199999809265137,
+        word: "I've",
+        start: 1.2999999523162842,
+      },
+      {
+        end: 1.600000023841858,
+        word: "been",
+        start: 1.5199999809265137,
+      },
+      {
+        end: 1.8200000524520874,
+        word: "hearing",
+        start: 1.600000023841858,
+      },
+      {
+        end: 2.0399999618530273,
+        word: "all",
+        start: 1.8200000524520874,
+      },
+      {
+        end: 2.180000066757202,
+        word: "this",
+        start: 2.0399999618530273,
+      },
+      {
+        end: 2.380000114440918,
+        word: "buzz",
+        start: 2.180000066757202,
+      },
+      {
+        end: 2.700000047683716,
+        word: "about",
+        start: 2.380000114440918,
+      },
+      {
+        end: 3.0399999618530273,
+        word: "React",
+        start: 2.700000047683716,
+      },
+      {
+        end: 3.440000057220459,
+        word: "What",
+        start: 3.2200000286102295,
+      },
+      {
+        end: 3.5399999618530273,
+        word: "is",
+        start: 3.440000057220459,
+      },
+      {
+        end: 3.700000047683716,
+        word: "it",
+        start: 3.5399999618530273,
+      },
+      {
+        end: 3.859999895095825,
+        word: "some",
+        start: 3.700000047683716,
+      },
+      {
+        end: 4.099999904632568,
+        word: "new",
+        start: 3.859999895095825,
+      },
+      {
+        end: 4.320000171661377,
+        word: "dance",
+        start: 4.099999904632568,
+      },
+      {
+        end: 4.559999942779541,
+        word: "move",
+        start: 4.320000171661377,
+      },
+      {
+        end: 4.71999979019165,
+        word: "I",
+        start: 4.559999942779541,
+      },
+      {
+        end: 4.880000114440918,
+        word: "should",
+        start: 4.71999979019165,
+      },
+      {
+        end: 5.019999980926514,
+        word: "know",
+        start: 4.880000114440918,
+      },
+      {
+        end: 5.260000228881836,
+        word: "about",
+        start: 5.019999980926514,
+      },
+      {
+        end: 5.880000114440918,
+        word: "Oh",
+        start: 5.440000057220459,
+      },
+      {
+        end: 6.159999847412109,
+        word: "Peter",
+        start: 5.880000114440918,
+      },
+      {
+        end: 6.420000076293945,
+        word: "it's",
+        start: 6.199999809265137,
+      },
+      {
+        end: 6.679999828338623,
+        word: "not",
+        start: 6.420000076293945,
+      },
+      {
+        end: 7.260000228881836,
+        word: "a",
+        start: 6.679999828338623,
+      },
+      {
+        end: 7.260000228881836,
+        word: "dance",
+        start: 7.260000228881836,
+      },
+      {
+        end: 7.679999828338623,
+        word: "React",
+        start: 7.639999866485596,
+      },
+      {
+        end: 8.039999961853027,
+        word: "is",
+        start: 7.679999828338623,
+      },
+      {
+        end: 8.239999771118164,
+        word: "this",
+        start: 8.039999961853027,
+      },
+      {
+        end: 8.65999984741211,
+        word: "amazing",
+        start: 8.239999771118164,
+      },
+      {
+        end: 9.180000305175781,
+        word: "JavaScript",
+        start: 8.65999984741211,
+      },
+      {
+        end: 9.859999656677246,
+        word: "library",
+        start: 9.180000305175781,
+      },
+      {
+        end: 10.260000228881836,
+        word: "It",
+        start: 10.0600004196167,
+      },
+      {
+        end: 10.420000076293945,
+        word: "helps",
+        start: 10.260000228881836,
+      },
+      {
+        end: 10.699999809265137,
+        word: "you",
+        start: 10.420000076293945,
+      },
+      {
+        end: 10.779999732971191,
+        word: "build",
+        start: 10.699999809265137,
+      },
+      {
+        end: 11.239999771118164,
+        word: "cool",
+        start: 10.779999732971191,
+      },
+      {
+        end: 11.720000267028809,
+        word: "interactive",
+        start: 11.720000267028809,
+      },
+      {
+        end: 12.140000343322754,
+        word: "user",
+        start: 11.720000267028809,
+      },
+      {
+        end: 12.619999885559082,
+        word: "interfaces",
+        start: 12.140000343322754,
+      },
+      {
+        end: 13.180000305175781,
+        word: "perfect",
+        start: 13.0600004196167,
+      },
+      {
+        end: 13.800000190734863,
+        word: "for",
+        start: 13.180000305175781,
+      },
+      {
+        end: 13.800000190734863,
+        word: "organizing",
+        start: 13.800000190734863,
+      },
+      {
+        end: 14.399999618530273,
+        word: "your",
+        start: 13.800000190734863,
+      },
+      {
+        end: 14.399999618530273,
+        word: "thoughts",
+        start: 14.399999618530273,
+      },
+      {
+        end: 14.84000015258789,
+        word: "almost",
+        start: 14.640000343322754,
+      },
+      {
+        end: 15.239999771118164,
+        word: "like",
+        start: 14.84000015258789,
+      },
+      {
+        end: 15.300000190734863,
+        word: "putting",
+        start: 15.239999771118164,
+      },
+      {
+        end: 15.779999732971191,
+        word: "jellyfish",
+        start: 15.300000190734863,
+      },
+      {
+        end: 15.9399995803833,
+        word: "in",
+        start: 15.779999732971191,
+      },
+      {
+        end: 16.100000381469727,
+        word: "a",
+        start: 15.9399995803833,
+      },
+      {
+        end: 16.360000610351562,
+        word: "perfect",
+        start: 16.100000381469727,
+      },
+      {
+        end: 16.799999237060547,
+        word: "line",
+        start: 16.360000610351562,
+      },
+      {
+        end: 17.600000381469727,
+        word: "Ah",
+        start: 17.15999984741211,
+      },
+      {
+        end: 18.040000915527344,
+        word: "gotcha",
+        start: 17.600000381469727,
+      },
+      {
+        end: 18.3799991607666,
+        word: "So",
+        start: 18.040000915527344,
+      },
+      {
+        end: 18.700000762939453,
+        word: "it's",
+        start: 18.3799991607666,
+      },
+      {
+        end: 18.979999542236328,
+        word: "like",
+        start: 18.700000762939453,
+      },
+      {
+        end: 19.239999771118164,
+        word: "I",
+        start: 19,
+      },
+      {
+        end: 19.420000076293945,
+        word: "can",
+        start: 19.239999771118164,
+      },
+      {
+        end: 19.579999923706055,
+        word: "use",
+        start: 19.420000076293945,
+      },
+      {
+        end: 19.68000030517578,
+        word: "it",
+        start: 19.579999923706055,
+      },
+      {
+        end: 19.799999237060547,
+        word: "to",
+        start: 19.68000030517578,
+      },
+      {
+        end: 19.920000076293945,
+        word: "make",
+        start: 19.799999237060547,
+      },
+      {
+        end: 20.280000686645508,
+        word: "those",
+        start: 19.920000076293945,
+      },
+      {
+        end: 20.420000076293945,
+        word: "menus",
+        start: 20.280000686645508,
+      },
+      {
+        end: 20.6200008392334,
+        word: "at",
+        start: 20.420000076293945,
+      },
+      {
+        end: 20.799999237060547,
+        word: "the",
+        start: 20.6200008392334,
+      },
+      {
+        end: 21.040000915527344,
+        word: "drunken",
+        start: 20.799999237060547,
+      },
+      {
+        end: 21.399999618530273,
+        word: "clam",
+        start: 21.040000915527344,
+      },
+      {
+        end: 21.68000030517578,
+        word: "dance",
+        start: 21.399999618530273,
+      },
+      {
+        end: 21.959999084472656,
+        word: "across",
+        start: 21.68000030517578,
+      },
+      {
+        end: 22.200000762939453,
+        word: "the",
+        start: 21.959999084472656,
+      },
+      {
+        end: 22.299999237060547,
+        word: "screen",
+        start: 22.200000762939453,
+      },
+      {
+        end: 22.520000457763672,
+        word: "or",
+        start: 22.299999237060547,
+      },
+      {
+        end: 22.639999389648438,
+        word: "something",
+        start: 22.520000457763672,
+      },
+      {
+        end: 23.420000076293945,
+        word: "Exactly",
+        start: 22.979999542236328,
+      },
+      {
+        end: 23.84000015258789,
+        word: "You",
+        start: 23.579999923706055,
+      },
+      {
+        end: 24,
+        word: "can",
+        start: 23.84000015258789,
+      },
+      {
+        end: 24.15999984741211,
+        word: "make",
+        start: 24,
+      },
+      {
+        end: 24.559999465942383,
+        word: "your",
+        start: 24.15999984741211,
+      },
+      {
+        end: 24.559999465942383,
+        word: "menus",
+        start: 24.559999465942383,
+      },
+      {
+        end: 24.959999084472656,
+        word: "appear",
+        start: 24.559999465942383,
+      },
+      {
+        end: 25.559999465942383,
+        word: "disappear",
+        start: 25.559999465942383,
+      },
+      {
+        end: 25.760000228881836,
+        word: "and",
+        start: 25.559999465942383,
+      },
+      {
+        end: 25.920000076293945,
+        word: "even",
+        start: 25.760000228881836,
+      },
+      {
+        end: 26.139999389648438,
+        word: "do",
+        start: 25.920000076293945,
+      },
+      {
+        end: 26.540000915527344,
+        word: "backflips",
+        start: 26.139999389648438,
+      },
+      {
+        end: 26.739999771118164,
+        word: "if",
+        start: 26.540000915527344,
+      },
+      {
+        end: 26.899999618530273,
+        word: "you",
+        start: 26.739999771118164,
+      },
+      {
+        end: 27.200000762939453,
+        word: "want",
+        start: 26.899999618530273,
+      },
+      {
+        end: 27.639999389648438,
+        word: "It's",
+        start: 27.200000762939453,
+      },
+      {
+        end: 27.84000015258789,
+        word: "all",
+        start: 27.639999389648438,
+      },
+      {
+        end: 28.079999923706055,
+        word: "about",
+        start: 27.84000015258789,
+      },
+      {
+        end: 28.399999618530273,
+        word: "rendering",
+        start: 28.079999923706055,
+      },
+      {
+        end: 28.940000534057617,
+        word: "efficiently",
+        start: 28.399999618530273,
+      },
+      {
+        end: 29.18000030517578,
+        word: "and",
+        start: 28.940000534057617,
+      },
+      {
+        end: 29.440000534057617,
+        word: "keeping",
+        start: 29.18000030517578,
+      },
+      {
+        end: 29.739999771118164,
+        word: "things",
+        start: 29.440000534057617,
+      },
+      {
+        end: 30.219999313354492,
+        word: "fresh",
+        start: 29.739999771118164,
+      },
+      {
+        end: 30.899999618530273,
+        word: "Wow",
+        start: 30.8799991607666,
+      },
+      {
+        end: 31.5,
+        word: "I've",
+        start: 31.260000228881836,
+      },
+      {
+        end: 31.6200008392334,
+        word: "been",
+        start: 31.5,
+      },
+      {
+        end: 31.979999542236328,
+        word: "rendering",
+        start: 31.6200008392334,
+      },
+      {
+        end: 32.47999954223633,
+        word: "efficiently",
+        start: 31.979999542236328,
+      },
+      {
+        end: 32.70000076293945,
+        word: "by",
+        start: 32.47999954223633,
+      },
+      {
+        end: 33.060001373291016,
+        word: "just",
+        start: 32.70000076293945,
+      },
+      {
+        end: 33.18000030517578,
+        word: "finding",
+        start: 33.060001373291016,
+      },
+      {
+        end: 33.380001068115234,
+        word: "the",
+        start: 33.18000030517578,
+      },
+      {
+        end: 33.58000183105469,
+        word: "remote",
+        start: 33.380001068115234,
+      },
+      {
+        end: 34.099998474121094,
+        word: "faster",
+        start: 33.58000183105469,
+      },
+      {
+        end: 34.29999923706055,
+        word: "but",
+        start: 34.2400016784668,
+      },
+      {
+        end: 34.52000045776367,
+        word: "this",
+        start: 34.29999923706055,
+      },
+      {
+        end: 34.70000076293945,
+        word: "sounds",
+        start: 34.52000045776367,
+      },
+      {
+        end: 35,
+        word: "more",
+        start: 34.70000076293945,
+      },
+      {
+        end: 35.279998779296875,
+        word: "impressive",
+        start: 35,
+      },
+      {
+        end: 35.58000183105469,
+        word: "Does",
+        start: 35.560001373291016,
+      },
+      {
+        end: 35.779998779296875,
+        word: "it",
+        start: 35.58000183105469,
+      },
+      {
+        end: 35.900001525878906,
+        word: "help",
+        start: 35.779998779296875,
+      },
+      {
+        end: 36.119998931884766,
+        word: "with",
+        start: 35.900001525878906,
+      },
+      {
+        end: 36.41999816894531,
+        word: "uh",
+        start: 36.119998931884766,
+      },
+      {
+        end: 36.70000076293945,
+        word: "say",
+        start: 36.41999816894531,
+      },
+      {
+        end: 36.779998779296875,
+        word: "keeping",
+        start: 36.70000076293945,
+      },
+      {
+        end: 37.099998474121094,
+        word: "track",
+        start: 36.779998779296875,
+      },
+      {
+        end: 37.29999923706055,
+        word: "of",
+        start: 37.099998474121094,
+      },
+      {
+        end: 37.619998931884766,
+        word: "TV",
+        start: 37.29999923706055,
+      },
+      {
+        end: 37.84000015258789,
+        word: "shows",
+        start: 37.619998931884766,
+      },
+      {
+        end: 38.34000015258789,
+        word: "I've",
+        start: 37.84000015258789,
+      },
+      {
+        end: 38.58000183105469,
+        word: "binged",
+        start: 38.34000015258789,
+      },
+      {
+        end: 39.2599983215332,
+        word: "Totally",
+        start: 38.779998779296875,
+      },
+      {
+        end: 39.779998779296875,
+        word: "You",
+        start: 39.65999984741211,
+      },
+      {
+        end: 40,
+        word: "could",
+        start: 39.779998779296875,
+      },
+      {
+        end: 40.2599983215332,
+        word: "create",
+        start: 40,
+      },
+      {
+        end: 40.7400016784668,
+        word: "a",
+        start: 40.2599983215332,
+      },
+      {
+        end: 40.7400016784668,
+        word: "nifty",
+        start: 40.7400016784668,
+      },
+      {
+        end: 41.2599983215332,
+        word: "tracker",
+        start: 40.7400016784668,
+      },
+      {
+        end: 41.779998779296875,
+        word: "Each",
+        start: 41.68000030517578,
+      },
+      {
+        end: 42,
+        word: "time",
+        start: 41.779998779296875,
+      },
+      {
+        end: 42.18000030517578,
+        word: "you",
+        start: 42,
+      },
+      {
+        end: 42.47999954223633,
+        word: "watch",
+        start: 42.18000030517578,
+      },
+      {
+        end: 42.68000030517578,
+        word: "React",
+        start: 42.63999938964844,
+      },
+      {
+        end: 42.97999954223633,
+        word: "can",
+        start: 42.68000030517578,
+      },
+      {
+        end: 43.220001220703125,
+        word: "update",
+        start: 42.97999954223633,
+      },
+      {
+        end: 43.68000030517578,
+        word: "your",
+        start: 43.220001220703125,
+      },
+      {
+        end: 43.68000030517578,
+        word: "list",
+        start: 43.68000030517578,
+      },
+      {
+        end: 44.119998931884766,
+        word: "instantly",
+        start: 43.68000030517578,
+      },
+      {
+        end: 44.47999954223633,
+        word: "without",
+        start: 44.119998931884766,
+      },
+      {
+        end: 44.91999816894531,
+        word: "reloading",
+        start: 44.47999954223633,
+      },
+      {
+        end: 45.040000915527344,
+        word: "the",
+        start: 44.91999816894531,
+      },
+      {
+        end: 45.279998779296875,
+        word: "whole",
+        start: 45.040000915527344,
+      },
+      {
+        end: 45.560001373291016,
+        word: "page",
+        start: 45.279998779296875,
+      },
+      {
+        end: 46.08000183105469,
+        word: "It's",
+        start: 45.779998779296875,
+      },
+      {
+        end: 46.459999084472656,
+        word: "magic",
+        start: 46.08000183105469,
+      },
+      {
+        end: 46.91999816894531,
+        word: "really",
+        start: 46.540000915527344,
+      },
+      {
+        end: 47.68000030517578,
+        word: "Geez",
+        start: 47.2400016784668,
+      },
+      {
+        end: 47.900001525878906,
+        word: "with",
+        start: 47.70000076293945,
+      },
+      {
+        end: 48.20000076293945,
+        word: "all",
+        start: 47.900001525878906,
+      },
+      {
+        end: 48.41999816894531,
+        word: "these",
+        start: 48.20000076293945,
+      },
+      {
+        end: 48.779998779296875,
+        word: "options",
+        start: 48.41999816894531,
+      },
+      {
+        end: 49.060001373291016,
+        word: "I",
+        start: 48.81999969482422,
+      },
+      {
+        end: 49.220001220703125,
+        word: "might",
+        start: 49.060001373291016,
+      },
+      {
+        end: 49.41999816894531,
+        word: "become",
+        start: 49.220001220703125,
+      },
+      {
+        end: 49.7599983215332,
+        word: "a",
+        start: 49.41999816894531,
+      },
+      {
+        end: 49.84000015258789,
+        word: "tech",
+        start: 49.7599983215332,
+      },
+      {
+        end: 50.02000045776367,
+        word: "wizard",
+        start: 49.84000015258789,
+      },
+      {
+        end: 50.20000076293945,
+        word: "in",
+        start: 50.02000045776367,
+      },
+      {
+        end: 50.36000061035156,
+        word: "my",
+        start: 50.20000076293945,
+      },
+      {
+        end: 50.540000915527344,
+        word: "own",
+        start: 50.36000061035156,
+      },
+      {
+        end: 50.84000015258789,
+        word: "right",
+        start: 50.540000915527344,
+      },
+      {
+        end: 51.20000076293945,
+        word: "Can",
+        start: 51.08000183105469,
+      },
+      {
+        end: 51.47999954223633,
+        word: "I",
+        start: 51.20000076293945,
+      },
+      {
+        end: 51.52000045776367,
+        word: "build",
+        start: 51.47999954223633,
+      },
+      {
+        end: 52.08000183105469,
+        word: "a",
+        start: 51.52000045776367,
+      },
+      {
+        end: 52.08000183105469,
+        word: "virtual",
+        start: 52.08000183105469,
+      },
+      {
+        end: 52.52000045776367,
+        word: "Quahog",
+        start: 52.08000183105469,
+      },
+      {
+        end: 52.7599983215332,
+        word: "with",
+        start: 52.52000045776367,
+      },
+      {
+        end: 52.900001525878906,
+        word: "it",
+        start: 52.7599983215332,
+      },
+      {
+        end: 53.68000030517578,
+        word: "Ha",
+        start: 53.20000076293945,
+      },
+      {
+        end: 53.68000030517578,
+        word: "ha",
+        start: 53.68000030517578,
+      },
+      {
+        end: 54.02000045776367,
+        word: "you",
+        start: 53.68000030517578,
+      },
+      {
+        end: 54.279998779296875,
+        word: "sure",
+        start: 54.02000045776367,
+      },
+      {
+        end: 54.79999923706055,
+        word: "can",
+        start: 54.279998779296875,
+      },
+      {
+        end: 55.29999923706055,
+        word: "Add",
+        start: 55.02000045776367,
+      },
+      {
+        end: 55.52000045776367,
+        word: "a",
+        start: 55.29999923706055,
+      },
+      {
+        end: 55.560001373291016,
+        word: "few",
+        start: 55.52000045776367,
+      },
+      {
+        end: 55.900001525878906,
+        word: "more",
+        start: 55.560001373291016,
+      },
+      {
+        end: 55.97999954223633,
+        word: "tools",
+        start: 55.900001525878906,
+      },
+      {
+        end: 56.279998779296875,
+        word: "with",
+        start: 55.97999954223633,
+      },
+      {
+        end: 56.58000183105469,
+        word: "React",
+        start: 56.279998779296875,
+      },
+      {
+        end: 56.79999923706055,
+        word: "and",
+        start: 56.58000183105469,
+      },
+      {
+        end: 57.15999984741211,
+        word: "you've",
+        start: 56.79999923706055,
+      },
+      {
+        end: 57.29999923706055,
+        word: "got",
+        start: 57.15999984741211,
+      },
+      {
+        end: 57.68000030517578,
+        word: "yourself",
+        start: 57.29999923706055,
+      },
+      {
+        end: 57.91999816894531,
+        word: "a",
+        start: 57.68000030517578,
+      },
+      {
+        end: 58.36000061035156,
+        word: "bustling",
+        start: 57.91999816894531,
+      },
+      {
+        end: 58.68000030517578,
+        word: "digital",
+        start: 58.36000061035156,
+      },
+      {
+        end: 59.279998779296875,
+        word: "metropolis",
+        start: 58.68000030517578,
+      },
+      {
+        end: 59.720001220703125,
+        word: "The",
+        start: 59.65999984741211,
+      },
+      {
+        end: 60.31999969482422,
+        word: "possibilities",
+        start: 59.720001220703125,
+      },
+      {
+        end: 60.58000183105469,
+        word: "are",
+        start: 60.31999969482422,
+      },
+      {
+        end: 60.79999923706055,
+        word: "as",
+        start: 60.58000183105469,
+      },
+      {
+        end: 61.119998931884766,
+        word: "endless",
+        start: 60.79999923706055,
+      },
+      {
+        end: 61.29999923706055,
+        word: "as",
+        start: 61.119998931884766,
+      },
+      {
+        end: 61.47999954223633,
+        word: "a",
+        start: 61.29999923706055,
+      },
+      {
+        end: 61.81999969482422,
+        word: "Krabby",
+        start: 61.47999954223633,
+      },
+      {
+        end: 62.279998779296875,
+        word: "Patty's",
+        start: 61.81999969482422,
+      },
+      {
+        end: 62.560001373291016,
+        word: "flavor",
+        start: 62.279998779296875,
+      },
+      {
+        end: 63.099998474121094,
+        word: "combinations",
+        start: 62.560001373291016,
+      },
+    ],
+    duration: 63.099998474121094,
+  },
+  speaker1AvatarUrl:
+    "https://shortsvid-dev.dd25622537be75e48de1c853bb4087c1.r2.cloudflarestorage.com/stock/avatar/system/cmo00at0p000iaol9i2vrztfo?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=efb97de48b7849b936f38e8a5a31241a%2F20260417%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20260417T184624Z&X-Amz-Expires=3600&X-Amz-Signature=340ef0eddd5f923950f72edf2fd6a3b33dfe5663034fd358335d16ab10b1c2e1&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+  speaker2AvatarUrl:
+    "https://shortsvid-dev.dd25622537be75e48de1c853bb4087c1.r2.cloudflarestorage.com/stock/avatar/system/cmo00au65000jaol9vv6f8ckz?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=efb97de48b7849b936f38e8a5a31241a%2F20260417%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20260417T184624Z&X-Amz-Expires=3600&X-Amz-Signature=4cfc9c5f19833497943b71e4d0fe16e4d9ab97847eeb38eede54a0d64d1ff2cd&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+  audioUrl:
+    "https://shortsvid-dev.dd25622537be75e48de1c853bb4087c1.r2.cloudflarestorage.com/shorts/cmo2ywxby000204l9d5gioggz/audio/voiceover.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=efb97de48b7849b936f38e8a5a31241a%2F20260417%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20260417T184624Z&X-Amz-Expires=3600&X-Amz-Signature=64301e45ad34ef9f639e0d57bcb8810b03c500832769c67f491c55b80a06e445&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+  backgroundVideoUrl:
+    "https://shortsvid-dev.dd25622537be75e48de1c853bb4087c1.r2.cloudflarestorage.com/stock/video/system/cmnz9ds7b0009eol9r5j3v062?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=efb97de48b7849b936f38e8a5a31241a%2F20260417%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20260417T184624Z&X-Amz-Expires=3600&X-Amz-Signature=b7bc6ceca73831dad48db45883542ba83233774021b63e72e7441b9c685a118b&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+  backgroundMusicUrl: null,
+};
+
+// ─── Root ─────────────────────────────────────────────────────────────────────
+
 export const RemotionRoot: React.FC = () => {
   return (
-    <Composition
-      id="renderVideo"
-      component={RemotionComposition}
-      durationInFrames={1680} // placeholder only
-      fps={30}
-      width={1080}
-      height={1920}
-      defaultProps={{
-        // @ts-ignore
-        videoData: videoData, // no durationInFrames here anymore
-      }}
-      calculateMetadata={calculateMetadata}
-    />
+    <>
+      {/* ── Faceless AI-image shorts ── */}
+      <Composition
+        id="renderVideo"
+        component={RemotionComposition}
+        durationInFrames={1800} // placeholder — overridden by calculateMetadata
+        fps={30}
+        width={1080}
+        height={1920}
+        defaultProps={{
+          // @ts-ignore
+          videoData: videoData,
+        }}
+        calculateMetadata={calculateFacelessMetadata}
+      />
+
+      {/* ── Dual-speaker conversation videos ── */}
+      <Composition
+        id="renderConversationVideo"
+        component={ConversationVideoComposition}
+        durationInFrames={1800} // placeholder — overridden by calculateMetadata
+        fps={30}
+        width={1080}
+        height={1920}
+        defaultProps={{
+          videoData: conversationVideoData,
+        }}
+        calculateMetadata={calculateConversationMetadata}
+      />
+    </>
   );
 };

@@ -760,6 +760,14 @@ export const videoRouter = createTRPCRouter({
           )
         : null;
 
+      // Background video
+      const backgroundVideoUrl =
+        conversationVideo.backgroundVideo.r2ObjectKey
+          ? await getSignedObjectUrl(
+              conversationVideo.backgroundVideo.r2ObjectKey,
+            )
+          : null;
+
       return {
         id: conversationVideo.id,
         status: conversationVideo.status,
@@ -778,6 +786,7 @@ export const videoRouter = createTRPCRouter({
         speaker2AvatarUrl,
         audioUrl,
         videoUrl,
+        backgroundVideoUrl,
         backgroundMusicUrl,
         createdAt: conversationVideo.createdAt,
         updatedAt: conversationVideo.updatedAt,

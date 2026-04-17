@@ -24,6 +24,7 @@
     "@remotion/fonts": "^4.0.435",
     "@remotion/google-fonts": "^4.0.435",
     "@remotion/light-leaks": "4.0.435",
+    "@remotion/media": "^4.0.435",
     "@remotion/player": "^4.0.435",
     "@remotion/transitions": "4.0.435",
     "@sentry/nextjs": "^10.46.0",
