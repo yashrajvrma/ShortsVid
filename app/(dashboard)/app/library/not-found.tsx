@@ -106,7 +106,7 @@ export default function VideoNotFound() {
             size="sm"
             className="gap-1.5 text-muted-foreground"
           >
-            <Link href="/app/videos">
+            <Link href="/app/library">
               <Search className="h-3.5 w-3.5" />
               Browse all your videos
             </Link>

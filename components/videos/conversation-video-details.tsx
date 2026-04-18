@@ -18,14 +18,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import RemotionPlayer from "@/components/remotion/remotion-player";
-
+import ConversationRemotionPlayer from "@/components/remotion/conversation-remotion-player";
 
 import {
   Download,
   Languages,
-  Mic,
-  Music,
   Clock,
   Loader2,
   Upload,
@@ -37,7 +34,7 @@ import {
   CalendarDays,
 } from "lucide-react";
 
-import type { VideoDetail, VideoStatus } from "@/types";
+import type { VideoStatus, ConversationVideo } from "@/types";
 import Header from "../header";
 
 // ── helpers ──────────────────────────────────────────────────────────────────
@@ -97,7 +94,7 @@ function formatCreatedAt(date: Date | string): string {
 
 // ── component ────────────────────────────────────────────────────────────────
 
-export default function VideoDetailClient({
+export default function ConversationVideoDetailClient({
   videoDetail,
 }: {
   videoDetail: any;
@@ -114,10 +111,8 @@ export default function VideoDetailClient({
   const isSuccess = status === "SUCCESS";
   const isReady = status === "READY";
 
-  // Copy & Share are only enabled when downloadUrl is available
   const hasDownloadUrl = !!downloadUrl;
 
-  // ── polling: only when RENDERING ─────────────────────────────────────────
   const { data: polledData } = useQuery(
     trpc.videos.getVideoStatus.queryOptions(
       { videoId: videoDetail.id },
@@ -145,7 +140,6 @@ export default function VideoDetailClient({
     }
   }, [polledData]);
 
-  // ── export mutation ───────────────────────────────────────────────────────
   const exportMutation = useMutation(
     trpc.videos.exportVideo.mutationOptions({
       onSuccess: (data) => {
@@ -171,16 +165,6 @@ export default function VideoDetailClient({
     exportMutation.mutate({ videoId: videoDetail.id });
   }, [exportMutation, videoDetail.id]);
 
-  // ── download ──────────────────────────────────────────────────────────────
-  // const handleDownload = useCallback(() => {
-  //   if (!downloadUrl) return;
-  //   const a = document.createElement("a");
-  //   a.href = downloadUrl;
-  //   a.download = `shorts-${videoDetail.id}.mp4`;
-  //   document.body.appendChild(a);
-  //   a.click();
-  //   document.body.removeChild(a);
-  // }, [downloadUrl, videoDetail.id]);
   const handleDownload = useCallback(async () => {
     if (!downloadUrl) return;
     try {
@@ -195,7 +179,6 @@ export default function VideoDetailClient({
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      // Release the object URL after a short delay
       setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
       toast.success("Download started!", { id: "download" });
     } catch (err) {
@@ -204,14 +187,12 @@ export default function VideoDetailClient({
     }
   }, [downloadUrl, videoDetail.id]);
 
-  // ── copy video download URL ───────────────────────────────────────────────
   const handleCopy = useCallback(() => {
     if (!downloadUrl) return;
     navigator.clipboard.writeText(downloadUrl);
     toast.success("Video download link copied!");
   }, [downloadUrl]);
 
-  // ── share video download URL ──────────────────────────────────────────────
   const handleShare = useCallback(async () => {
     if (!downloadUrl) return;
     if (navigator.share) {
@@ -231,7 +212,6 @@ export default function VideoDetailClient({
     <TooltipProvider>
       <div className="min-h-screen bg-background w-full">
         <div className="container pb-4">
-          {/* ── top nav bar ── */}
           <Header>
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -295,28 +275,19 @@ export default function VideoDetailClient({
 
           <Separator className="mb-6" />
 
-          {/* ── 2-col layout ── */}
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_320px] w-full">
-            {/* ── LEFT: content ── */}
             <motion.div
               initial={{ opacity: 0, x: -12 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.35, delay: 0.05 }}
               className="flex flex-col gap-5"
             >
-              {/* Topic · Style · Status badges */}
               <div className="flex flex-wrap items-center gap-2">
                 <Badge
                   variant="outline"
                   className="text-sm px-2 py-3 rounded-sm font-semibold uppercase tracking-tight"
                 >
                   {videoDetail.script.topic}
-                </Badge>
-                <Badge
-                  variant="outline"
-                  className="text-sm px-2 py-3 rounded-sm font-semibold uppercase tracking-tight"
-                >
-                  {videoDetail.videoStyle}
                 </Badge>
                 <Badge
                   variant={statusCfg.variant}
@@ -327,7 +298,6 @@ export default function VideoDetailClient({
                 </Badge>
               </div>
 
-              {/* Prompt — large heading */}
               {videoDetail.script.prompt ? (
                 <h1 className="text-4xl font-semibold leading-snug tracking-tight">
                   {videoDetail.script.prompt}
@@ -338,7 +308,6 @@ export default function VideoDetailClient({
                 </h1>
               )}
 
-              {/* Created at */}
               {videoDetail.createdAt && (
                 <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                   <CalendarDays className="size-5" />
@@ -346,16 +315,23 @@ export default function VideoDetailClient({
                 </div>
               )}
 
-              {/* Script body */}
               {videoDetail.script.content.length > 0 && (
                 <ScrollArea className="h-50">
-                  <p className="text-lg leading-relaxed text-muted-foreground">
-                    {videoDetail.script.content.join(" ")}
-                  </p>
+                  <div className="flex flex-col gap-4">
+                    {videoDetail.script.content.map((line: string, index: number) => (
+                      <div key={index} className="flex flex-col p-4 bg-muted/30 rounded-xl border">
+                         <span className="text-xs font-semibold text-muted-foreground mb-1">
+                           Speaker {index % 2 === 0 ? "1" : "2"}
+                         </span>
+                         <p className="text-lg leading-relaxed text-foreground">
+                           {line}
+                         </p>
+                      </div>
+                    ))}
+                  </div>
                 </ScrollArea>
               )}
 
-              {/* ── Info items — individual auto-width cards ── */}
               <div className="mt-2 flex flex-wrap gap-3">
                 <InfoCard>
                   <InfoItem
@@ -374,31 +350,9 @@ export default function VideoDetailClient({
                     />
                   </InfoCard>
                 )}
-
-                {videoDetail.voice && (
-                  <InfoCard>
-                    <InfoItem
-                      icon={<Mic className="size-4" />}
-                      label="Voice"
-                      value={videoDetail.voice.name}
-                    />
-                  </InfoCard>
-                )}
-
-                {/* {videoDetail.audioUrl && (
-                  <InfoCard highlight>
-                    <InfoItem
-                      icon={<Music className="size-4" />}
-                      label="Audio"
-                      value="Ready"
-                      highlight
-                    />
-                  </InfoCard>
-                )} */}
               </div>
             </motion.div>
 
-            {/* ── RIGHT: player ── */}
             <motion.div
               initial={{ opacity: 0, x: 12 }}
               animate={{ opacity: 1, x: 0 }}
@@ -410,20 +364,22 @@ export default function VideoDetailClient({
               </p>
 
               <div className="">
-                <RemotionPlayer
+                <ConversationRemotionPlayer
                   videoData={{
                     id: videoDetail.id,
                     duration: videoDetail.duration!,
                     caption: videoDetail.caption,
                     captionConfig: videoDetail.captionConfig,
-                    imagesUrl: videoDetail.imagesUrl,
+                    speaker1AvatarUrl: videoDetail.speaker1AvatarUrl,
+                    speaker2AvatarUrl: videoDetail.speaker2AvatarUrl,
                     audioUrl: videoDetail.audioUrl,
+                    backgroundVideoUrl: videoDetail.backgroundVideoUrl,
                     backgroundMusicUrl: videoDetail.backgroundMusicUrl,
+                    script: videoDetail.script,
                   }}
                 />
               </div>
 
-              {/* Export / Download */}
               <div className="mt-1">
                 {isReady && (
                   <Button
@@ -493,8 +449,9 @@ function InfoItem({
         {label}
       </span>
       <span
-        className={`flex items-center gap-2 text-sm font-semibold ${highlight ? "text-primary" : "text-foreground"
-          }`}
+        className={`flex items-center gap-2 text-sm font-semibold ${
+          highlight ? "text-primary" : "text-foreground"
+        }`}
       >
         {value}
       </span>

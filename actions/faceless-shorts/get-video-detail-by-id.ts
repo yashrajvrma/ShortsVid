@@ -4,7 +4,7 @@ import { prisma } from "@/db";
 import { getSignedObjectUrl } from "@/lib/r2-bucket";
 import { redirect } from "next/navigation";
 
-export async function getVideoDetailsById({
+export async function getVideoDetailById({
   videoId,
   userId,
 }: {
@@ -22,7 +22,7 @@ export async function getVideoDetailsById({
   });
 
   if (!video || video.status === "GENERATING") {
-    redirect("/app/videos");
+    redirect("/app/library");
   }
 
   // ── Generate signed URLs for all R2 assets
@@ -53,6 +53,7 @@ export async function getVideoDetailsById({
 
   return {
     id: video.id,
+    type: "faceless-shorts",
     status: video.status,
     videoStyle: video.videoStyle,
     duration: video.duration,
@@ -65,11 +66,11 @@ export async function getVideoDetailsById({
     },
     voice: video.voice
       ? {
-          id: video.voice.id,
-          name: video.voice.name,
-          gender: video.voice.gender,
-          languageCode: video.voice.languageCode,
-        }
+        id: video.voice.id,
+        name: video.voice.name,
+        gender: video.voice.gender,
+        languageCode: video.voice.languageCode,
+      }
       : null,
     // Signed asset URLs — ready for Remotion
     captionConfig: video.captionConfig,

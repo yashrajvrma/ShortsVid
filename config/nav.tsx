@@ -19,7 +19,7 @@ export const navProjects: NavItem[] = [
   },
   {
     name: "Library",
-    url: "/app/videos",
+    url: "/app/library",
     icon: <Play />,
   },
 ];

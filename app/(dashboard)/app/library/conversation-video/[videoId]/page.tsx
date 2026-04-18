@@ -5,9 +5,9 @@ import { HydrateClient } from "@/trpc/server";
 import { ErrorBoundary } from "react-error-boundary";
 import { Suspense } from "react";
 
-import VideoDetailClient from "@/components/videos/video-details";
-import { getVideoDetailsById } from "@/actions/faceless-shorts/get-video-detail-by-id";
+import { getConversationVideoDetailById } from "@/actions/conversation-videos/get-video-detail-by-id";
 import { Loader2 } from "lucide-react";
+import ConversationVideoDetailClient from "@/components/videos/conversation-video-details";
 
 interface VideoDetailPageProps {
   params: Promise<{ videoId: string }>;
@@ -23,7 +23,7 @@ export default async function VideoDetailPage({
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) redirect("/login");
 
-  const video = await getVideoDetailsById({
+  const video = await getConversationVideoDetailById({
     videoId,
     userId: session.user.id,
   });
@@ -38,7 +38,7 @@ export default async function VideoDetailPage({
             </div>
           }
         >
-          <VideoDetailClient videoDetail={video} />
+          <ConversationVideoDetailClient videoDetail={video} />
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>

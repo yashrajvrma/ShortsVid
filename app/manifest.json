@@ -33,7 +33,7 @@
     {
       "name": "My Videos",
       "short_name": "Videos",
-      "url": "/app/videos",
+      "url": "/app/library",
       "description": "View all your generated short videos"
     }
   ]

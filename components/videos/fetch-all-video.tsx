@@ -51,8 +51,10 @@ export default function VideoCard({
     }),
   );
 
+  const videoType = videoData.videoStyle ? "faceless-shorts" : "conversation-video";
+
   const handleCardClick = () => {
-    router.push(`/app/videos/${videoData.id}`);
+    router.push(`/app/library/${videoType}/${videoData.id}`);
   };
 
   const handleDelete = (e: React.MouseEvent) => {
@@ -62,7 +64,7 @@ export default function VideoCard({
 
   const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    const url = `${window.location.origin}/app/videos/${videoData.id}`;
+    const url = `${window.location.origin}/app/library/${videoType}/${videoData.id}`;
     if (navigator.share) {
       await navigator.share({
         title: videoData.script?.prompt ?? "ShortsVid",
@@ -147,7 +149,7 @@ export default function VideoCard({
             <DropdownMenuItem
               onClick={(e) => {
                 e.stopPropagation();
-                router.push(`/app/videos/${videoData.id}`);
+                router.push(`/app/library/${videoType}/${videoData.id}`);
               }}
               className="gap-2 cursor-pointer"
             >
