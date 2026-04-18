@@ -651,6 +651,7 @@ function VideoThumbnailCard({
   isActive: boolean;
   onClick: () => void;
 }) {
+  console.log("video is", JSON.stringify(video));
   return (
     <div
       onClick={onClick}
@@ -658,17 +659,13 @@ function VideoThumbnailCard({
     >
       {/* Thumbnail */}
       <div className="relative aspect-[9/16] w-full bg-muted rounded-[16px] overflow-hidden">
-        {video.thumbnailUrl ? (
-          <img
-            src={video.thumbnailUrl}
+        {video.signedThumbnailUrl ? (
+          <Image
+            src={video.signedThumbnailUrl}
             alt={video.script?.prompt ?? "Video"}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          />
-        ) : video.imagesUrl?.[0] ? (
-          <img
-            src={video.imagesUrl[0]}
-            alt={video.script?.prompt ?? "Video"}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 aspect-9/16"
+            width={100}
+            height={100}
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-muted">
