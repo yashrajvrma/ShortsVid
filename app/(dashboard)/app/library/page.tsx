@@ -16,7 +16,13 @@ export default async function Videos() {
 
   return (
     <HydrateClient>
-      <ErrorBoundary fallback={<div>Something went wrong</div>}>
+      <ErrorBoundary
+        fallback={
+          <div className="flex items-center min-h-screen justify-center text-base my-5">
+            Something went wrong
+          </div>
+        }
+      >
         <Suspense fallback={<div>Loading...</div>}>
           <AllVideos />
         </Suspense>

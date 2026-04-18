@@ -49,16 +49,16 @@ export default function AllVideos() {
                 setActiveTab(val as "facelessShorts" | "conversationVideo")
               }
             >
-              <TabsList className="bg-transparent border border-border w-full rounded-lg min-h-12 gap-2">
+              <TabsList className="bg-transparent border border-border w-full rounded-lg min-h-12 gap-1">
                 <TabsTrigger
                   value="facelessShorts"
-                  className="rounded-md px-4 py-2 data-[state=active]:bg-foreground data-[state=active]:text-primary-foreground transition-all text-base"
+                  className="rounded-md px-4 py-1.5 data-[state=active]:bg-foreground data-[state=active]:text-primary-foreground transition-all text-base"
                 >
                   Faceless Shorts
                 </TabsTrigger>
                 <TabsTrigger
                   value="conversationVideo"
-                  className="rounded-md px-4 py-2 data-[state=active]:bg-foreground data-[state=active]:text-primary-foreground transition-all text-base"
+                  className="rounded-md px-4 py-1.5 data-[state=active]:bg-foreground data-[state=active]:text-primary-foreground transition-all text-base"
                 >
                   Conversation Videos
                 </TabsTrigger>
@@ -68,7 +68,7 @@ export default function AllVideos() {
         </Header>
 
         <div className="mt-4 outline-none">
-          <div className="flex flex-wrap items-center gap-4 sm:gap-6 pb-20">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 pb-20">
             {activeTab === "facelessShorts" &&
               (isLoadingShorts ? (
                 <div className="flex items-center w-full justify-center py-5">

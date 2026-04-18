@@ -51,7 +51,9 @@ export default function VideoCard({
     }),
   );
 
-  const videoType = videoData.videoStyle ? "faceless-shorts" : "conversation-video";
+  const videoType = videoData.videoStyle
+    ? "faceless-shorts"
+    : "conversation-video";
 
   const handleCardClick = () => {
     router.push(`/app/library/${videoType}/${videoData.id}`);
