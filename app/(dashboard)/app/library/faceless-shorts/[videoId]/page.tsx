@@ -7,7 +7,6 @@ import { Suspense } from "react";
 
 import VideoDetailClient from "@/components/videos/video-details";
 import { getVideoDetailById } from "@/actions/faceless-shorts/get-video-detail-by-id";
-import { getConversationVideoDetailById } from "@/actions/conversation-videos/get-video-detail-by-id";
 import { Loader2 } from "lucide-react";
 
 interface VideoDetailPageProps {
