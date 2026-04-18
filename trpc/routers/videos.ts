@@ -571,11 +571,11 @@ export const videoRouter = createTRPCRouter({
           },
           voice: video.voice
             ? {
-                id: video.voice.id,
-                name: video.voice.name,
-                gender: video.voice.gender,
-                languageCode: video.voice.languageCode,
-              }
+              id: video.voice.id,
+              name: video.voice.name,
+              gender: video.voice.gender,
+              languageCode: video.voice.languageCode,
+            }
             : null,
           // No asset URLs yet
           imagesUrl: [] as string[],
@@ -630,11 +630,11 @@ export const videoRouter = createTRPCRouter({
         },
         voice: video.voice
           ? {
-              id: video.voice.id,
-              name: video.voice.name,
-              gender: video.voice.gender,
-              languageCode: video.voice.languageCode,
-            }
+            id: video.voice.id,
+            name: video.voice.name,
+            gender: video.voice.gender,
+            languageCode: video.voice.languageCode,
+          }
           : null,
         // Signed asset URLs — ready for Remotion
         captionConfig: video.captionConfig,
@@ -756,16 +756,16 @@ export const videoRouter = createTRPCRouter({
       // Background music
       const backgroundMusicUrl = conversationVideo.backgroundMusic?.r2ObjectKey
         ? await getSignedObjectUrl(
-            conversationVideo.backgroundMusic.r2ObjectKey,
-          )
+          conversationVideo.backgroundMusic.r2ObjectKey,
+        )
         : null;
 
       // Background video
       const backgroundVideoUrl =
         conversationVideo.backgroundVideo.r2ObjectKey
           ? await getSignedObjectUrl(
-              conversationVideo.backgroundVideo.r2ObjectKey,
-            )
+            conversationVideo.backgroundVideo.r2ObjectKey,
+          )
           : null;
 
       return {

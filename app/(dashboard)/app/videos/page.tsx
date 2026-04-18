@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 
 export default async function Videos() {
   prefetch(trpc.videos.getAllShorts.queryOptions());
+  prefetch(trpc.videos.getAllConversationVideos.queryOptions());
 
   return (
     <HydrateClient>

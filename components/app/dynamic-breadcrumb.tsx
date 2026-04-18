@@ -19,7 +19,7 @@ export function DynamicBreadcrumb() {
   return (
     <div className="flex items-center text-base text-muted-foreground">
       {/* <span className="text-foreground/40">·</span> */}
-      <BreadcrumbPage className="font-medium text-foreground">
+      <BreadcrumbPage className="font-normal text-foreground">
         {label}
       </BreadcrumbPage>
     </div>

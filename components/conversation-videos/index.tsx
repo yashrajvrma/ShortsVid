@@ -45,7 +45,8 @@ export default function ConversationVideos() {
   const form = useConversationForm();
   const [showConfirm, setShowConfirm] = useState(false);
 
-  const mutationOptions = trpc.videos.generateConversationVideo.mutationOptions();
+  const mutationOptions =
+    trpc.videos.generateConversationVideo.mutationOptions();
 
   const generateVideoMutation = useMutation({
     ...mutationOptions,
@@ -55,7 +56,9 @@ export default function ConversationVideos() {
       router.push("/app/videos");
     },
     onError: (error: TRPCClientErrorLike<AppRouter>) => {
-      toast.error(error.message || "Failed to start conversation video generation");
+      toast.error(
+        error.message || "Failed to start conversation video generation",
+      );
     },
   });
 
@@ -96,13 +99,13 @@ export default function ConversationVideos() {
       }
       return;
     }
-    
+
     setShowConfirm(true);
   };
 
   const onConfirmGenerate = () => {
     setShowConfirm(false);
-    
+
     const { captionConfig } = form;
 
     generateVideoMutation.mutate({
@@ -175,7 +178,7 @@ export default function ConversationVideos() {
       style={{ height: "calc(100vh - 2rem)" }}
     >
       <Header>
-        <div className="text-xl tracking-tighter">
+        <div className="text-base tracking-tight">
           Create Conversation Videos
         </div>
       </Header>
@@ -302,7 +305,8 @@ export default function ConversationVideos() {
           <AlertDialogHeader>
             <AlertDialogTitle>Generate Conversation Video</AlertDialogTitle>
             <AlertDialogDescription>
-              Generating this video will consume <strong>5 credits</strong>. Are you sure you want to proceed?
+              Generating this video will consume <strong>5 credits</strong>. Are
+              you sure you want to proceed?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
