@@ -175,7 +175,7 @@ export default function ConversationVideos() {
   return (
     <div
       className="w-full flex flex-col font-sans"
-      style={{ height: "calc(100vh - 2rem)" }}
+      style={{ height: "calc(100vh - 3rem)" }}
     >
       <Header>
         <div className="text-base tracking-tight">

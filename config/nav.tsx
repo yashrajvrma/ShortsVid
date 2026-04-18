@@ -1,9 +1,4 @@
-import {
-  HomeIcon,
-  Play,
-  UserRound,
-  Gamepad2Icon,
-} from "lucide-react";
+import { HomeIcon, Play, ScanFace, UsersRound } from "lucide-react";
 
 export type NavItem = {
   name: string;
@@ -28,12 +23,12 @@ export const navShorts: NavItem[] = [
   {
     name: "Faceless Shorts",
     url: "/app/shorts/faceless-shorts",
-    icon: <UserRound />,
+    icon: <ScanFace />,
   },
   {
     name: "Conversation Videos",
     url: "/app/shorts/conversation-videos",
-    icon: <Gamepad2Icon />,
+    icon: <UsersRound />,
   },
 ];
 

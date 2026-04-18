@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ShortsVidIcon from "@/public/shortsvid-icon.png";
 import { Button } from "@/components/ui/button";
-import { Gamepad2, UserRound } from "lucide-react";
+import { ScanFace, UsersRound } from "lucide-react";
 
 const OPTIONS = [
   {
@@ -13,7 +13,7 @@ const OPTIONS = [
     href: "/app/shorts/faceless-shorts",
   },
   {
-    icon: <Gamepad2 className="size-5" />,
+    icon: <UsersRound className="size-5" />,
     title: "Conversation Videos",
     description:
       "Viral gaming clips with captions, background music, and AI narration — ready to post in minutes.",

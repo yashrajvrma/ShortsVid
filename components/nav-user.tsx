@@ -109,7 +109,7 @@ export function NavUser() {
                       {`${String(session?.user.name).charAt(0).toUpperCase()}`}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
+                  <div className="grid flex-1 text-left text-sm leading-tight text-foreground">
                     <span className="truncate font-medium">
                       {session?.user.name}
                     </span>

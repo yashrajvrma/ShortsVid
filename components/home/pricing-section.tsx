@@ -7,7 +7,7 @@ import {
   Video,
   Mic,
   Film,
-  Gamepad2,
+  UsersRound,
   Captions,
   Clapperboard,
 } from "lucide-react";
@@ -28,7 +28,7 @@ const FEATURES = [
   { icon: Mic, label: "40+ AI voices" },
   { icon: Film, label: "Story-Driven Short Videos" },
   { icon: Film, label: "Facts-Based Video Shorts" },
-  { icon: Gamepad2, label: "Gameplay-Focused Shorts" },
+  { icon: UsersRound, label: "Gameplay-Focused Shorts" },
   { icon: Captions, label: "Subtitled Video Shorts" },
 ];
 

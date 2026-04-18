@@ -10,6 +10,7 @@ import {
   Gamepad2,
   Captions,
   Clapperboard,
+  UsersRound,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -28,7 +29,7 @@ const FEATURES = [
   { icon: Mic, label: "40+ AI voices" },
   { icon: Film, label: "Story-Driven Short Videos" },
   { icon: Film, label: "Facts-Based Video Shorts" },
-  { icon: Gamepad2, label: "Gameplay-Focused Shorts" },
+  { icon: UsersRound, label: "Conversation Gameplay Shorts" },
   { icon: Captions, label: "Subtitled Video Shorts" },
 ];
 
