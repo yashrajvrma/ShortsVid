@@ -120,7 +120,7 @@ export default function VideoDetailClient({
   // ── polling: only when RENDERING ─────────────────────────────────────────
   const { data: polledData } = useQuery(
     trpc.videos.getVideoStatus.queryOptions(
-      { videoId: videoDetail.id },
+      { videoId: videoDetail.id, type: "faceless-shorts" },
       {
         enabled: isRendering,
         refetchInterval: isRendering ? 4000 : false,

@@ -881,30 +881,43 @@ export const videoRouter = createTRPCRouter({
       }
     }),
 
-  getVideoStatus: authProcedure
+  exportConversationVideo: authProcedure
     .input(
       z.object({
         videoId: z.string(),
       }),
     )
-    .query(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const { userId } = ctx;
 
-      // get the status
-      const video = await prisma.video.findUnique({
+      const conversationVideo = await prisma.conversationVideo.findUnique({
         where: { id: input.videoId, userId },
       });
 
-      if (!video) {
+      if (!conversationVideo) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Invalid video Id",
         });
       }
 
-      if (video.status === "SUCCESS") {
+      if (conversationVideo.status === "GENERATING") {
+        throw new TRPCError({
+          code: "UNPROCESSABLE_CONTENT",
+          message: "Video is being generated, Pls try after some time",
+        });
+      }
+
+      if (conversationVideo.status === "FAILED") {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Video generation failed, Please try again",
+        });
+      }
+
+      if (conversationVideo.status === "SUCCESS") {
         // generate signed url of the video and return it to the client
-        const r2Key = video.r2ObjectKey;
+        const r2Key = conversationVideo.r2ObjectKey;
         if (!r2Key) {
           throw new TRPCError({
             code: "INTERNAL_SERVER_ERROR",
@@ -915,21 +928,138 @@ export const videoRouter = createTRPCRouter({
         const signedVideoUrl = await getSignedObjectUrl(r2Key);
 
         return {
-          id: video.id,
-          status: video.status,
+          id: conversationVideo.id,
+          status: conversationVideo.status,
           downloadUrl: signedVideoUrl,
           message: "Video has been exported successfully",
+        };
+      }
+
+      if (conversationVideo.status === "RENDERING") {
+        return {
+          id: conversationVideo.id,
+          status: conversationVideo.status,
+          message: "Video is being exported, Please wait for some time",
+        };
+      }
+
+      if (conversationVideo.status === "READY") {
+        // Trigger Inngest workflow
+        await inngest.send({
+          name: "conversationVideo/render",
+          data: {
+            userId,
+            videoId: conversationVideo.id,
+          },
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        const videoStatus = await prisma.conversationVideo.findUnique({
+          where: { id: input.videoId, userId },
+        });
+
+        return {
+          id: conversationVideo.id,
+          status: videoStatus?.status,
+          message:
+            "Video export started, We will notify you once it's ready for download",
+        };
+      }
+    }),
+
+  getVideoStatus: authProcedure
+    .input(
+      z.object({
+        videoId: z.string(),
+        type: z.enum(["faceless-shorts", "conversation-video"]).default("faceless-shorts"),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { userId } = ctx;
+
+      if (input.type === "conversation-video") {
+        // get the status for conversation video
+        const video = await prisma.conversationVideo.findUnique({
+          where: { id: input.videoId, userId },
+        });
+
+        if (!video) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Invalid conversation video Id",
+          });
+        }
+
+        if (video.status === "SUCCESS") {
+          const r2Key = video.r2ObjectKey;
+          if (!r2Key) {
+            throw new TRPCError({
+              code: "INTERNAL_SERVER_ERROR",
+              message: "Something went wrong, Please try again",
+            });
+          }
+
+          const signedVideoUrl = await getSignedObjectUrl(r2Key);
+
+          return {
+            id: video.id,
+            status: video.status,
+            downloadUrl: signedVideoUrl,
+            message: "Video has been exported successfully",
+            createdAt: video.createdAt,
+            updatedAt: video.updatedAt,
+          };
+        }
+
+        return {
+          id: video.id,
+          status: video.status,
+          createdAt: video.createdAt,
+          updatedAt: video.updatedAt,
+        };
+      } else {
+        // get the status for faceless shorts
+        const video = await prisma.video.findUnique({
+          where: { id: input.videoId, userId },
+        });
+
+        if (!video) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Invalid video Id",
+          });
+        }
+
+        if (video.status === "SUCCESS") {
+          // generate signed url of the video and return it to the client
+          const r2Key = video.r2ObjectKey;
+          if (!r2Key) {
+            throw new TRPCError({
+              code: "INTERNAL_SERVER_ERROR",
+              message: "Something went wrong, Please try again",
+            });
+          }
+
+          const signedVideoUrl = await getSignedObjectUrl(r2Key);
+
+          return {
+            id: video.id,
+            status: video.status,
+            downloadUrl: signedVideoUrl,
+            message: "Video has been exported successfully",
+            createdAt: video.createdAt,
+            updatedAt: video.updatedAt,
+          };
+        }
+
+        return {
+          id: video.id,
+          status: video.status,
           createdAt: video.createdAt,
           updatedAt: video.updatedAt,
         };
       }
-
-      return {
-        id: video.id,
-        status: video.status,
-        createdAt: video.createdAt,
-        updatedAt: video.updatedAt,
-      };
     }),
 
   deleteVideo: authProcedure

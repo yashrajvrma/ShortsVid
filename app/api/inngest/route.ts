@@ -5,6 +5,7 @@ import {
   generateShort,
   helloWorld,
   renderShorts,
+  renderConversationVideo,
 } from "@/inngest/function";
 
 // Create an API that serves zero functions
@@ -15,6 +16,7 @@ export const { GET, POST, PUT } = serve({
     generateShort,
     renderShorts,
     generateConversationVideo,
+    renderConversationVideo,
     /* your functions will be passed here later! */
   ],
 });

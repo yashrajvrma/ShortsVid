@@ -115,7 +115,7 @@ export default function ConversationVideoDetailClient({
 
   const { data: polledData } = useQuery(
     trpc.videos.getVideoStatus.queryOptions(
-      { videoId: videoDetail.id },
+      { videoId: videoDetail.id, type: "conversation-video" },
       {
         enabled: isRendering,
         refetchInterval: isRendering ? 4000 : false,
@@ -141,7 +141,7 @@ export default function ConversationVideoDetailClient({
   }, [polledData]);
 
   const exportMutation = useMutation(
-    trpc.videos.exportVideo.mutationOptions({
+    trpc.videos.exportConversationVideo.mutationOptions({
       onSuccess: (data) => {
         if (!data) return;
         const newStatus = data.status as VideoStatus;
