@@ -6,7 +6,7 @@ import { ScanFace, UsersRound } from "lucide-react";
 
 const OPTIONS = [
   {
-    icon: <UserRound className="size-5" />,
+    icon: <ScanFace className="size-5" />,
     title: "Faceless Shorts",
     description:
       "Quick, engaging short videos perfect for platforms like YouTube Shorts, Instagram Reels, and TikTok — no face required.",

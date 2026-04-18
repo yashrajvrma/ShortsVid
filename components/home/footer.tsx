@@ -1,3 +1,292 @@
+// import Link from "next/link";
+// import Image from "next/image";
+// import logo from "@/public/shortsvid-light-icon.png";
+// import buildfastIcon from "@/public/buildfast-icon.png";
+
+// const NAV_LINKS = [
+//   { label: "Features", href: "/#features" },
+//   { label: "Pricing", href: "/#pricing" },
+//   { label: "FAQ", href: "/#faq" },
+//   { label: "About", href: "/about" },
+//   { label: "Blogs", href: "/blog" },
+// ];
+
+// const LEGAL_LINKS = [
+//   { label: "Contact & Support", href: "/contact" },
+//   { label: "Privacy Policy", href: "/privacy" },
+//   { label: "Terms of Service", href: "/terms" },
+// ];
+
+// const FREE_TOOLS = [
+//   { label: "Faceless Shorts Generator", href: "/app/shorts/faceless-shorts" },
+//   { label: "AI Tiktok Shorts", href: "/app/shorts/faceless-shorts" },
+//   {
+//     label: "Italian Brainrot Videos",
+//     href: "/app/shorts/conversation-videos",
+//   },
+//   { label: "Conversation Videos", href: "/app/shorts/conversation-videos" },
+//   {
+//     label: "Gameplay Background Video Generator",
+//     href: "/app/shorts/conversation-videos",
+//   },
+// ];
+// const RESOURCES = [
+//   {
+//     label: "Best Faceless YouTube Channel",
+//     href: "/blog/faceless-youtube-channel-ideas-2026",
+//   },
+//   {
+//     label: "How to create Viral Shorts in 2026",
+//     href: "/blog/how-to-make-ai-shorts",
+//   },
+// ];
+
+// // export function Footer() {
+// //   return (
+// //     <footer className="w-full border-t border-border bg-foreground sm:mt-20 mt-12">
+// //       <div className="w-full max-w-5xl mx-auto px-4 sm:px-3 sm:py-16 py-14">
+// //         {/* Top row: Brand left, Links + Legal right */}
+// //         <div className="flex flex-col sm:flex-row justify-between gap-y-10">
+// //           {/* Brand */}
+// //           <div className="flex flex-col gap-1">
+// //             <Link href="/" className="flex items-center gap-1 w-fit">
+// //               <Image
+// //                 src={logo}
+// //                 alt="ShortsVid"
+// //                 className="w-8 rotate-[-5deg]"
+// //               />
+// //               <span className="text-xl font-semibold tracking-tighter text-primary-foreground">
+// //                 ShortsVid
+// //               </span>
+// //             </Link>
+
+// //             <p className="text-base text-muted-foreground sm:max-w-[400px] max-w-[350px] mt-2">
+// //               Get ready to post shorts in seconds with ShortsVid. Script Visuals
+// //               Voiceover Captions — all done by AI.
+// //             </p>
+
+// //             <a
+// //               href="https://buildfast.shop/"
+// //               target="_blank"
+// //               rel="noopener noreferrer"
+// //               className="mt-3 flex items-center gap-1.5 w-fit rounded-lg border border-double text-secondary bg-background px-3 py-1.5 text-sm font-medium transition-colors"
+// //             >
+// //               Built with
+// //               <Image src={buildfastIcon} alt="buildfast-icon" className="w-3" />
+// //               Buildfast
+// //             </a>
+// //           </div>
+
+// //           {/* Links + Legal grouped on the right */}
+// // <div className="flex gap-12 sm:gap-16">
+// //   {/* Links */}
+// //   <div className="flex flex-col gap-3">
+// //     <span className="text-sm font-semibold uppercase tracking-tight text-muted-foreground">
+// //       Links
+// //     </span>
+// //     {NAV_LINKS.map((link) => (
+// //       <Link
+// //         key={link.label}
+// //         href={link.href}
+// //         className="text-sm text-primary-foreground hover:opacity-70 transition-opacity w-fit"
+// //       >
+// //         {link.label}
+// //       </Link>
+// //     ))}
+// //   </div>
+
+// //   {/* Legal */}
+// //   <div className="flex flex-col gap-3">
+// //     <span className="text-sm font-semibold uppercase tracking-tight text-muted-foreground">
+// //       Legal
+// //     </span>
+// //     {LEGAL_LINKS.map((link) => (
+// //       <Link
+// //         key={link.label}
+// //         href={link.href}
+// //         className="text-sm text-primary-foreground hover:opacity-70 transition-opacity w-fit"
+// //       >
+// //         {link.label}
+// //       </Link>
+// //     ))}
+// //   </div>
+// // </div>
+// //         </div>
+
+// //         {/* Bottom bar */}
+// //         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mt-12 pt-6 border-t border-border/20">
+// //           <p className="text-sm text-muted-foreground">
+// //             Copyright © {new Date().getFullYear()} - All rights reserved
+// //           </p>
+// //           <p className="text-sm text-muted-foreground">
+// //             Made with ❤️ for creators{" "}
+// //           </p>
+// //           {/* <p className="text-sm text-muted-foreground">
+// //             Made with ❤️ by{" "}
+// //             <a
+// //               href="https://twitter.com/yashrajvrma"
+// //               target="_blank"
+// //               rel="noopener noreferrer"
+// //               className="underline underline-offset-2 hover:text-primary-foreground transition-colors"
+// //             >
+// //               Yashraj
+// //             </a>
+// //           </p> */}
+// //         </div>
+// //       </div>
+// //     </footer>
+// //   );
+// // }
+
+// export function Footer() {
+//   return (
+//     <footer className="w-full border-t border-border bg-foreground sm:mt-20 mt-12">
+//       <div className="flex flex-col gap-10 w-full max-w-5xl mx-auto px-4 sm:px-3 sm:py-16 py-14">
+//         <div className="flex flex-col justify-between gap-y-10 text-red-400">
+//           {/* 1st row  */}
+//           <div className="w-full bg-green-400">
+//             <div className="max-w-5xl mx-auto px-5 py-4 grid grid-cols-1 md:grid-cols-3 gap-10">
+//               {/* LEFT - BRAND */}
+//               <div className="flex flex-col gap-2">
+//                 <Link href="/" className="flex items-center gap-1 w-fit">
+//                   <Image
+//                     src={logo}
+//                     alt="ShortsVid"
+//                     className="w-8 rotate-[-5deg]"
+//                   />
+//                   <span className="text-xl font-semibold tracking-tighter text-primary-foreground">
+//                     ShortsVid
+//                   </span>
+//                 </Link>
+
+//                 <p className="text-base text-muted-foreground max-w-[350px] mt-2">
+//                   Get ready to post shorts in seconds with ShortsVid. Script
+//                   Visuals Voiceover Captions — all done by AI.
+//                 </p>
+
+//                 <a
+//                   href="https://buildfast.shop/"
+//                   target="_blank"
+//                   rel="noopener noreferrer"
+//                   className="mt-3 flex items-center gap-1.5 w-fit rounded-lg border border-double text-secondary bg-background px-3 py-1.5 text-sm font-medium transition-colors"
+//                 >
+//                   Built with
+//                   <Image
+//                     src={buildfastIcon}
+//                     alt="buildfast-icon"
+//                     className="w-3"
+//                   />
+//                   Buildfast
+//                 </a>
+//               </div>
+
+//               {/* CENTER - LINKS */}
+//               <div className="flex flex-col gap-3">
+//                 <span className="text-sm font-semibold uppercase tracking-tight text-muted-foreground">
+//                   Links
+//                 </span>
+
+//                 {NAV_LINKS.map((link) => (
+//                   <Link
+//                     key={link.label}
+//                     href={link.href}
+//                     className="text-sm text-primary-foreground hover:opacity-70 transition-opacity"
+//                   >
+//                     {link.label}
+//                   </Link>
+//                 ))}
+//               </div>
+
+//               {/* RIGHT - LEGAL */}
+//               <div className="flex flex-col gap-3">
+//                 <span className="text-sm font-semibold uppercase tracking-tight text-muted-foreground">
+//                   Legal
+//                 </span>
+
+//                 {LEGAL_LINKS.map((link) => (
+//                   <Link
+//                     key={link.label}
+//                     href={link.href}
+//                     className="text-sm text-primary-foreground hover:opacity-70 transition-opacity"
+//                   >
+//                     {link.label}
+//                   </Link>
+//                 ))}
+//               </div>
+//             </div>
+//           </div>
+//           {/* 2nd row  */}
+//           <div className="flex flex-col w-full bg-blue-400 py-4 px-5">
+//             <div className="flex justify-end">
+//               {/* tools  */}
+//               <div className="flex flex-col gap-3">
+//                 <span className="text-sm font-semibold uppercase tracking-tight text-muted-foreground">
+//                   Free Tools
+//                 </span>
+
+//                 {FREE_TOOLS.map((link) => (
+//                   <Link
+//                     key={link.label}
+//                     href={link.href}
+//                     className="text-sm text-primary-foreground hover:opacity-70 transition-opacity"
+//                   >
+//                     {link.label}
+//                   </Link>
+//                 ))}
+//               </div>
+//               {/* blogs */}
+//               <div className="flex flex-col gap-3">
+//                 <span className="text-sm font-semibold uppercase tracking-tight text-muted-foreground">
+//                   Resources
+//                 </span>
+
+//                 {RESOURCES.map((link) => (
+//                   <Link
+//                     key={link.label}
+//                     href={link.href}
+//                     className="text-sm text-primary-foreground hover:opacity-70 transition-opacity"
+//                   >
+//                     {link.label}
+//                   </Link>
+//                 ))}
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+
+//         {/* Bottom bar */}
+//         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mt-12 pt-6 border-t border-border/20">
+//           <p className="text-sm text-muted-foreground">
+//             Copyright © {new Date().getFullYear()} - All rights reserved
+//           </p>
+//           <p className="text-sm text-muted-foreground">
+//             Made with ❤️ for creators by{" "}
+//             <a
+//               href="https://twitter.com/yashrajvrma"
+//               target="_blank"
+//               rel="noopener noreferrer"
+//               className="underline underline-offset-2 hover:text-primary-foreground transition-colors"
+//             >
+//               Yashraj
+//             </a>
+//           </p>
+//           {/* <p className="text-sm text-muted-foreground">
+//             Made with ❤️ by{" "}
+//             <a
+//               href="https://twitter.com/yashrajvrma"
+//               target="_blank"
+//               rel="noopener noreferrer"
+//               className="underline underline-offset-2 hover:text-primary-foreground transition-colors"
+//             >
+//               Yashraj
+//             </a>
+//           </p> */}
+//         </div>
+//       </div>
+//     </footer>
+//   );
+// }
+
 import Link from "next/link";
 import Image from "next/image";
 import logo from "@/public/shortsvid-light-icon.png";
@@ -7,96 +296,142 @@ const NAV_LINKS = [
   { label: "Features", href: "/#features" },
   { label: "Pricing", href: "/#pricing" },
   { label: "FAQ", href: "/#faq" },
+  { label: "About", href: "/about" },
   { label: "Blogs", href: "/blog" },
 ];
 
 const LEGAL_LINKS = [
+  { label: "Contact & Support", href: "/contact" },
   { label: "Privacy Policy", href: "/privacy" },
   { label: "Terms of Service", href: "/terms" },
+];
+
+const FREE_TOOLS = [
+  { label: "Faceless Shorts Generator", href: "/app/shorts/faceless-shorts" },
+  { label: "AI Tiktok Shorts", href: "/app/shorts/faceless-shorts" },
+  { label: "Italian Brainrot Videos", href: "/app/shorts/conversation-videos" },
+  { label: "Conversation Videos", href: "/app/shorts/conversation-videos" },
+  {
+    label: "Gameplay Background Videos",
+    href: "/app/shorts/conversation-videos",
+  },
+];
+
+const RESOURCES = [
+  {
+    label: "Best Faceless YouTube Channel",
+    href: "/blog/faceless-youtube-channel-ideas-2026",
+  },
+  {
+    label: "How to create Viral Shorts in 2026",
+    href: "/blog/how-to-make-ai-shorts",
+  },
 ];
 
 export function Footer() {
   return (
     <footer className="w-full border-t border-border bg-foreground sm:mt-20 mt-12">
-      <div className="w-full max-w-5xl mx-auto px-4 sm:px-3 sm:py-16 py-14">
-        {/* Top row: Brand left, Links + Legal right */}
-        <div className="flex flex-col sm:flex-row justify-between gap-y-10">
-          {/* Brand */}
-          <div className="flex flex-col gap-1">
-            <Link href="/" className="flex items-center gap-1 w-fit">
-              <Image
-                src={logo}
-                alt="ShortsVid"
-                className="w-8 rotate-[-5deg]"
-              />
-              <span className="text-xl font-semibold tracking-tighter text-primary-foreground">
-                ShortsVid
-              </span>
-            </Link>
+      <div className="w-full max-w-5xl mx-auto px-5 py-12">
+        {/* Brand row */}
+        <div className="flex flex-col gap-2 mb-12">
+          <Link href="/" className="flex items-center gap-1 w-fit">
+            <Image src={logo} alt="ShortsVid" className="w-8 rotate-[-5deg]" />
+            <span className="text-xl font-semibold tracking-tighter text-primary-foreground">
+              ShortsVid
+            </span>
+          </Link>
 
-            <p className="text-base text-muted-foreground sm:max-w-[400px] max-w-[350px] mt-2">
-              Get ready to post shorts in seconds with ShortsVid. Script Visuals
-              Voiceover Captions — all done by AI.
-            </p>
+          <p className="text-sm text-muted-foreground max-w-sm mt-1">
+            Get ready to post shorts in seconds. Script · Visuals · Voiceover ·
+            Captions — all done by AI.
+          </p>
 
-            <a
-              href="https://buildfast.shop/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-3 flex items-center gap-1.5 w-fit rounded-lg border border-double text-secondary bg-background px-3 py-1.5 text-sm font-medium transition-colors"
-            >
-              Built with
-              <Image src={buildfastIcon} alt="buildfast-icon" className="w-3" />
-              Buildfast
-            </a>
+          <a
+            href="https://buildfast.shop/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 flex items-center gap-1.5 w-fit rounded-sm border border-double text-secondary bg-background px-2 py-1 text-xs font-medium transition-colors"
+          >
+            Built with
+            <Image src={buildfastIcon} alt="buildfast-icon" className="w-3" />
+            Buildfast
+          </a>
+        </div>
+
+        {/* Links grid — 2 cols on mobile, 4 cols on md+ */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
+          {/* Links */}
+          <div className="flex flex-col gap-3">
+            <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              Links
+            </span>
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="text-sm text-primary-foreground hover:opacity-70 transition-opacity w-fit"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
 
-          {/* Links + Legal grouped on the right */}
-          <div className="flex gap-12 sm:gap-16">
-            {/* Links */}
-            <div className="flex flex-col gap-3">
-              <span className="text-sm font-semibold uppercase tracking-tight text-muted-foreground">
-                Links
-              </span>
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="text-sm text-primary-foreground hover:opacity-70 transition-opacity w-fit"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
+          {/* Legal */}
+          <div className="flex flex-col gap-3">
+            <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              Legal
+            </span>
+            {LEGAL_LINKS.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="text-sm text-primary-foreground hover:opacity-70 transition-opacity w-fit"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
 
-            {/* Legal */}
-            <div className="flex flex-col gap-3">
-              <span className="text-sm font-semibold uppercase tracking-tight text-muted-foreground">
-                Legal
-              </span>
-              {LEGAL_LINKS.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="text-sm text-primary-foreground hover:opacity-70 transition-opacity w-fit"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
+          {/* Free Tools */}
+          <div className="flex flex-col gap-3">
+            <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              Free Tools
+            </span>
+            {FREE_TOOLS.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="text-sm text-primary-foreground hover:opacity-70 transition-opacity w-fit"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+
+          {/* Resources */}
+          <div className="flex flex-col gap-3">
+            <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              Resources
+            </span>
+            {RESOURCES.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="text-sm text-primary-foreground hover:opacity-70 transition-opacity w-fit"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mt-12 pt-6 border-t border-border/20">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mt-14 pt-6 border-t border-border/20">
           <p className="text-sm text-muted-foreground">
-            Copyright © {new Date().getFullYear()} - All rights reserved
+            Copyright © {new Date().getFullYear()} — All rights reserved
           </p>
           <p className="text-sm text-muted-foreground">
-            Made with ❤️ for creators{" "}
-          </p>
-          {/* <p className="text-sm text-muted-foreground">
-            Made with ❤️ by{" "}
+            Made with ❤️ for creators by{" "}
             <a
               href="https://twitter.com/yashrajvrma"
               target="_blank"
@@ -105,7 +440,7 @@ export function Footer() {
             >
               Yashraj
             </a>
-          </p> */}
+          </p>
         </div>
       </div>
     </footer>

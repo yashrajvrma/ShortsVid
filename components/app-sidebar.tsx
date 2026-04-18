@@ -30,12 +30,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <div
               className="flex justify-start py-2 hover:bg-transparent"
-            // size="lg"
-            // asChild
-            // <div
-            //   className="flex justify-start py-2 hover:bg-transparent md:block hidden"
-            // size="lg"
-            // asChild
+              // size="lg"
+              // asChild
+              // <div
+              //   className="flex justify-start py-2 hover:bg-transparent md:block hidden"
+              // size="lg"
+              // asChild
             >
               <Link href="/app">
                 {/* <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
