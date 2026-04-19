@@ -129,7 +129,6 @@ enum StockType {
   VOICE
   BG_VIDEO
   BG_MUSIC
-  MUSIC // TODO: remove this after migration
   AI_AVATAR
 }
 
