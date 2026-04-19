@@ -7,8 +7,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname:
-          "shortsvid-dev.dd25622537be75e48de1c853bb4087c1.r2.cloudflarestorage.com",
+        hostname: `${process.env.R2_BUCKET_NAME}.dd25622537be75e48de1c853bb4087c1.r2.cloudflarestorage.com`,
       },
     ],
     qualities: [100],
