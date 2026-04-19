@@ -7,6 +7,17 @@ import { Separator } from "@/components/ui/separator";
 import { Loader2, Zap } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import type { TRPCClientErrorLike } from "@trpc/client";
+import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 import {
   useFacelessForm,
@@ -32,6 +43,7 @@ export default function FacelessShorts() {
   const router = useRouter();
   const trpc = useTRPC();
   const form = useFacelessForm();
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const mutationOptions = trpc.videos.generateFacelessVideo.mutationOptions();
 
@@ -72,6 +84,12 @@ export default function FacelessShorts() {
       return;
     }
 
+    setShowConfirm(true); // ← show dialog instead of firing mutation directly
+  };
+
+  const onConfirmGenerate = () => {
+    setShowConfirm(false);
+
     const { captionConfig } = form;
 
     generateVideoMutation.mutate({
@@ -84,14 +102,12 @@ export default function FacelessShorts() {
       musicId: form.selectedMusicId,
       videoStyle: form.videoStyle as any,
       captionConfig: {
-        // ── Colors ──────────────────────────────────────────────────────
         textColor: captionConfig.textColor,
         strokeColor: captionConfig.strokeColor,
         highlightColor: captionConfig.highlightColor,
         // @ts-ignore
         highlightStrokeColor: captionConfig.highlightStrokeColor,
         popBackgroundColor: captionConfig.popBackgroundColor,
-        // ── Effects ─────────────────────────────────────────────────────
         strokeWidth: captionConfig.strokeWidth,
         fontSize: captionConfig.fontSize,
         verticalPosition: captionConfig.verticalPosition,
@@ -100,20 +116,37 @@ export default function FacelessShorts() {
         maxWordsPerLine: captionConfig.maxWordsPerLine,
         shadowOffsetY: captionConfig.shadowOffsetY,
         shadowBlur: captionConfig.shadowBlur,
-        // ── Typography ───────────────────────────────────────────────────
         fontFamily: captionConfig.fontFamily,
         fontWeight: captionConfig.fontWeight,
         textTransform: captionConfig.textTransform,
         letterSpacing: captionConfig.letterSpacing,
-        // ── Animation ───────────────────────────────────────────────────
         animationPreset: captionConfig.animationPreset,
-        // ── Light leak ───────────────────────────────────────────────────
         lightLeakHue: captionConfig.lightLeakHue,
         lightLeakSeed: captionConfig.lightLeakSeed,
       } satisfies CaptionStyle,
       captionsEnabled: form.captionsEnabled,
     });
   };
+
+  const GenerateButton = (
+    <Button
+      className="w-full h-11 font-semibold gap-2 text-sm"
+      disabled={isPending || !canGenerate}
+      onClick={handleGenerate}
+    >
+      {isPending ? (
+        <>
+          <Loader2 className="size-4 animate-spin" />
+          Generating…
+        </>
+      ) : (
+        <>
+          <Zap className="size-4" />
+          Generate Video
+        </>
+      )}
+    </Button>
+  );
 
   return (
     <div
@@ -124,22 +157,18 @@ export default function FacelessShorts() {
         <div className="text-base tracking-tight">Create Faceless Shorts</div>
       </Header>
 
-      {/* ── Main card ───────────────────────────────────────────────────── */}
       <Card
         className="flex-1 min-h-0 overflow-hidden p-0"
         style={{ display: "flex", flexDirection: "row" }}
       >
-        {/* ── LEFT  65% ─────────────────────────────────────────────────── */}
+        {/* LEFT 65% */}
         <div className="flex flex-col min-h-0 border-r border-border lg:w-[65%] w-full min-w-0 overflow-hidden">
           <ScrollArea className="[&>div>div[style]]:!block flex-1 min-h-0 h-full overflow-y-auto overflow-x-hidden">
             <div className="sm:p-6 p-4 space-y-4 min-w-0 overflow-hidden w-full">
-              {/* 1. Language */}
               <LanguageSelector
                 value={form.languageCode}
                 onChange={(v) => setField("languageCode", v)}
               />
-
-              {/* 2. Topic + Duration */}
               <TopicDuration
                 topic={form.topic}
                 duration={form.duration}
@@ -147,8 +176,6 @@ export default function FacelessShorts() {
                 onDurationChange={(v) => setField("duration", v)}
               />
               <Separator />
-
-              {/* 3. Script */}
               <ScriptSection
                 languageCode={form.languageCode}
                 topic={form.topic}
@@ -161,8 +188,6 @@ export default function FacelessShorts() {
                 onGeneratedScriptChange={setGeneratedScript}
               />
               <Separator />
-
-              {/* 4. Voice */}
               <VoiceSelector
                 languageCode={form.languageCode}
                 selectedVoiceId={form.selectedVoiceId}
@@ -176,24 +201,16 @@ export default function FacelessShorts() {
                 }
               />
               <Separator />
-
-              {/* 5. Background Music */}
               <BgMusicSelector
                 selectedMusicId={form.selectedMusicId}
                 onSelect={(id) => setField("selectedMusicId", id)}
               />
-
               <Separator />
-
-              {/* 6. Video Style */}
               <VideoStylePicker
                 selectedStyle={form.videoStyle}
                 onSelect={(v) => setField("videoStyle", v)}
               />
-
               <Separator />
-
-              {/* 7. Caption Config */}
               <CaptionConfig
                 config={form.captionConfig}
                 captionsEnabled={form.captionsEnabled}
@@ -204,32 +221,13 @@ export default function FacelessShorts() {
           </ScrollArea>
         </div>
 
-        {/* ── RIGHT  35% ────────────────────────────────────────────────── */}
+        {/* RIGHT 35% */}
         <div className="hidden md:flex flex-col min-h-0 bg-muted/30 sm:w-[35%]">
-          {/* Scrollable preview */}
           <div className="flex-1 min-h-0 overflow-auto">
             <MockupPreview form={form} />
           </div>
-
-          {/* Generate button — pinned to bottom */}
           <div className="shrink-0 p-5 border-t border-border bg-card">
-            <Button
-              className="w-full h-11 font-semibold gap-2 text-sm"
-              disabled={isPending || !canGenerate}
-              onClick={handleGenerate}
-            >
-              {isPending ? (
-                <>
-                  <Loader2 className="size-4 animate-spin" />
-                  Generating…
-                </>
-              ) : (
-                <>
-                  <Zap className="size-4" />
-                  Generate Video
-                </>
-              )}
-            </Button>
+            {GenerateButton}
             {isOverLimit && (
               <p className="text-destructive text-xs text-center mt-2">
                 Shorten your script to under 1200 characters to generate.
@@ -239,31 +237,34 @@ export default function FacelessShorts() {
         </div>
       </Card>
 
-      {/* ── Mobile generate button ─────────────────────────────────────── */}
+      {/* Mobile generate button */}
       <div className="md:hidden mt-4 shrink-0">
-        <Button
-          className="w-full h-11 font-semibold gap-2"
-          disabled={isPending || !canGenerate}
-          onClick={handleGenerate}
-        >
-          {isPending ? (
-            <>
-              <Loader2 className="size-4 animate-spin" />
-              Generating…
-            </>
-          ) : (
-            <>
-              <Zap className="size-4" />
-              Generate Video
-            </>
-          )}
-        </Button>
+        {GenerateButton}
         {isOverLimit && (
           <p className="text-destructive text-xs text-center mt-2">
             Shorten your script to under 1200 characters to generate.
           </p>
         )}
       </div>
+
+      {/* Confirmation dialog */}
+      <AlertDialog open={showConfirm} onOpenChange={setShowConfirm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Generate Faceless Video</AlertDialogTitle>
+            <AlertDialogDescription>
+              Generating this video will consume <strong>5 credit</strong>. Are
+              you sure you want to proceed?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={onConfirmGenerate}>
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
