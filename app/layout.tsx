@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "./provider";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { env } from "@/lib/env";
 
 const inter = Inter({
   variable: "--font-serif",
@@ -20,7 +21,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const APP_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://shortsvid.pro";
+const APP_URL = env.NEXT_PUBLIC_BASE_URL || "https://shortsvid.pro";
 const APP_NAME = "ShortsVid";
 const APP_DESCRIPTION =
   "Generate viral YouTube Shorts, TikTok & Instagram Reels in seconds. Script, Visuals, Captions & Voiceover — all done by AI. No editing skills required.";

@@ -3,13 +3,14 @@ import OpenAI from "openai";
 import Together from "together-ai";
 import { zodTextFormat } from "openai/helpers/zod";
 import { z } from "zod";
+import { env } from "@/lib/env";
 
 export const openAI = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
+  apiKey: env.OPENAI_API_KEY,
 });
 
 const together = new Together({
-  apiKey: process.env.TOGETHER_AI_API_KEY!,
+  apiKey: env.TOGETHER_AI_API_KEY,
 });
 
 const CharacterSchema = z.object({

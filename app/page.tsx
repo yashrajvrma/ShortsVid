@@ -9,8 +9,9 @@ import { ViewsShowcase } from "@/components/home/views-showcase";
 import { JsonLd } from "@/components/seo/json-ld";
 import Testimonials from "@/components/home/testimonial";
 import WhyChooseUs from "@/components/home/why-choose-us";
+import { env } from "@/lib/env";
 
-const APP_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://shortsvid.pro";
+const APP_URL = env.NEXT_PUBLIC_BASE_URL || "https://shortsvid.pro";
 
 export const metadata: Metadata = {
   title: "ShortsVid - AI Short Video Generator for YouTube, TikTok & Instagram",

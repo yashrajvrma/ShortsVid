@@ -4,6 +4,7 @@ import { authProcedure, createTRPCRouter } from "../init";
 import { polar, SUBSCRIPTION_PLAN_CONFIG } from "@/lib/polar";
 import { TRPCError } from "@trpc/server";
 import { prisma } from "@/db";
+import { env } from "@/lib/env";
 
 export const billingRouter = createTRPCRouter({
   // createCheckout: authProcedure
@@ -19,7 +20,7 @@ export const billingRouter = createTRPCRouter({
   //     const config = SUBSCRIPTION_PLAN_CONFIG[input.planKey];
   //     const checkout = await polar.checkouts.create({
   //       products: [config.productId],
-  //       successUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/app`,
+  // successUrl: `${env.NEXT_PUBLIC_BASE_URL}/app`,
   //       customerEmail: ctx.email,
   //       metadata: {
   //         userId: ctx.userId,

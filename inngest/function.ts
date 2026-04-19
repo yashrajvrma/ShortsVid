@@ -28,7 +28,7 @@ import { Topic, VideoStyle } from "@/types";
 import { env } from "@/lib/env";
 
 const fishAudio = new FishAudioClient({
-  apiKey: process.env.FISH_AUDIO_API_KEY!,
+  apiKey: env.FISH_AUDIO_API_KEY!,
   headers: {},
 });
 
@@ -366,7 +366,7 @@ export const generateConversationVideo = inngest.createFunction(
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.FISH_AUDIO_API_KEY}`,
+            Authorization: `Bearer ${env.FISH_AUDIO_API_KEY}`,
             "Content-Type": "application/json",
             model: "s2-pro",
           },
@@ -511,7 +511,7 @@ export const renderShorts = inngest.createFunction(
       const { renderId, bucketName } = await renderMediaOnLambda({
         region: "us-east-1",
         functionName,
-        serveUrl: process.env.REMOTION_AWS_SERVE_URL!,
+        serveUrl: env.REMOTION_AWS_SERVE_URL!,
         composition: "renderVideo",
         inputProps: {
           videoData: {
@@ -686,7 +686,7 @@ export const renderConversationVideo = inngest.createFunction(
         const { renderId, bucketName } = await renderMediaOnLambda({
           region: "us-east-1",
           functionName,
-          serveUrl: process.env.REMOTION_AWS_SERVE_URL!,
+          serveUrl: env.REMOTION_AWS_SERVE_URL!,
           composition: "renderConversationVideo",
           inputProps: {
             videoData: {
@@ -865,7 +865,7 @@ export const renderConversationVideo = inngest.createFunction(
 //         const result = await renderMediaOnCloudrun({
 //           serviceName,
 //           region: "us-east1",
-//           serveUrl: process.env.GCP_SERVE_URL!,
+//           serveUrl: env.GCP_SERVE_URL!,
 //           composition: "renderConversationVideo",
 //           inputProps: {
 //             videoData: {

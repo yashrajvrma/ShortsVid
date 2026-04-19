@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { polar, SUBSCRIPTION_PLAN_CONFIG } from "@/lib/polar";
 import { auth } from "@/lib/auth/server"; // adjust to your auth import
 import { headers } from "next/headers";
+import { env } from "@/lib/env";
 
 type PlanKey = "BASIC_MONTHLY" | "BASIC_YEARLY" | "PRO_MONTHLY" | "PRO_YEARLY";
 
@@ -18,7 +19,7 @@ export async function createCheckout(planKey: PlanKey) {
 
   const checkout = await polar.checkouts.create({
     products: [config.productId],
-    successUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/app`,
+    successUrl: `${env.NEXT_PUBLIC_BASE_URL}/app`,
     customerEmail: session.user.email!,
     metadata: {
       userId: session.user.id,

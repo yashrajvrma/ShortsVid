@@ -8,6 +8,7 @@ import { prisma } from "@/db";
 import { getSubscriptionPlanConfigByProductId } from "@/lib/polar";
 import { SubscriptionPlan, SubscriptionStatus } from "@prisma/client";
 import { addCredits } from "@/lib/credit";
+import { env } from "@/lib/env";
 
 export async function POST(req: NextRequest) {
   const rawBody = await req.text();
@@ -24,7 +25,7 @@ export async function POST(req: NextRequest) {
     event = validateEvent(
       rawBody,
       headers, // ← pass full headers object, not just signature string
-      process.env.POLAR_WEBHOOK_SECRET!,
+      env.POLAR_WEBHOOK_SECRET,
     );
   } catch (err) {
     if (err instanceof WebhookVerificationError) {
