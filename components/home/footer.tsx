@@ -296,11 +296,11 @@ const NAV_LINKS = [
   { label: "Features", href: "/#features" },
   { label: "Pricing", href: "/#pricing" },
   { label: "FAQ", href: "/#faq" },
-  { label: "About", href: "/about" },
   { label: "Blogs", href: "/blog" },
 ];
 
 const LEGAL_LINKS = [
+  { label: "About", href: "/about" },
   { label: "Contact & Support", href: "/contact" },
   { label: "Privacy Policy", href: "/privacy" },
   { label: "Terms of Service", href: "/terms" },
@@ -341,7 +341,7 @@ export function Footer() {
             </span>
           </Link>
 
-          <p className="text-sm text-muted-foreground max-w-sm mt-1">
+          <p className="text-sm text-muted-foreground max-w-md mt-1">
             Get ready to post shorts in seconds. Script · Visuals · Voiceover ·
             Captions — all done by AI.
           </p>
