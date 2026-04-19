@@ -55,7 +55,7 @@ export async function generateScript(
     });
 
     if (!session?.user) {
-      redirect("/login");
+      redirect("/login?redirect=/app/shorts/faceless-shorts");
     }
 
     const user = session.user;

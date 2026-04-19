@@ -21,7 +21,8 @@ export default async function VideoDetailPage({
   if (!videoId) notFound();
 
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session?.user) redirect("/login");
+  if (!session?.user)
+    redirect(`/login?redirect=/app/library/conversation-video/${videoId}`);
 
   const video = await getConversationVideoDetailById({
     videoId,

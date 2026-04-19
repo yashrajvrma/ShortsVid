@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Footer } from "@/components/home/footer";
 import Navbar from "@/components/home/navbar";
-import About from "@/components/home/about";
+import About from "@/components/legal/about";
 
 const APP_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://shortsvid.pro";
 

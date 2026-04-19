@@ -37,7 +37,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: `ShortsVid - #1 AI Shorts Generator`,
+    default: `ShortsVid - Automate viral shorts for Tiktok, Instagram and Youtube in seconds`,
     template: `%s | ShortsVid`,
   },
   description: APP_DESCRIPTION,
@@ -54,6 +54,10 @@ export const metadata: Metadata = {
     "AI content creator",
     "no face YouTube",
     "automated video creation",
+    "Italian Brainrot Generator",
+    "Brainrot videos genrator",
+    "Text to Video Generator",
+    "PDF to Brainrot Videos",
   ],
   authors: [{ name: APP_NAME, url: APP_URL }],
   creator: APP_NAME,
@@ -77,14 +81,14 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: APP_URL,
     siteName: APP_NAME,
-    title: `ShortsVid - #1 AI Shorts Generator`,
+    title: `ShortsVid - Automate viral shorts for Tiktok, Instagram and Youtube in seconds`,
     description: APP_DESCRIPTION,
     images: [
       {
         url: "/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: `ShortsVid - #1 AI Shorts Generator`,
+        alt: `ShortsVid - Automate viral shorts for Tiktok, Instagram and Youtube in seconds`,
       },
     ],
   },
@@ -92,11 +96,11 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@shortsvid",
     creator: "@shortsvid",
-    title: `ShortsVid - #1 AI Shorts Generator`,
+    title: `ShortsVid - Automate viral shorts for Tiktok, Instagram and Youtube in seconds`,
     description: APP_DESCRIPTION,
     images: ["/opengraph-image.png"],
   },
-  manifest: "/manifest.json",
+  manifest: "/manifest.webmanifest",
   icons: {
     icon: [
       { url: "/favicon.ico" },

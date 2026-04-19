@@ -59,7 +59,7 @@ export async function generateDialogue(
     const session = await auth.api.getSession({ headers: await headers() });
 
     if (!session?.user) {
-      redirect("/login");
+      redirect("/login?redirect=/app/shorts/conversation-videos");
     }
 
     if (session.user.credit < CREDITS_PER_VIDEO) {
@@ -69,12 +69,20 @@ export async function generateDialogue(
       };
     }
 
-    const { languageCode, topic, duration, prompt, speaker1Name, speaker2Name } =
-      generateDialogueSchema.parse(params);
+    const {
+      languageCode,
+      topic,
+      duration,
+      prompt,
+      speaker1Name,
+      speaker2Name,
+    } = generateDialogueSchema.parse(params);
     const languageName = getLanguageName(languageCode);
 
-    const cleanSpeaker1Name = speaker1Name?.replace(/\s*\d+$/, "").trim() || "Speaker 1";
-    const cleanSpeaker2Name = speaker2Name?.replace(/\s*\d+$/, "").trim() || "Speaker 2";
+    const cleanSpeaker1Name =
+      speaker1Name?.replace(/\s*\d+$/, "").trim() || "Speaker 1";
+    const cleanSpeaker2Name =
+      speaker2Name?.replace(/\s*\d+$/, "").trim() || "Speaker 2";
 
     const userPrompt = `Target duration: ${duration} seconds
 Creative direction: ${prompt}
@@ -91,7 +99,7 @@ Write the dialogue now. Remember: output ONLY valid JSON matching the required s
             languageName,
             topic,
             cleanSpeaker1Name,
-            cleanSpeaker2Name
+            cleanSpeaker2Name,
           ),
         },
         { role: "user", content: userPrompt },

@@ -6,10 +6,9 @@ import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Sign In",
-  description: "Sign in to ShortsVid to start creating AI-powered short videos.",
-  robots: { index: false, follow: false },
+  description:
+    "Sign in to ShortsVid to start creating AI-powered short videos.",
 };
-
 
 export default async function SignIn() {
   const session = await auth.api.getSession({

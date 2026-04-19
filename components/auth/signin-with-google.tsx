@@ -9,6 +9,7 @@ import loginImg1 from "@/public/images/E4sxmoEYhqg.jpg";
 import loginImg2 from "@/public/images/kdkdkdkdkeo30303.jpg";
 import loginImg3 from "@/public/images/maxresdefault.jpg";
 import { Spinner } from "../ui/spinner";
+import { useSearchParams } from "next/navigation";
 
 function GoogleIcon() {
   return (
@@ -40,13 +41,18 @@ function GoogleIcon() {
 
 export default function LoginCard() {
   const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+
+  const redirect = searchParams.get("redirect");
+
+  console.log("redirect", redirect);
 
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
       await signIn.social({
         provider: "google",
-        callbackURL: "/app",
+        callbackURL: redirect ? `${redirect}` : "/app",
         errorCallbackURL: "/error",
         fetchOptions: {
           onSuccess: () => {

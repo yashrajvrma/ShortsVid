@@ -25,18 +25,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.5,
     },
+
     {
-      url: `${baseUrl}/privacy`,
+      url: `${baseUrl}/about`,
       lastModified: now,
       changeFrequency: "monthly",
-      priority: 0.3,
+      priority: 0.6,
     },
     {
-      url: `${baseUrl}/terms`,
+      url: `${baseUrl}/contact`,
       lastModified: now,
       changeFrequency: "monthly",
-      priority: 0.3,
+      priority: 0.5,
     },
+
     {
       url: `${baseUrl}/blog`,
       lastModified: now,
@@ -44,5 +46,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     ...blogs,
+
+    {
+      url: `${baseUrl}/privacy`,
+      lastModified: now,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/terms`,
+      lastModified: now,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
   ];
 }

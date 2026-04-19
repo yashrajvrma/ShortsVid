@@ -200,13 +200,8 @@ const Navbar = () => {
           router.push("/app");
           setOpen(false);
         }}
-        disabled={isPending}
       >
-        {isPending ? (
-          <span className="w-16 h-4 bg-muted-foreground/10 animate-pulse rounded" />
-        ) : (
-          "Open App"
-        )}
+        Open App
       </Button>
     </div>
   );

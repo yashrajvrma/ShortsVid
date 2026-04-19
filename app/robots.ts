@@ -7,8 +7,17 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: ["/", "/login", "/privacy", "/terms"],
-        disallow: ["/app/", "/api/", "/_next/"],
+        allow: [
+          "/",
+          "/login",
+          "/about",
+          "/contact",
+          "/privacy",
+          "/terms",
+          "/blog/",
+        ],
+        disallow: ["/app/", "/api/"],
+        // /_next/ intentionally NOT disallowed — Google needs it to render pages
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

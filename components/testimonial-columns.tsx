@@ -46,7 +46,7 @@ export const TestimonialsColumn = (props: {
                       {Array.from({ length: stars }).map((_, s) => (
                         <Star
                           key={s}
-                          className="w-3.5 h-3.5 fill-primary text-primary"
+                          className="w-3.5 h-3.5 fill-primary/70 text-primary"
                         />
                       ))}
                     </div>
@@ -77,7 +77,7 @@ export const TestimonialsColumn = (props: {
                         </span>
                       </div>
                       {platform && (
-                        <span className="ml-auto text-[10px] font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary shrink-0">
+                        <span className="ml-auto text-[10px] font-medium px-2 py-0.5 rounded-full bg-blue-400 text-background shrink-0">
                           {platform}
                         </span>
                       )}
