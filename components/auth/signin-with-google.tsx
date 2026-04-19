@@ -69,7 +69,7 @@ export default function LoginCard() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4">
-      <div className="relative w-full max-w-sm flex flex-col items-center">
+      <div className="relative w-full sm:w-[320px] flex flex-col items-center">
         {/* ── Fanned cards — perfectly centered, half above card ── */}
         {/* 
           All 3 cards share the same transform-origin (bottom-center).
@@ -166,7 +166,7 @@ export default function LoginCard() {
 
         {/* ── Card — images overlap top ── */}
         <div
-          className="w-full bg-card rounded-2xl shadow-lg px-7 pb-7 flex flex-col items-center gap-4 text-center"
+          className="w-full bg-card rounded-2xl shadow-sm px-7 pb-7 flex flex-col items-center gap-4 text-center h-[280px]"
           style={{ paddingTop: "72px", marginTop: "-52px" }}
         >
           <h1 className="text-xl font-semibold tracking-tight text-foreground leading-snug">
@@ -198,6 +198,19 @@ export default function LoginCard() {
             )}
           </Button>
         </div>
+
+        <p className="text-center px-3 py-4 text-sm ">
+          By clicking continue, you agree to our {""}
+          <span>
+            <a href="/terms" className="underline hover:text-muted-foreground">
+              Terms of Service
+            </a>
+          </span>{" "}
+          and {""}
+          <a href="/privacy" className="underline hover:text-muted-foreground">
+            Privacy Policy
+          </a>
+        </p>
       </div>
     </div>
   );
