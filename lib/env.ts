@@ -31,6 +31,13 @@ export const env = createEnv({
     GCP_SERVE_URL: z.string().min(1),
     GCP_SITE: z.string().min(1),
 
+    // remotion aws lambda
+    REMOTION_AWS_REGION: z.string().min(1),
+    REMOTION_AWS_ACCESS_KEY_ID: z.string().min(1),
+    REMOTION_AWS_SECRET_ACCESS_KEY: z.string().min(1),
+    REMOTION_AWS_SITE: z.string().min(1),
+    REMOTION_AWS_SERVE_URL: z.string().min(1),
+
     // polar
     POLAR_SERVER_ENVIRONMENT: z
       .enum(["sandbox", "production"])

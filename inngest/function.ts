@@ -17,9 +17,15 @@ import {
 } from "@/lib/r2-bucket";
 import axios from "axios";
 
+import {
+  getFunctions,
+  renderMediaOnLambda,
+  getRenderProgress,
+} from "@remotion/lambda/client";
 import { getServices, renderMediaOnCloudrun } from "@remotion/cloudrun/client";
 import { CaptionData, generateCaptions } from "@/lib/captions";
 import { Topic, VideoStyle } from "@/types";
+import { env } from "@/lib/env";
 
 const fishAudio = new FishAudioClient({
   apiKey: process.env.FISH_AUDIO_API_KEY!,
@@ -491,19 +497,21 @@ export const renderShorts = inngest.createFunction(
 
     // render shorts (audioUrl, videoUrl, captions, )
     const renderShorts = await step.run("render-shorts", async () => {
-      const services = await getServices({
-        region: "us-east1",
+      const functions = await getFunctions({
+        region: "us-east-1",
         compatibleOnly: true,
       });
 
+      const functionName = functions[0].functionName;
+      console.log("all function", JSON.stringify(functions));
+      console.log("function is", functionName);
+
       console.log("video duration is", video.duration);
 
-      const serviceName = services[0].serviceName;
-
-      const result = await renderMediaOnCloudrun({
-        serviceName,
-        region: "us-east1",
-        serveUrl: process.env.GCP_SERVE_URL!,
+      const { renderId, bucketName } = await renderMediaOnLambda({
+        region: "us-east-1",
+        functionName,
+        serveUrl: process.env.REMOTION_AWS_SERVE_URL!,
         composition: "renderVideo",
         inputProps: {
           videoData: {
@@ -518,17 +526,33 @@ export const renderShorts = inngest.createFunction(
           },
         },
         codec: "h264",
+        maxRetries: 1,
+        framesPerLambda: 300,
+        timeoutInMilliseconds: 300000, // 300seconds
       });
 
-      if (result.type === "success") {
-        console.log(result.bucketName);
-        console.log(result.renderId);
-
-        return result?.publicUrl;
+      while (true) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const progress = await getRenderProgress({
+          renderId,
+          bucketName,
+          functionName,
+          region: "us-east-1",
+        });
+        if (progress.fatalErrorEncountered) {
+          // console.error("Error enountered", progress.errors);
+          throw new Error("Error occurred while rendering faceless video", {
+            cause: progress.errors[0],
+          });
+        }
+        if (progress.done) {
+          console.log("Render finished!", progress.outputFile);
+          return progress.outputFile;
+        }
       }
     });
 
-    Sentry.logger.info("Shorts rendered successfully", { videoId });
+    Sentry.logger.info("Faceless Shorts rendered successfully", { videoId });
 
     // upload video to cloudflare r2 using render video url
     const uploadVideo = await step.run("upload-video-to-r2", async () => {
@@ -644,22 +668,25 @@ export const renderConversationVideo = inngest.createFunction(
     Sentry.logger.info("Conversation video rendering started", { videoId });
 
     // render conversation video via CloudRun Remotion
-    const renderConversationResponse = await step.run(
+    const renderConversationVideo = await step.run(
       "render-conversation-video",
       async () => {
-        const services = await getServices({
-          region: "us-east1",
+        const functions = await getFunctions({
+          region: "us-east-1",
           compatibleOnly: true,
         });
 
         console.log("video duration is", conversationVideo.duration);
 
-        const serviceName = services[0].serviceName;
+        const functionName = functions[0].functionName;
 
-        const result = await renderMediaOnCloudrun({
-          serviceName,
-          region: "us-east1",
-          serveUrl: process.env.GCP_SERVE_URL!,
+        console.log("all function", JSON.stringify(functions));
+        console.log("function is", functionName);
+
+        const { renderId, bucketName } = await renderMediaOnLambda({
+          region: "us-east-1",
+          functionName,
+          serveUrl: process.env.REMOTION_AWS_SERVE_URL!,
           composition: "renderConversationVideo",
           inputProps: {
             videoData: {
@@ -676,13 +703,30 @@ export const renderConversationVideo = inngest.createFunction(
             },
           },
           codec: "h264",
+          maxRetries: 1,
+          framesPerLambda: 300,
+          timeoutInMilliseconds: 300000, // 300seconds
         });
 
-        if (result.type === "success") {
-          console.log(result.bucketName);
-          console.log(result.renderId);
-
-          return result?.publicUrl;
+        while (true) {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          const progress = await getRenderProgress({
+            renderId,
+            bucketName,
+            functionName,
+            region: "us-east-1",
+          });
+          if (progress.fatalErrorEncountered) {
+            // console.error("Error enountered", progress.errors);
+            throw new Error(
+              "Error occurred while rendering conversation video",
+              { cause: progress.errors[0] },
+            );
+          }
+          if (progress.done) {
+            console.log("Render finished!", progress.outputFile);
+            return progress.outputFile;
+          }
         }
       },
     );
@@ -691,10 +735,10 @@ export const renderConversationVideo = inngest.createFunction(
 
     // upload video to cloudflare r2
     const uploadVideo = await step.run("upload-video-to-r2", async () => {
-      if (!renderConversationResponse) {
+      if (!renderConversationVideo) {
         throw new Error("Render conversation video failed");
       }
-      const response = await fetch(renderConversationResponse);
+      const response = await fetch(renderConversationVideo);
       const videoBuffer = Buffer.from(await response.arrayBuffer());
 
       const r2ObjectKey = `output/shorts/conversation/${userId}/${videoId}.mp4`;
@@ -729,3 +773,165 @@ export const renderConversationVideo = inngest.createFunction(
     };
   },
 );
+
+// export const renderConversationVideo = inngest.createFunction(
+//   {
+//     id: "render-conversation-video",
+//     retries: 1,
+//     onFailure: async ({ event, step }) => {
+//       const videoId = event.data.event.data?.videoId;
+//       await prisma.conversationVideo.update({
+//         where: { id: videoId },
+//         data: { status: "FAILED" },
+//       });
+//     },
+//   },
+
+//   { event: "conversationVideo/render" },
+//   async ({ event, step }) => {
+//     const { userId, videoId } = event.data;
+
+//     // update the status to RENDERING in db
+//     const conversationVideo = await step.run("update-status", async () => {
+//       const updateVideo = await prisma.conversationVideo.update({
+//         where: { id: videoId },
+//         data: { status: "RENDERING" },
+//         include: {
+//           backgroundVideo: true,
+//           backgroundMusic: true,
+//           speaker1Avatar: true,
+//           speaker2Avatar: true,
+//           captionConfig: true,
+//           script: true, // Needed by remotion player
+//         },
+//       });
+//       return updateVideo;
+//     });
+
+//     // generate signedUrls
+//     const videoDataWithSignedUrl = await step.run(
+//       "generate-signed-urls",
+//       async () => {
+//         const [
+//           speaker1AvatarUrl,
+//           speaker2AvatarUrl,
+//           audioUrl,
+//           backgroundVideoUrl,
+//           backgroundMusicUrl,
+//         ] = await Promise.all([
+//           conversationVideo.speaker1Avatar?.r2ObjectKey
+//             ? getSignedObjectUrl(conversationVideo.speaker1Avatar.r2ObjectKey)
+//             : Promise.resolve(null),
+//           conversationVideo.speaker2Avatar?.r2ObjectKey
+//             ? getSignedObjectUrl(conversationVideo.speaker2Avatar.r2ObjectKey)
+//             : Promise.resolve(null),
+//           conversationVideo.audio
+//             ? getSignedAudioUrl(conversationVideo.audio)
+//             : Promise.resolve(null),
+//           conversationVideo.backgroundVideo?.r2ObjectKey
+//             ? getSignedObjectUrl(conversationVideo.backgroundVideo.r2ObjectKey)
+//             : Promise.resolve(null),
+//           conversationVideo.backgroundMusic?.r2ObjectKey
+//             ? getSignedAudioUrl(conversationVideo.backgroundMusic.r2ObjectKey)
+//             : Promise.resolve(null),
+//         ]);
+
+//         return {
+//           ...conversationVideo,
+//           speaker1AvatarUrl,
+//           speaker2AvatarUrl,
+//           audioUrl,
+//           backgroundVideoUrl,
+//           backgroundMusicUrl,
+//         };
+//       },
+//     );
+
+//     Sentry.logger.info("Conversation video rendering started", { videoId });
+
+//     // render conversation video via CloudRun Remotion
+//     const renderConversationVideo = await step.run(
+//       "render-conversation-video",
+//       async () => {
+//         const services = await getServices({
+//           region: "us-east1",
+//           compatibleOnly: true,
+//         });
+
+//         console.log("video duration is", conversationVideo.duration);
+
+//         const serviceName = services[0].serviceName;
+
+//         const result = await renderMediaOnCloudrun({
+//           serviceName,
+//           region: "us-east1",
+//           serveUrl: process.env.GCP_SERVE_URL!,
+//           composition: "renderConversationVideo",
+//           inputProps: {
+//             videoData: {
+//               id: videoDataWithSignedUrl.id,
+//               duration: videoDataWithSignedUrl.duration,
+//               caption: videoDataWithSignedUrl.caption,
+//               captionConfig: videoDataWithSignedUrl.captionConfig,
+//               speaker1AvatarUrl: videoDataWithSignedUrl.speaker1AvatarUrl,
+//               speaker2AvatarUrl: videoDataWithSignedUrl.speaker2AvatarUrl,
+//               audioUrl: videoDataWithSignedUrl.audioUrl,
+//               backgroundVideoUrl: videoDataWithSignedUrl.backgroundVideoUrl,
+//               backgroundMusicUrl: videoDataWithSignedUrl.backgroundMusicUrl,
+//               script: videoDataWithSignedUrl.script,
+//             },
+//           },
+//           codec: "h264",
+//         });
+
+//         if (result.type === "success") {
+//           console.log(result.bucketName);
+//           console.log(result.renderId);
+
+//           return result?.publicUrl;
+//         }
+//       },
+//     );
+
+//     Sentry.logger.info("Conversation Video rendered successfully", { videoId });
+
+//     // upload video to cloudflare r2
+//     const uploadVideo = await step.run("upload-video-to-r2", async () => {
+//       if (!renderConversationVideo) {
+//         throw new Error("Render conversation video failed");
+//       }
+//       const response = await fetch(renderConversationVideo);
+//       const videoBuffer = Buffer.from(await response.arrayBuffer());
+
+//       const r2ObjectKey = `output/shorts/conversation/${userId}/${videoId}.mp4`;
+
+//       await uploadVideoToR2({
+//         buffer: videoBuffer,
+//         key: r2ObjectKey,
+//         contentType: "video/mp4",
+//       });
+
+//       return r2ObjectKey;
+//     });
+
+//     Sentry.logger.info("Conversation Video uploaded to r2 successfully", {
+//       videoId,
+//     });
+
+//     // save video R2 key to DB
+//     await step.run("save-video-to-db", async () => {
+//       await prisma.conversationVideo.update({
+//         where: { id: videoId },
+//         data: {
+//           r2ObjectKey: uploadVideo,
+//           status: "SUCCESS",
+//         },
+//       });
+//     });
+
+//     return {
+//       success: true,
+//       message: "Conversation Video rendered successfully",
+//     };
+//   },
+// );
