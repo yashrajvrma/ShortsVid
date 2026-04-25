@@ -3,7 +3,6 @@ import { inngest } from "@/inngest/client";
 import {
   generateConversationVideo,
   generateShort,
-  helloWorld,
   renderShorts,
   renderConversationVideo,
 } from "@/inngest/function";
@@ -12,7 +11,6 @@ import {
 export const { GET, POST, PUT } = serve({
   client: inngest,
   functions: [
-    helloWorld,
     generateShort,
     renderShorts,
     generateConversationVideo,
