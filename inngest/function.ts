@@ -704,7 +704,8 @@ export const renderConversationVideo = inngest.createFunction(
           },
           codec: "h264",
           maxRetries: 1,
-          framesPerLambda: 300,
+          framesPerLambda: 30, // 1000 concurrent lambda worker --> 1 will glue all the video clips and rest 999 will render the video clip parallely, so 999 X 30 = 3000 frames === 100 sec video
+
           timeoutInMilliseconds: 300000, // 300seconds
         });
 
