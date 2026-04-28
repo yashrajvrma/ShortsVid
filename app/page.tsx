@@ -14,13 +14,21 @@ import { env } from "@/lib/env";
 const APP_URL = env.NEXT_PUBLIC_BASE_URL || "https://shortsvid.pro";
 
 export const metadata: Metadata = {
-  title: "ShortsVid - AI Short Video Generator for YouTube, TikTok & Instagram",
+  title: {
+    absolute: "AI Short Video Generator for YouTube, TikTok & Instagram | ShortsVid",
+  },
   description:
     "Create viral YouTube Shorts, Instagram Reels, and TikTok videos in minutes with AI. Auto-generate scripts, voiceovers, captions, and background music. No editing skills needed.",
   alternates: { canonical: APP_URL },
   openGraph: {
     url: APP_URL,
-    title: "ShortsVid - AI Short Video Generator",
+    title: "AI Short Video Generator for YouTube, TikTok & Instagram | ShortsVid",
+    description:
+      "Create viral YouTube Shorts, Instagram Reels, and TikTok videos in minutes with AI. Auto-generate scripts, voiceovers, captions, and background music.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AI Short Video Generator for YouTube, TikTok & Instagram | ShortsVid",
     description:
       "Create viral YouTube Shorts, Instagram Reels, and TikTok videos in minutes with AI. Auto-generate scripts, voiceovers, captions, and background music.",
   },

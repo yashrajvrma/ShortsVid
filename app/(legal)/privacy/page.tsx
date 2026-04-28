@@ -11,6 +11,19 @@ export const metadata: Metadata = {
   description:
     "Read ShortsVid's Privacy Policy to understand how we collect, use, and protect your personal data.",
   alternates: { canonical: `${APP_URL}/privacy` },
+  openGraph: {
+    url: `${APP_URL}/privacy`,
+    title: "Privacy Policy",
+    description:
+      "Read ShortsVid's Privacy Policy to understand how we collect, use, and protect your personal data.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Privacy Policy",
+    description:
+      "Read ShortsVid's Privacy Policy to understand how we collect, use, and protect your personal data.",
+  },
 };
 
 export default function Page() {

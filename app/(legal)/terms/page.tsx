@@ -11,6 +11,19 @@ export const metadata: Metadata = {
   description:
     "Read ShortsVid's Terms of Service to understand your rights and responsibilities when using our AI video generation platform.",
   alternates: { canonical: `${APP_URL}/terms` },
+  openGraph: {
+    url: `${APP_URL}/terms`,
+    title: "Terms of Service",
+    description:
+      "Read ShortsVid's Terms of Service to understand your rights and responsibilities when using our AI video generation platform.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Terms of Service",
+    description:
+      "Read ShortsVid's Terms of Service to understand your rights and responsibilities when using our AI video generation platform.",
+  },
 };
 
 export default function Page() {

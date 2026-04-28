@@ -15,6 +15,8 @@ export default function robots(): MetadataRoute.Robots {
           "/privacy",
           "/terms",
           "/blog/",
+          "/llms.txt",
+          "/llms-full.txt",
         ],
         disallow: ["/app/", "/api/"],
         // /_next/ intentionally NOT disallowed — Google needs it to render pages

@@ -38,8 +38,8 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: `ShortsVid - Automate viral shorts for Tiktok, Instagram and Youtube in seconds`,
-    template: `%s | ShortsVid`,
+    default: "ShortsVid",
+    template: "%s",
   },
   description: APP_DESCRIPTION,
   keywords: [

@@ -11,6 +11,19 @@ export const metadata: Metadata = {
   description:
     "Get in touch with the ShortsVid team. We're here to help with questions, support, and feedback.",
   alternates: { canonical: `${APP_URL}/contact` },
+  openGraph: {
+    url: `${APP_URL}/contact`,
+    title: "Contact",
+    description:
+      "Get in touch with the ShortsVid team. We're here to help with questions, support, and feedback.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact",
+    description:
+      "Get in touch with the ShortsVid team. We're here to help with questions, support, and feedback.",
+  },
 };
 
 export default function Page() {

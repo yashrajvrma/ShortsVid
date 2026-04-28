@@ -11,6 +11,19 @@ export const metadata: Metadata = {
   description:
     "Learn about ShortsVid.pro — the AI-powered short video generator built for creators, marketers, and storytellers.",
   alternates: { canonical: `${APP_URL}/about` },
+  openGraph: {
+    url: `${APP_URL}/about`,
+    title: "About",
+    description:
+      "Learn about ShortsVid.pro — the AI-powered short video generator built for creators, marketers, and storytellers.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About",
+    description:
+      "Learn about ShortsVid.pro — the AI-powered short video generator built for creators, marketers, and storytellers.",
+  },
 };
 
 export default function Page() {

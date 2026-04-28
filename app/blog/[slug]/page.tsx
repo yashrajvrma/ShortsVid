@@ -24,9 +24,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!blog) return { title: "Not Found" };
 
   return {
-    title: `${blog.title} — ShortsVid Blog`,
+    title: blog.title,
     description: blog.description,
+    alternates: {
+      canonical: `/blog/${blog.slug}`,
+    },
     openGraph: {
+      url: `https://shortsvid.pro/blog/${blog.slug}`,
       title: blog.title,
       description: blog.description,
       images: [{ url: blog.coverImage }],

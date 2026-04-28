@@ -82,14 +82,24 @@ import { Button } from "@/components/ui/button";
 import logo from "@/public/shortsvid-icon.png";
 
 export const metadata: Metadata = {
-  title: "Blog — ShortsVid",
+  title: "Blog",
   description:
     "Tips, tutorials, and insights on creating viral AI short videos. Learn how to grow your channel with ShortsVid.",
+  alternates: {
+    canonical: "/blog",
+  },
   openGraph: {
+    url: "https://shortsvid.pro/blog",
     title: "Blog",
     description:
       "Tips, tutorials, and insights on creating viral AI short videos.",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog",
+    description:
+      "Tips, tutorials, and insights on creating viral AI short videos.",
   },
 };
 

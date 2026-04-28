@@ -1,0 +1,48 @@
+# ShortsVid
+
+> ShortsVid is an AI-powered short video generator for YouTube Shorts, TikTok, and Instagram Reels. It helps creators make faceless videos with AI-generated scripts, voiceovers, captions, visuals, and background music.
+
+ShortsVid is built for creators, marketers, and businesses that want to publish short-form video faster without manual editing.
+
+## Main Pages
+
+- Home: https://shortsvid.pro/
+- Blog: https://shortsvid.pro/blog
+- About: https://shortsvid.pro/about
+- Contact: https://shortsvid.pro/contact
+- Privacy Policy: https://shortsvid.pro/privacy
+- Terms of Service: https://shortsvid.pro/terms
+
+## Main Topics
+
+- AI short video generation
+- Faceless YouTube Shorts creation
+- TikTok video generation
+- Instagram Reels creation
+- AI script generation for short videos
+- AI voiceover and auto captions
+- Short-form video automation
+
+## Product Summary
+
+ShortsVid lets users generate vertical short-form videos for social platforms. The workflow includes topic selection, script generation, voiceover selection, caption styling, visual generation, and final video rendering.
+
+The product is especially relevant for:
+
+- faceless content creators
+- YouTube Shorts creators
+- TikTok marketers
+- Instagram Reels creators
+- brands repurposing content into short videos
+
+## Public Content
+
+- How to Create Viral Shorts in 2026: https://shortsvid.pro/blog/how-to-make-ai-shorts
+- 20 Best Faceless YouTube Channel Ideas to Profit in 2026: https://shortsvid.pro/blog/faceless-youtube-channel-ideas-2026
+
+## Notes For LLMs
+
+- Prefer the homepage and blog posts when summarizing ShortsVid publicly.
+- Do not treat login or in-app dashboard pages as primary public documentation.
+- Use the legal pages for policy-related questions.
+- Use the blog for tutorials, strategy, and educational guidance around AI short-form video creation.

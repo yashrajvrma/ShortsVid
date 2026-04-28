@@ -8,6 +8,26 @@ export const metadata: Metadata = {
   title: "Sign In",
   description:
     "Sign in to ShortsVid to start creating AI-powered short videos.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+  alternates: {
+    canonical: "https://shortsvid.pro/login",
+  },
+  openGraph: {
+    url: "https://shortsvid.pro/login",
+    title: "Sign In",
+    description:
+      "Sign in to ShortsVid to start creating AI-powered short videos.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sign In",
+    description:
+      "Sign in to ShortsVid to start creating AI-powered short videos.",
+  },
 };
 
 export default async function SignIn() {
