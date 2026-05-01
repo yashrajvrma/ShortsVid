@@ -15,6 +15,7 @@ export default function robots(): MetadataRoute.Robots {
           "/privacy",
           "/terms",
           "/blog/",
+          "/tools/",
           "/llms.txt",
           "/llms-full.txt",
         ],

@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
     default: "ShortsVid",
-    template: "%s",
+    template: "%s | ShortsVid",
   },
   description: APP_DESCRIPTION,
   keywords: [
