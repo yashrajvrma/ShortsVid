@@ -1,28 +1,18 @@
 import { prisma } from "@/db";
-import { authProcedure, createTRPCRouter } from "../init";
+import { authProcedure, baseProcedure, createTRPCRouter } from "../init";
 import { getSignedObjectUrl } from "@/lib/r2-bucket";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
 export const stockRouter = createTRPCRouter({
-  getAllBackgroundMusic: authProcedure.query(async ({ ctx }) => {
-    const [systemUploadedMusic, userUploadedMusic] = await Promise.all([
-      prisma.stock.findMany({
-        where: {
-          stockVariant: "SYSTEM",
-          stockType: "BG_MUSIC",
-        },
-        orderBy: { createdAt: "desc" },
-      }),
-      prisma.stock.findMany({
-        where: {
-          stockVariant: "USER",
-          stockType: "BG_MUSIC",
-          userId: ctx.userId,
-        },
-        orderBy: { createdAt: "desc" },
-      }),
-    ]);
+  getAllBackgroundMusic: baseProcedure.query(async () => {
+    const systemUploadedMusic = await prisma.stock.findMany({
+      where: {
+        stockVariant: "SYSTEM",
+        stockType: "BG_MUSIC",
+      },
+      orderBy: { createdAt: "desc" },
+    });
 
     const convertR2ObjectKeyToSignedUrl = async (
       musicList: typeof systemUploadedMusic,
@@ -48,15 +38,11 @@ export const stockRouter = createTRPCRouter({
       );
     };
 
-    const [systemBackgroundMusic, userbackgroundMusic] = await Promise.all([
-      convertR2ObjectKeyToSignedUrl(systemUploadedMusic),
-      convertR2ObjectKeyToSignedUrl(userUploadedMusic),
-    ]);
+    const systemBackgroundMusic = await convertR2ObjectKeyToSignedUrl(
+      systemUploadedMusic,
+    );
 
-    return {
-      systemMusic: systemBackgroundMusic,
-      userMusic: userbackgroundMusic,
-    };
+    return systemBackgroundMusic;
   }),
 
   getSystemBackgroundVideos: authProcedure.query(async () => {

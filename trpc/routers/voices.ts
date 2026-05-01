@@ -1,29 +1,18 @@
-import { string, z } from "zod";
-import { TRPCError } from "@trpc/server";
+import { z } from "zod";
 import { prisma } from "@/db";
-import { authProcedure, createTRPCRouter } from "../init";
+import { baseProcedure, createTRPCRouter } from "../init";
 import { Prisma } from "@prisma/client";
 import { getSignedAudioUrl } from "@/lib/r2-bucket";
-// import { getSignedAudioUrl } from "@/lib/r2-bucket";
 
 export const voiceRouter = createTRPCRouter({
-  //   getAll : authProcedure.input(z.object({
-  //   })).query(async ({ ctx }) => {
-  //     // const videos = await prisma.video.findMany({
-  //     //   where: {
-  //     //     userId: ctx.userId,
-  //     //   },
-  //     // });
-  //     return { videos: [] };
-  //   }
-  getSystemVoice: authProcedure
+  getSystemVoice: baseProcedure
     .input(
       z.object({
         languageCode: z.string().min(1),
         query: z.string().trim().optional(),
       }),
     )
-    .query(async ({ ctx, input }) => {
+    .query(async ({ input }) => {
       // create the search filter for prisma with typesafety
       const searchFilter: Prisma.VoiceWhereInput = input?.query
         ? {

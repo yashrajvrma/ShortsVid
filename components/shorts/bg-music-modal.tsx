@@ -107,7 +107,7 @@ function MusicItem({
       {audioUrl && (
         <button
           type="button"
-          onClick={handlePlay}  
+          onClick={handlePlay}
           className={`size-7 rounded-full flex items-center justify-center shrink-0 transition-colors ${
             isSelected
               ? "bg-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/30"
@@ -140,8 +140,7 @@ export function BgMusicModal({
     onClose();
   };
 
-  const systemMusic = data?.systemMusic ?? [];
-  const userMusic = data?.userMusic ?? [];
+  const systemMusic = data ?? [];
 
   return (
     <AlertDialog open={open}>
@@ -246,10 +245,10 @@ export function BgMusicModal({
                         stopSignal={stopSignal}
                       />
                     ))}
-                  </div>
+          </div>
                 )}
               </ScrollArea>
-            </div>
+        </div>
           </TabsContent> */}
         </Tabs>
       </AlertDialogContent>

@@ -25,8 +25,7 @@ export function BgMusicSelector({
   const selectedMusic = useMemo(() => {
     if (!selectedMusicId) return null;
     if (!data) return null;
-    const allMusic = [...(data.systemMusic ?? []), ...(data.userMusic ?? [])];
-    return allMusic.find((m) => m.id === selectedMusicId) ?? null;
+    return data.find((m) => m.id === selectedMusicId) ?? null;
   }, [selectedMusicId, data]);
 
   const avatarSvg = useVoiceAvatar(selectedMusic?.name || "default");
