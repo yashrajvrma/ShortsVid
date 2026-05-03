@@ -18,8 +18,8 @@ const LEGAL_LINKS = [
 ];
 
 const FREE_TOOLS = [
-  { label: "Faceless Shorts Generator", href: "/app/shorts/faceless-shorts" },
-  { label: "AI Tiktok Shorts", href: "/app/shorts/faceless-shorts" },
+  { label: "Faceless Shorts Generator", href: "/tools/faceless-shorts" },
+  { label: "AI Tiktok Shorts", href: "/tools/faceless-shorts" },
   { label: "Italian Brainrot Videos", href: "/app/shorts/conversation-videos" },
   { label: "Conversation Videos", href: "/app/shorts/conversation-videos" },
   {
