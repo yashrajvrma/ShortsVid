@@ -78,6 +78,10 @@ ShortsVid is relevant to the following search and answer-engine topics:
 The main public-facing pages for ShortsVid are:
 
 - Home: https://shortsvid.pro/
+- Pricing: https://shortsvid.pro/pricing
+- FAQ: https://shortsvid.pro/faq
+- Tools: https://shortsvid.pro/tools
+- Faceless Shorts Generator: https://shortsvid.pro/tools/faceless-shorts
 - Blog: https://shortsvid.pro/blog
 - About: https://shortsvid.pro/about
 - Contact: https://shortsvid.pro/contact
