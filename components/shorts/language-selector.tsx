@@ -14,6 +14,19 @@ interface LanguageSelectorProps {
   onChange: (value: string) => void;
 }
 
+const getFlagUrl = (code: string) => {
+  const countryMap: Record<string, string> = {
+    en: "us",
+    de: "de",
+    fr: "fr",
+    ru: "ru",
+    ja: "jp",
+    zh: "cn",
+  };
+  const countryCode = countryMap[code] || "us";
+  return `https://flagcdn.com/${countryCode}.svg`;
+};
+
 export function LanguageSelector({ value, onChange }: LanguageSelectorProps) {
   return (
     <div className="space-y-2">
@@ -28,8 +41,12 @@ export function LanguageSelector({ value, onChange }: LanguageSelectorProps) {
           <SelectContent>
             {LANGUAGES.map((lang) => (
               <SelectItem key={lang.code} value={lang.code}>
-                <span className="flex items-center gap-2">
-                  <span>{lang.flag}</span>
+                <span className="flex items-center gap-2.5">
+                  <img
+                    src={getFlagUrl(lang.code)}
+                    alt={`${lang.name} flag`}
+                    className="w-4 h-3 object-cover rounded-[1px] shadow-sm"
+                  />
                   <span>{lang.name}</span>
                 </span>
               </SelectItem>
