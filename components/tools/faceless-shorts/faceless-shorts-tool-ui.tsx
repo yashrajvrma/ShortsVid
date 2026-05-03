@@ -60,6 +60,12 @@ export default function FacelessShortsToolUi() {
       router.push("/app/library");
     },
     onError: (error: TRPCClientErrorLike<AppRouter>) => {
+      // Insufficient credits — send to pricing page
+      if (error.data?.code === "PAYMENT_REQUIRED") {
+        toast.error("Not enough credits to generate video.");
+        router.push("/pricing");
+        return;
+      }
       toast.error(error.message || "Failed to start video generation");
     },
   });
@@ -143,7 +149,7 @@ export default function FacelessShortsToolUi() {
     <Button
       id="faceless-shorts-generate-btn"
       className="w-full h-11 font-semibold gap-2 text-sm"
-      disabled={isPending}
+      disabled={isPending || !canGenerate}
       onClick={handleGenerate}
     >
       {isPending ? (
