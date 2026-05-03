@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSession } from "@/lib/auth/client";
 
 const NAV_LINKS = [
-  { href: "/pricing", label: "Pricing" },
+  { href: "/#pricing", label: "Pricing" },
   { href: "/#faq", label: "FAQ" },
   { href: "#features", label: "Features" },
   { href: "/blog", label: "Blog" },
