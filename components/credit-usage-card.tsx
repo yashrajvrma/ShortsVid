@@ -119,9 +119,9 @@ export default async function CreditUsageCard() {
   const hasSubscription = !!userRecord.subscription;
   const billingEnd = userRecord.subscription?.currentPeriodEnd
     ? new Date(userRecord.subscription.currentPeriodEnd).toLocaleDateString(
-        "en-US",
-        { month: "long", day: "numeric", year: "numeric" },
-      )
+      "en-US",
+      { month: "long", day: "numeric", year: "numeric" },
+    )
     : null;
 
   return (
@@ -177,7 +177,7 @@ export default async function CreditUsageCard() {
         </form>
       ) : (
         <Link
-          href="/#pricing"
+          href="/pricing"
           className="w-full flex items-center justify-between px-3 py-3 hover:bg-muted transition-colors group"
         >
           <span className="text-sm font-medium tracking-tight text-primary">

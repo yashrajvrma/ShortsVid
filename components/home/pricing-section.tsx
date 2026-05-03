@@ -113,15 +113,22 @@ export function PricingSection() {
     >
       <div className="mx-auto max-w-4xl">
         {/* Header */}
-        <div className="text-center sm:mb-24 mb-16">
-          <div className="text-3xl sm:text-4xl font-semibold tracking-tighter text-foreground mb-4">
+        <div className="text-center sm:mb-14 mb-16">
+          {/* <div className="text-3xl sm:text-4xl font-semibold tracking-tighter text-foreground mb-4">
             Pricing
-          </div>
-          <div className="text-lg mt-5 font-medium">
-            Save{" "}
-            <span className="text-primary font-semibold tracking-tight">
+          </div> */}
+          <p className="text-4xl tracking-tight font-semibold">
+            Choose your plan
+          </p>
+          <p className="text-lg text-muted-foreground py-2">
+            Replace 8+ tools with a simple AI workflow
+          </p>
+
+          <div className="flex justify-center text-lg mt-5 font-medium">
+            Save
+            <span className="px-1 text-primary font-semibold tracking-tight">
               40% off
-            </span>{" "}
+            </span>
             on yearly plan
           </div>
         </div>
