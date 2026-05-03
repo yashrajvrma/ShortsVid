@@ -4,8 +4,15 @@ import type { FacelessFormState } from "@/hooks/use-faceless-form";
 import { VIDEO_STYLES } from "@/lib/constants";
 import type { CaptionStyle } from "@/types";
 import { CaptionAnimationOverlay } from "../captions/caption-animation-overlay";
+import { HelpCircle } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-const MOCKUP_WIDTH = 240;
+const MOCKUP_WIDTH = 350;
 
 interface MockupPreviewProps {
   form: FacelessFormState & {
@@ -20,7 +27,31 @@ export function MockupPreview({ form }: MockupPreviewProps) {
   );
 
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-5 py-6">
+    <div className="flex flex-col justify-between items-center h-full gap-5 py-6 px-3">
+      {/* Credits Card */}
+      <div className="bg-card border border-border px-3 py-1 rounded-lg shadow-sm flex flex-col gap-1 text-sm font-medium text-muted-foreground w-full mx-5">
+        <div>Esitmated credits:</div>
+        <div className="flex items-center text-primary font-semibold gap-2">
+          5 credits
+          <span>
+            {" "}
+            <TooltipProvider delayDuration={100}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="w-4 h-4 text-muted-foreground hover:text-foreground transition-colors cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent
+                  side="top"
+                  className="text-xs p-2.5 max-w-[250px] shadow-md leading-relaxed"
+                >
+                  <p>5 credits per 1 video</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </span>
+        </div>
+      </div>
+
       {/* Phone shell */}
       <div
         className="relative shrink-0"

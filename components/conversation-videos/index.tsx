@@ -279,7 +279,7 @@ export default function ConversationVideos() {
         </div>
 
         {/* ── RIGHT 35% ─────────────────────────────────────────────────── */}
-        <div className="hidden md:flex flex-col min-h-0 bg-muted/30 sm:w-[35%]">
+        <div className="hidden md:flex flex-col min-h-0 sm:w-[35%]">
           {/* Scrollable preview */}
           <div className="flex-1 min-h-0 overflow-auto">
             <ConversationMockupPreview form={form} />
