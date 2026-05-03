@@ -18,6 +18,10 @@ export const env = createEnv({
     FISH_AUDIO_API_KEY: z.string().min(1),
     TOGETHER_AI_API_KEY: z.string().min(1),
 
+    // resend email
+    RESEND_API_KEY: z.string().min(1),
+    EMAIL_FROM: z.string().min(1),
+
     // cloudflare api key
     R2_TOKEN: z.string().min(1),
     R2_ACCOUNT_ID: z.string().min(1),
