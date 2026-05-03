@@ -75,7 +75,7 @@ export function ProductFeatures() {
           className="flex flex-col justify-center mb-12 text-center"
         >
           <h2 className="text-3xl sm:text-5xl font-medium tracking-tighter text-foreground">
-            Create viral videos in few clicks
+            Create viral Faceless videos in few clicks
           </h2>
           <p className="mt-4 sm:text-xl text-base text-muted-foreground text-center mx-auto max-w-2xl">
             No Need of switching tools and manual editing. ShortsVid gives you

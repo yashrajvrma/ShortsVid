@@ -47,14 +47,14 @@ export function Hero() {
         className="flex flex-col items-center text-4xl sm:text-6xl tracking-tighter font-semibold leading-[1.05] max-w-2xl mx-auto"
       >
         <div className="flex">
-          Automate
-          <Image
+          Automate viral Faceless
+          {/* <Image
             src={socialImg}
             alt="social Icons"
             className="inline-block sm:w-40 w-24 mx-2"
             draggable={false}
-          />
-          viral
+            priority
+          /> */}
         </div>{" "}
         <div>shorts in seconds</div>
         {/* <div>&#35; 1 AI shorts</div>
