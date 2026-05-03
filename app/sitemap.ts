@@ -4,24 +4,13 @@ import { MetadataRoute } from "next";
 const BASE_URL =
   process.env.NEXT_PUBLIC_BASE_URL || "https://shortsvid.pro";
 
-// ─── Tool pages ──────────────────────────────────────────────────────────────
-// Add a new slug here each time a /tools/* page is built.
-const TOOL_SLUGS = [
-  "brainrot-video-generator",
-  "minecraft-parkour-generator",
-  "tiktok-transcript",
-  "fake-imessage-generator",
-  "fake-instagram-dm",
-  "tiktok-money-calculator",
-  "italian-brainrot-generator",
-  "pdf-to-brainrot",
-  "reddit-story-generator",
-  "youtube-shorts-generator",
+// ─── Live tool pages ──────────────────────────────────────────────────────────
+// Only add a slug here when its /tools/[slug]/page.tsx is actually built.
+// Listing non-existent pages hurts crawl budget and can cause soft-404 penalties.
+const LIVE_TOOL_SLUGS = [
+  "faceless-shorts",
+  // "brainrot-video-generator", // 👈 uncomment once page is built
 ];
-
-// ─── Alternatives / comparison pages ─────────────────────────────────────────
-// These are published as regular blog posts under /blog/ — no separate route
-// needed. getAllBlogs() picks them up automatically.
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -33,29 +22,51 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  const tools = TOOL_SLUGS.map((slug) => ({
+  const tools = LIVE_TOOL_SLUGS.map((slug) => ({
     url: `${BASE_URL}/tools/${slug}`,
     lastModified: now,
     changeFrequency: "monthly" as const,
-    priority: 0.9, // second-highest — these are the main traffic pages
+    priority: 0.9,
   }));
 
-
-
   return [
-    // ── Core pages ──────────────────────────────────────────────────────────
+    // ── Highest priority — homepage ─────────────────────────────────────────
     {
       url: BASE_URL,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 1.0,
     },
+
+    // ── Core marketing pages ────────────────────────────────────────────────
+    {
+      url: `${BASE_URL}/pricing`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${BASE_URL}/faq`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
+    {
+      url: `${BASE_URL}/tools`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
+
+    // ── Blog ────────────────────────────────────────────────────────────────
     {
       url: `${BASE_URL}/blog`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.8,
     },
+
+    // ── Secondary pages ─────────────────────────────────────────────────────
     {
       url: `${BASE_URL}/about`,
       lastModified: now,
@@ -74,6 +85,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.5,
     },
+
+    // ── Legal ───────────────────────────────────────────────────────────────
     {
       url: `${BASE_URL}/privacy`,
       lastModified: now,
@@ -86,6 +99,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "yearly",
       priority: 0.3,
     },
+
+    // ── AI / LLM discovery ──────────────────────────────────────────────────
     {
       url: `${BASE_URL}/llms.txt`,
       lastModified: now,
@@ -98,7 +113,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.4,
     },
+
+    // ── Tool pages (live only) ──────────────────────────────────────────────
     ...tools,
+
+    // ── Blog posts ──────────────────────────────────────────────────────────
     ...blogs,
   ];
 }
+
