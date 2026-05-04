@@ -33,37 +33,37 @@ export const VIDEO_STYLES: {
   {
     id: "ANIME",
     label: "Anime",
-    thumbnail: "/images/stocks/anime.jpg",
+    thumbnail: "/images/stocks/anime.webp",
   },
   {
     id: "CARTOON",
     label: "Cartoon",
-    thumbnail: "/images/stocks/cartoon.jpg",
+    thumbnail: "/images/stocks/cartoon.webp",
   },
   {
     id: "CINEMATIC",
     label: "Cinematic",
-    thumbnail: "/images/stocks/cinematic.jpg",
+    thumbnail: "/images/stocks/cinematic.webp",
   },
   {
     id: "COLORFUL_COMICS",
     label: "Colorful Comics",
-    thumbnail: "/images/stocks/colorful_comics.jpg",
+    thumbnail: "/images/stocks/colorful_comics.webp",
   },
   {
     id: "CYBERPUNK",
     label: "Cyberpunk",
-    thumbnail: "/images/stocks/cyberpunk.jpg",
+    thumbnail: "/images/stocks/cyberpunk.webp",
   },
   {
     id: "PIXEL_ART",
     label: "Pixel Art",
-    thumbnail: "/images/stocks/pixel_art.jpg",
+    thumbnail: "/images/stocks/pixel_art.webp",
   },
   {
     id: "PHOTO_REALISTIC",
     label: "Photo Realistic",
-    thumbnail: "/images/stocks/realistic.jpg",
+    thumbnail: "/images/stocks/realistic.webp",
   },
 ];
 

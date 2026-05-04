@@ -5,9 +5,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import ShortsVidLogo from "@/public/shortsvid-icon.png";
 import React from "react";
-import Image from "next/image";
 import { auth } from "@/lib/auth/server";
 import { prisma } from "@/db";
 import { headers } from "next/headers";

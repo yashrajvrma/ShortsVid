@@ -5,13 +5,13 @@ import { VideoShowcase } from "./video-showcase";
 import { Button } from "../ui/button";
 import { MoveRight, Zap } from "lucide-react";
 import { AvatarCircles } from "@/components/ui/avatar-circles";
-import img1 from "@/public/images/testimonials/1690466258472.jpg";
+import img1 from "@/public/images/testimonials/1690466258472.webp";
 import img2 from "@/public/images/testimonials/2idjdjwkexnxsleke.webp";
-import img3 from "@/public/images/testimonials/hnn7qjbeka98bkikpdokprbp7qq-314-profile (1).webp";
-import img4 from "@/public/images/testimonials/jsjjeoeoeoc.jpg";
+import img3 from "@/public/images/testimonials/hnn7qjbeka98bkikpdokprbp7qq.webp";
+import img4 from "@/public/images/testimonials/jsjjeoeoeoc.webp";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import socialImg from "@/public/images/social-icons.png";
+import socialImg from "@/public/images/social-icons.webp";
 
 const avatarUrls = [img1, img2, img3, img4];
 

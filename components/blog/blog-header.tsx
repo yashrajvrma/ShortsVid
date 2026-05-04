@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import logo from "@/public/shortsvid-icon.png";
+import logo from "@/public/shortsvid-icon.webp";
 import { formatDate } from "@/lib/utils";
 
 interface BlogHeaderProps {

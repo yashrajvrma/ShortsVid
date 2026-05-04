@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import logo from "@/public/shortsvid-light-icon.png";
-import buildfastIcon from "@/public/buildfast-icon.png";
+import logo from "@/public/shortsvid-light-icon.webp";
+import buildfastIcon from "@/public/buildfast-icon.webp";
 
 const NAV_LINKS = [
   { label: "Features", href: "/#features" },
@@ -224,7 +224,7 @@ export function Footer() {
 
             <a href="https://toolfio.com" target="_blank" rel="dofollow">
               <img
-                src="https://toolfio.com/toolfio-light-badge.png"
+                src="https://toolfio.com/toolfio-light-badge.webp"
                 alt="Featured on Toolfio"
                 width="150"
                 height="54"

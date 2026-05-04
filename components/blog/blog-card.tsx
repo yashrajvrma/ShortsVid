@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { CalendarDays, Clock } from "lucide-react";
 import { BlogMeta } from "@/types";
 import { formatDate } from "@/lib/utils";
-import logoIcon from "@/public/shortsvid-icon.png";
+import logoIcon from "@/public/shortsvid-icon.webp";
 
 interface BlogCardProps {
   blog: BlogMeta;

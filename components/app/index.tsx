@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import ShortsVidIcon from "@/public/shortsvid-icon.png";
+import ShortsVidIcon from "@/public/shortsvid-icon.webp";
 import { Button } from "@/components/ui/button";
 import { ScanFace, UsersRound } from "lucide-react";
 

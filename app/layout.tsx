@@ -89,7 +89,7 @@ export const metadata: Metadata = {
     description: APP_DESCRIPTION,
     images: [
       {
-        url: "/opengraph-image.png",
+        url: "/opengraph-image.webp",
         width: 1200,
         height: 630,
         alt: `ShortsVid - Automate viral faceless shorts for Tiktok, Instagram and Youtube in seconds`,
@@ -102,24 +102,24 @@ export const metadata: Metadata = {
     creator: "@shortsvid",
     title: `ShortsVid - Automate viral faceless shorts for Tiktok, Instagram and Youtube in seconds`,
     description: APP_DESCRIPTION,
-    images: ["/opengraph-image.png"],
+    images: ["/opengraph-image.webp"],
   },
   manifest: "/manifest.webmanifest",
   icons: {
     icon: [
       { url: "/favicon.ico" },
       {
-        url: "/web-app-manifest-192x192.png",
+        url: "/web-app-manifest-192x192.webp",
         sizes: "192x192",
         type: "image/png",
       },
       {
-        url: "/web-app-manifest-512x512.png",
+        url: "/web-app-manifest-512x512.webp",
         sizes: "512x512",
         type: "image/png",
       },
     ],
-    apple: [{ url: "/web-app-manifest-192x192.png" }],
+    apple: [{ url: "/web-app-manifest-192x192.webp" }],
   },
 };
 

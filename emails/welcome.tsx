@@ -1,59 +1,3 @@
-// import {
-//   Body,
-//   Container,
-//   Head,
-//   Heading,
-//   Html,
-//   Preview,
-//   Text,
-//   Button,
-//   Tailwind,
-// } from "@react-email/components";
-
-// interface WelcomeEmailProps {
-//   name: string;
-// }
-
-// export default function WelcomeEmail({ name }: WelcomeEmailProps) {
-//   return (
-//     <Html>
-//       <Head />
-//       <Preview>Welcome to ShortsVid!</Preview>
-//       <Tailwind>
-//         <Body className="bg-white my-auto mx-auto font-sans">
-//           <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] w-[465px]">
-//             <Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
-//               Welcome to <strong>ShortsVid</strong>
-//             </Heading>
-//             <Text className="text-black text-[14px] leading-[24px]">
-//               Hello {name},
-//             </Text>
-//             <Text className="text-black text-[14px] leading-[24px]">
-//               We're thrilled to have you on board. ShortsVid makes it incredibly
-//               easy to generate high-quality video content using AI. Get ready to
-//               scale your video production and capture your audience's attention!
-//             </Text>
-//             <Button
-//               className="bg-[#000000] rounded text-white text-[12px] font-semibold no-underline text-center px-4 py-3 mt-4"
-//               href="https://shortsvid.pro/app"
-//             >
-//               Generate your first video
-//             </Button>
-//             <Text className="text-black text-[14px] leading-[24px] mt-[24px]">
-//               If you have any questions, simply reply to this email. We're here
-//               to help.
-//             </Text>
-//           </Container>
-//         </Body>
-//       </Tailwind>
-//     </Html>
-//   );
-// }
-
-// WelcomeEmail.PreviewProps = {
-//   name: "John Doe",
-// } satisfies WelcomeEmailProps;
-
 import {
   Body,
   Container,
@@ -92,7 +36,7 @@ export default function WelcomeEmail({ name }: WelcomeEmailProps) {
                     <tr>
                       <td valign="middle" className="pr-1">
                         <Img
-                          src="https://cdn.shortsvid.pro/images/shortsvid-logo.png"
+                          src="https://cdn.shortsvid.pro/images/shortsvid-logo.webp"
                           alt="ShortsVid"
                           height="28"
                         />

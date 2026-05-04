@@ -42,7 +42,7 @@ const organizationSchema = {
   "@type": "Organization",
   name: "ShortsVid",
   url: APP_URL,
-  logo: `${APP_URL}/web-app-manifest-512x512.png`,
+  logo: `${APP_URL}/web-app-manifest-512x512.webp`,
   sameAs: [],
 };
 

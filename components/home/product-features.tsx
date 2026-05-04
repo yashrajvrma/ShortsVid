@@ -4,12 +4,12 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 
 // Import your screenshots here
-import scriptImg from "@/public/images/ai-script.png";
-import videoStyleImg from "@/public/images/video-style.png";
-import captionsImg from "@/public/images/captions.png";
-import voiceImg from "@/public/images/voices.png";
-import exportImg from "@/public/images/export.png";
-import gameplayImg from "@/public/images/gameplay-shorts.png";
+import scriptImg from "@/public/images/ai-script.webp";
+import videoStyleImg from "@/public/images/video-style.webp";
+import captionsImg from "@/public/images/captions.webp";
+import voiceImg from "@/public/images/voices.webp";
+import exportImg from "@/public/images/export.webp";
+import gameplayImg from "@/public/images/gameplay-shorts.webp";
 
 const FEATURES = [
   {

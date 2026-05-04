@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import logo from "@/public/shortsvid-icon.png";
+import logo from "@/public/shortsvid-icon.webp";
 
 export function BlogFooter() {
   return (

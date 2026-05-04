@@ -128,7 +128,7 @@ export const generateShort = inngest.createFunction(
 
           const buffer = await generateImageBuffer(enrichedPrompt, scene.mood);
 
-          const key = `shorts/${videoId}/images/scene_${scene.sceneIndex}.png`;
+          const key = `shorts/${videoId}/images/scene_${scene.sceneIndex}.webp`;
 
           await uploadImageToR2({
             buffer,

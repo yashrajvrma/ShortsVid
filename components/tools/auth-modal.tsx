@@ -14,9 +14,9 @@ import {
 import { signIn } from "@/lib/auth/client";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
-import loginImg1 from "@/public/images/E4sxmoEYhqg.jpg";
-import loginImg2 from "@/public/images/kdkdkdkdkeo30303.jpg";
-import loginImg3 from "@/public/images/maxresdefault.jpg";
+import loginImg1 from "@/public/images/E4sxmoEYhqg.webp";
+import loginImg2 from "@/public/images/kdkdkdkdkeo30303.webp";
+import loginImg3 from "@/public/images/maxresdefault.webp";
 
 function GoogleIcon() {
   return (

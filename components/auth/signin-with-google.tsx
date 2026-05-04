@@ -5,9 +5,9 @@ import { signIn } from "@/lib/auth/client";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
-import loginImg1 from "@/public/images/E4sxmoEYhqg.jpg";
-import loginImg2 from "@/public/images/kdkdkdkdkeo30303.jpg";
-import loginImg3 from "@/public/images/maxresdefault.jpg";
+import loginImg1 from "@/public/images/E4sxmoEYhqg.webp";
+import loginImg2 from "@/public/images/kdkdkdkdkeo30303.webp";
+import loginImg3 from "@/public/images/maxresdefault.webp";
 import { Spinner } from "../ui/spinner";
 import { useSearchParams } from "next/navigation";
 
