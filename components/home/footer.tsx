@@ -224,7 +224,7 @@ export function Footer() {
 
             <a href="https://toolfio.com" target="_blank" rel="dofollow">
               <img
-                src="https://toolfio.com/toolfio-light-badge.webp"
+                src="https://toolfio.com/toolfio-light-badge.png"
                 alt="Featured on Toolfio"
                 width="150"
                 height="54"

@@ -7,7 +7,7 @@ import { TestimonialsColumn } from "../testimonial-columns";
 const testimonials = [
   {
     text: "I went from 0 to 47K followers in 6 weeks using ShortsVid. I just paste my blog posts and it turns them into viral-ready Shorts. My content output went from 2 videos/week to 20+.",
-    image: "https://randomuser.me/api/portraits/men/32.webp",
+    image: "https://randomuser.me/api/portraits/men/32.jpg",
     name: "Marcus Delgado",
     role: "Digital Creator • 47K followers",
     platform: "YouTube",
@@ -15,7 +15,7 @@ const testimonials = [
   },
   {
     text: "As a solo founder, I have no time to sit and edit. ShortsVid generates my weekly content in under 10 minutes. The captions sync perfectly and the AI voiceover sounds surprisingly natural.",
-    image: "https://randomuser.me/api/portraits/women/44.webp",
+    image: "https://randomuser.me/api/portraits/women/44.jpg",
     name: "Priya Nair",
     role: "SaaS Founder & Bootstrapper",
     platform: "TikTok",
@@ -23,7 +23,7 @@ const testimonials = [
   },
   {
     text: "We use ShortsVid for our agency clients across 5 niches. The batch generation feature saves us literally 30+ hours a month. ROI was clear in the first billing cycle.",
-    image: "https://randomuser.me/api/portraits/men/55.webp",
+    image: "https://randomuser.me/api/portraits/men/55.jpg",
     name: "James Okafor",
     role: "Social Media Agency Owner",
     platform: "Instagram",
@@ -31,7 +31,7 @@ const testimonials = [
   },
   {
     text: "The video quality and pacing are on point. I tested 3 other AI video tools before landing here. ShortsVid is the only one that didn't make my audience cringe at the cuts.",
-    image: "https://randomuser.me/api/portraits/women/22.webp",
+    image: "https://randomuser.me/api/portraits/women/22.jpg",
     name: "Sofia Marchetti",
     role: "Lifestyle & Travel Creator",
     platform: "TikTok",
@@ -39,7 +39,7 @@ const testimonials = [
   },
   {
     text: "I repurpose my podcast episodes into Shorts every week. My episode about stoicism got 2.1M views after ShortsVid clipped the best 60 seconds. Game changer for discoverability.",
-    image: "https://randomuser.me/api/portraits/men/13.webp",
+    image: "https://randomuser.me/api/portraits/men/13.jpg",
     name: "Daniel Reeves",
     role: "Podcast Host • The Mind Room",
     platform: "YouTube",
@@ -47,7 +47,7 @@ const testimonials = [
   },
   {
     text: "The script-to-video pipeline is insane. I type a topic, and in 4 minutes I have a complete Short with voiceover, captions, and stock footage. My productivity tripled overnight.",
-    image: "https://randomuser.me/api/portraits/women/67.webp",
+    image: "https://randomuser.me/api/portraits/women/67.jpg",
     name: "Amara Osei",
     role: "Finance Content Creator",
     platform: "YouTube",
@@ -55,7 +55,7 @@ const testimonials = [
   },
   {
     text: "I was skeptical about AI-generated videos but ShortsVid proved me wrong. The auto-caption styling and font options actually match my brand. Viewers can't tell the difference.",
-    image: "https://randomuser.me/api/portraits/men/78.webp",
+    image: "https://randomuser.me/api/portraits/men/78.jpg",
     name: "Ryan Kowalski",
     role: "Fitness Influencer • 120K subs",
     platform: "Instagram",
@@ -63,7 +63,7 @@ const testimonials = [
   },
   {
     text: "Running an e-commerce brand, I needed product Shorts fast. ShortsVid lets me generate 10 product videos in the time it used to take me to make one. Sales from Shorts are up 34%.",
-    image: "https://randomuser.me/api/portraits/women/89.webp",
+    image: "https://randomuser.me/api/portraits/women/89.jpg",
     name: "Layla Hassan",
     role: "E-commerce Brand Owner",
     platform: "TikTok",
@@ -71,7 +71,7 @@ const testimonials = [
   },
   {
     text: "The multilingual voiceover support is what sold me. I create content in English and Spanish simultaneously for my audience. No other tool does this as seamlessly as ShortsVid.",
-    image: "https://randomuser.me/api/portraits/men/91.webp",
+    image: "https://randomuser.me/api/portraits/men/91.jpg",
     name: "Carlos Mendoza",
     role: "Bilingual Content Strategist",
     platform: "YouTube",
