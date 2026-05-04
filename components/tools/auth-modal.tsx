@@ -108,6 +108,7 @@ export default function AuthModal({
                 className="absolute w-[85px] h-[120px] rounded-2xl shadow-md border-2 border-double object-cover"
                 src={loginImg1}
                 alt="preview"
+                priority={true}
                 style={{
                   bottom: 0,
                   left: "50%",
@@ -121,6 +122,7 @@ export default function AuthModal({
                 className="absolute w-[85px] h-[120px] rounded-2xl shadow-md border-2 border-double object-cover"
                 src={loginImg3}
                 alt="preview"
+                priority={true}
                 style={{
                   bottom: 0,
                   left: "50%",
@@ -133,6 +135,7 @@ export default function AuthModal({
                 className="absolute w-[85px] h-[120px] rounded-2xl shadow-md border-2 border-double object-cover"
                 src={loginImg2}
                 alt="preview"
+                priority={true}
                 style={{
                   bottom: 0,
                   left: "50%",

@@ -25,6 +25,7 @@ const AvatarCircles = ({
           src={url}
           width={40}
           height={40}
+          priority={true}
           quality={100}
           alt={`Avatar ${index + 1}`}
         />

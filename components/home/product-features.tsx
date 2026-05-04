@@ -103,7 +103,6 @@ export function ProductFeatures() {
                 <Image
                   src={feature.img}
                   alt={feature.title}
-                  // quality={1200}
                   fill
                   className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

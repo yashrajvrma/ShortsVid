@@ -99,6 +99,7 @@ export default function LoginCard() {
             className="absolute w-[75px] h-[110px] rounded-2xl shadow-md border-2 border-double"
             src={loginImg1}
             alt="login-img1"
+            priority={true}
             style={{
               background: "linear-gradient(135deg, #ffb347, #ff8c42)",
               bottom: 0,
@@ -134,6 +135,7 @@ export default function LoginCard() {
             className="absolute w-[75px] h-[110px] rounded-2xl shadow-md border-2 border-double"
             src={loginImg3}
             alt="login-img3"
+            priority={true}
             style={{
               background: "linear-gradient(135deg, #ffe066, #ffd700)",
               bottom: 0,
@@ -159,6 +161,7 @@ export default function LoginCard() {
             className="absolute w-[75px] h-[110px] rounded-2xl shadow-md border-2 border-double"
             src={loginImg2}
             alt="login-img2"
+            priority={true}
             style={{
               background: "linear-gradient(135deg, #ff6b6b, #ee5a24)",
               bottom: 0,
