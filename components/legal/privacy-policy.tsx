@@ -138,7 +138,7 @@ export default function PrivacyPolicy() {
           For privacy-related questions or concerns:
         </p>
         <a
-          href="mailto:yashrajv.work@gmail.com"
+          href="mailto:hello@shortsvid.pro"
           className="text-primary hover:underline"
         >
           mail us

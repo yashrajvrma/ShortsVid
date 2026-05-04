@@ -82,7 +82,7 @@ export default function About() {
           Have questions, feedback, or just want to say hi?
         </p>
         <a
-          href="mailto:yashrajv.work@gmail.com"
+          href="mailto:hello@shortsvid.pro"
           className="text-primary hover:underline"
         >
           mail us

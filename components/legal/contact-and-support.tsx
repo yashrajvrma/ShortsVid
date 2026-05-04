@@ -21,10 +21,10 @@ export default function ContactAndSupport() {
           For general inquiries, support, and feedback:
         </p>
         <a
-          href="mailto:yashrajv.work@gmail.com"
+          href="mailto:hello@shortsvid.pro"
           className="text-primary hover:underline"
         >
-          yashrajv.work@gmail.com
+          hello@shortsvid.pro
         </a>
       </section>
 
@@ -48,10 +48,10 @@ export default function ContactAndSupport() {
           Found a bug, a broken feature, or something that doesn't look right?
           Send us a detailed report at{" "}
           <a
-            href="mailto:yashrajv.work@gmail.com"
+            href="mailto:hello@shortsvid.pro"
             className="text-primary hover:underline"
           >
-            yashrajv.work@gmail.com
+            hello@shortsvid.pro
           </a>{" "}
           and we'll investigate promptly. Your reports help us make ShortsVid
           better for everyone.

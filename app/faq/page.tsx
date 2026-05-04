@@ -278,7 +278,7 @@ export default function FAQPage() {
           Everything you need to know about ShortsVid. Can&apos;t find what
           you&apos;re looking for?{" "}
           <a
-            href="mailto:yashrajv.work@gmail.com"
+            href="mailto:hello@shortsvid.pro"
             className="text-primary underline underline-offset-4 hover:text-primary/80 transition-colors"
           >
             Contact our support team.
@@ -343,7 +343,7 @@ export default function FAQPage() {
             </p>
           </div>
           <Link
-            href="mailto:yashrajv.work@gmail.com"
+            href="mailto:hello@shortsvid.pro"
             className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-medium px-5 py-2.5 rounded-xl text-sm hover:bg-primary/90 transition-colors shrink-0"
           >
             Contact Support
