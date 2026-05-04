@@ -19,7 +19,7 @@ interface DemoVideo {
 
 const DEMO_VIDEOS: DemoVideo[] = [
   {
-    src: "https://cdn.shortsvid.pro/videos/landing-7.mp4",
+    src: "https://cdn.shortsvid.pro/videos/landing-7.webm",
     label: "Improve Your English to Speak Like a CEO",
     username: "Health tips",
     handle: "generationbeautytips",
@@ -30,7 +30,7 @@ const DEMO_VIDEOS: DemoVideo[] = [
     followersGrowth: "+32%",
   },
   {
-    src: "https://cdn.shortsvid.pro/videos/landing-8.mp4",
+    src: "https://cdn.shortsvid.pro/videos/landing-8.webm",
     label: "If your dad is still alive...",
     username: "Amy Morgans",
     handle: "amymorgans",
@@ -41,7 +41,7 @@ const DEMO_VIDEOS: DemoVideo[] = [
     followersGrowth: "+195%",
   },
   {
-    src: "https://cdn.shortsvid.pro/videos/landing-3.mp4",
+    src: "https://cdn.shortsvid.pro/videos/landing-3.webm",
     label: "KNOWING HISTORY MAKES YOU EXTREMELY INTELLIGENT",
     username: "My IQ · Boost Your Brain",
     handle: "myiq.com",

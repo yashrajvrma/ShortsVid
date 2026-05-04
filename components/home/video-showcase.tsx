@@ -11,9 +11,9 @@ interface DemoVideo {
 }
 
 const DEMO_VIDEOS: DemoVideo[] = [
-  { id: 1, src: "https://cdn.shortsvid.pro/videos/landing-4.mp4" },
-  { id: 2, src: "https://cdn.shortsvid.pro/videos/landing-2.mp4" },
-  { id: 3, src: "https://cdn.shortsvid.pro/videos/landing-1.mp4" },
+  { id: 1, src: "https://cdn.shortsvid.pro/videos/landing-4.webm" },
+  { id: 2, src: "https://cdn.shortsvid.pro/videos/landing-2.webm" },
+  { id: 3, src: "https://cdn.shortsvid.pro/videos/landing-1.webm" },
 ];
 
 function VideoCard({
