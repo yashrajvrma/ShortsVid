@@ -16,24 +16,24 @@ const APP_URL = env.NEXT_PUBLIC_BASE_URL || "https://shortsvid.pro";
 export const metadata: Metadata = {
   title: {
     absolute:
-      "AI Short Video Generator for YouTube, TikTok & Instagram | ShortsVid",
+      "AI Faceless Shorts Video Generator for TikTok, Instagram and YouTube",
   },
   description:
-    "Create viral YouTube Shorts, Instagram Reels, and TikTok videos in minutes with AI. Auto-generate scripts, voiceovers, captions, and background music. No editing skills needed.",
+    "Create viral Faceless YouTube Shorts, Instagram Reels, and TikTok videos in minutes with AI. Auto-generate scripts, voiceovers, captions, and background music. No editing skills needed.",
   alternates: { canonical: APP_URL },
   openGraph: {
     url: APP_URL,
     title:
-      "AI Short Video Generator for YouTube, TikTok & Instagram | ShortsVid",
+      "AI Faceless Shorts Video Generator for TikTok, Instagram and YouTube",
     description:
-      "Create viral YouTube Shorts, Instagram Reels, and TikTok videos in minutes with AI. Auto-generate scripts, voiceovers, captions, and background music.",
+      "Create viral YouTube Shorts, Instagram Reels, and TikTok videos in minutes with AI. Auto-generate scripts, voiceovers, captions, and background music. No editing skills needed.",
   },
   twitter: {
     card: "summary_large_image",
     title:
-      "AI Short Video Generator for YouTube, TikTok & Instagram | ShortsVid",
+      "AI Faceless Shorts Video Generator for TikTok, Instagram and YouTube",
     description:
-      "Create viral YouTube Shorts, Instagram Reels, and TikTok videos in minutes with AI. Auto-generate scripts, voiceovers, captions, and background music.",
+      "Create viral YouTube Shorts, Instagram Reels, and TikTok videos in minutes with AI. Auto-generate scripts, voiceovers, captions, and background music. No editing skills needed.",
   },
 };
 

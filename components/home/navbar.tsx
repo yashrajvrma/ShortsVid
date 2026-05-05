@@ -59,7 +59,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed z-50 w-full bg-background/80 backdrop-blur-3xl shadow-sm sm:h-18 h-16">
+      <nav className="fixed z-50 w-full bg-background/80 backdrop-blur-3xl sm:h-16 h-16">
         <div className="flex items-center justify-between max-w-5xl mx-auto h-full px-4 sm:px-3">
           {/* Logo */}
           <Link className="flex" href="/" onClick={() => setOpen(false)}>

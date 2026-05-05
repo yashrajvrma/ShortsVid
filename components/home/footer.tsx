@@ -222,14 +222,37 @@ export function Footer() {
               />
             </a>
 
-            <a href="https://toolfio.com" target="_blank" rel="dofollow">
+            <a href="https://wired.business" target="_blank">
+              <img
+                src="https://wired.business/badge0-white.svg"
+                alt="Featured on Wired Business"
+                width="145"
+                height="54"
+              />
+            </a>
+
+            <a
+              href="https://www.scrolllaunch.com/products/shortsvid?utm_source=badge&utm_medium=embed&utm_campaign=shortsvid&ref=scrolllaunch"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="https://www.scrolllaunch.com/api/badge/shortsvid"
+                alt="Featured on ScrollLaunch"
+                width="195"
+                height="54"
+                loading="lazy"
+              />
+            </a>
+
+            {/* <a href="https://toolfio.com" target="_blank" rel="dofollow">
               <img
                 src="https://toolfio.com/toolfio-light-badge.png"
                 alt="Featured on Toolfio"
                 width="150"
                 height="54"
               />
-            </a>
+            </a> */}
           </div>
         </div>
 
