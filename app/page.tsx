@@ -10,6 +10,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import Testimonials from "@/components/home/testimonial";
 import WhyChooseUs from "@/components/home/why-choose-us";
 import { env } from "@/lib/env";
+import CallToAction from "@/components/ctx";
 
 const APP_URL = env.NEXT_PUBLIC_BASE_URL || "https://shortsvid.pro";
 
@@ -191,6 +192,7 @@ export default async function Home() {
       {/* <SocialProofSection /> */}
       <PricingSection />
       <FAQ />
+      <CallToAction />
       <Footer />
     </main>
   );

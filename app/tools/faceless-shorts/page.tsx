@@ -402,7 +402,7 @@ export default async function FacelessShortsToolPage() {
               Join 100K+ creators making faceless Shorts every day. Start for
               free — no credit card required.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 nter">
               <Link
                 href="/app"
                 id="faceless-cta-signup-btn"

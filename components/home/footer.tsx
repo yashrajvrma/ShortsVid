@@ -42,7 +42,7 @@ const RESOURCES = [
 export function Footer() {
   return (
     <footer className="w-full bg-neutral-900 sm:mt-16 mt-12">
-      <div className="w-full max-w-5xl mx-auto px-5 py-12">
+      <div className="w-full max-w-6xl mx-auto px-5 py-12">
         {/* Brand row */}
         <div className="flex flex-col gap-2 mb-12">
           <Link href="/" className="flex items-center gap-1 w-fit">

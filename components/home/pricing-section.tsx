@@ -185,7 +185,7 @@ export function PricingSection() {
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-md lg:max-w-full mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6 gap-12 max-w-md lg:max-w-full mx-auto">
           {PLANS.map((plan) => {
             const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
             const oldPrice = isYearly
