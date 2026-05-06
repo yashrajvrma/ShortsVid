@@ -11,6 +11,11 @@ import {
   Captions,
   Clapperboard,
   UsersRound,
+  Sparkles,
+  User,
+  ArrowUpCircle,
+  Headset,
+  Hourglass,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -26,7 +31,7 @@ const FEATURES = [
   { icon: Film, label: "Instagram Reels & TikTok Compatibility" },
   { icon: Captions, label: "Faceless Shorts, Fake Text, Split Screen" },
   { icon: Mic, label: "10+ languages" },
-  { icon: Mic, label: "40+ AI voices" },
+  { icon: Mic, label: "40+ AI Voices from Eleven labs" },
   { icon: Film, label: "Story-Driven Short Videos" },
   { icon: Film, label: "Facts-Based Video Shorts" },
   { icon: UsersRound, label: "Conversation Gameplay Shorts" },
@@ -72,6 +77,7 @@ const PLANS: Plan[] = [
     monthlyCredits: 150,
     yearlyCredits: 1800,
     videosPerMonth: 30,
+    highlighted: true,
     badge: "LIMITED OFFER",
   },
   {
@@ -86,7 +92,6 @@ const PLANS: Plan[] = [
     monthlyCredits: 500,
     yearlyCredits: 6000,
     videosPerMonth: 100,
-    highlighted: true,
     badge: "BEST VALUE",
   },
 ];
@@ -99,6 +104,10 @@ export function PricingModal() {
 
   // ← Replace the entire checkoutMutation block with this:
   const handleSubscribe = (planKey: string) => {
+    if (planKey === "free") {
+      window.location.href = "/sign-up";
+      return;
+    }
     const resolvedPlanKey = getPlanKey(planKey, period);
     setPendingPlanKey(resolvedPlanKey);
     startTransition(async () => {
@@ -114,10 +123,46 @@ export function PricingModal() {
           <h2 className="text-2xl font-semibold tracking-tight text-foreground">
             Subscribe to unlock more features
           </h2>
+          <div className="flex justify-center items-center mt-3 mb-2">
+            <div className="bg-muted/50 p-1 rounded-[12px] flex items-center border border-border">
+              <button
+                onClick={() => setPeriod("monthly")}
+                className={cn(
+                  "px-4 py-2 rounded-[8px] text-sm font-medium transition-all",
+                  !isYearly
+                    ? "bg-[#FF5A00] text-white shadow-sm"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                Monthly Billing
+              </button>
+              <button
+                onClick={() => setPeriod("yearly")}
+                className={cn(
+                  "px-6 py-2 rounded-[8px] text-sm font-medium transition-all flex items-center gap-2",
+                  isYearly
+                    ? "bg-[#FF5A00] text-white shadow-sm"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                Yearly Billing
+                <span
+                  className={cn(
+                    "text-[10px] px-2 py-0.5 rounded-sm font-semibold",
+                    isYearly
+                      ? "bg-white text-foreground"
+                      : "bg-primary text-secondary-foreground",
+                  )}
+                >
+                  Save 40%
+                </span>
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div className="p-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
+        <div className="p-10 max-h-[70vh] overflow-y-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-6">
             {PLANS.map((plan) => {
               const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
               const oldPrice = isYearly
@@ -161,18 +206,6 @@ export function PricingModal() {
                       <h3 className="text-2xl font-semibold tracking-tighter text-foreground">
                         {plan.name}
                       </h3>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[10px] font-medium text-muted-foreground uppercase">
-                          Yearly
-                        </span>
-                        <Switch
-                          checked={isYearly}
-                          onCheckedChange={(v) =>
-                            setPeriod(v ? "yearly" : "monthly")
-                          }
-                          className="data-[state=checked]:bg-primary scale-90"
-                        />
-                      </div>
                     </div>
 
                     <p className="text-xs text-muted-foreground -mt-2">
@@ -180,22 +213,26 @@ export function PricingModal() {
                     </p>
 
                     <div className="flex items-baseline gap-2">
-                      <span className="text-base font-medium line-through text-muted-foreground">
-                        ${oldPrice}
-                      </span>
+                      {oldPrice > 0 && (
+                        <span className="text-base font-medium line-through text-muted-foreground">
+                          ${oldPrice}
+                        </span>
+                      )}
                       <div className="flex items-center gap-1">
                         <span className="text-4xl font-semibold text-foreground">
                           ${price}
                         </span>
-                        <div className="flex flex-col text-xs text-muted-foreground">
-                          <span>USD</span>
-                          <span>/ mo</span>
-                        </div>
                       </div>
                     </div>
-                    <p className="text-xs text-muted-foreground -mt-2">
-                      Billed today: ${isYearly ? price * 12 : price}
-                    </p>
+                    {price > 0 ? (
+                      <p className="text-xs text-muted-foreground -mt-2">
+                        Billed today: ${isYearly ? price * 12 : price}
+                      </p>
+                    ) : (
+                      <p className="text-xs text-muted-foreground -mt-2">
+                        No credit card required
+                      </p>
+                    )}
 
                     <Button
                       className="w-full font-semibold"
@@ -203,8 +240,11 @@ export function PricingModal() {
                       disabled={isLoading}
                       onClick={() => handleSubscribe(plan.key)}
                     >
-                      {isLoading ? "Redirecting..." : "Subscribe →"}{" "}
-                      {/* ← updated label */}
+                      {isLoading
+                        ? "Redirecting..."
+                        : plan.key === "free"
+                          ? "Start for Free"
+                          : "Subscribe →"}
                     </Button>
 
                     <div className="flex items-center gap-1.5 rounded-full border border-border bg-muted/50 px-3 py-1 text-xs font-medium text-foreground w-fit">
@@ -227,33 +267,74 @@ export function PricingModal() {
 
                     <div className="border-t border-border" />
 
-                    <div>
+                    <div className="flex-grow">
                       <p className="text-xs font-semibold text-foreground mb-2.5">
-                        What&apos;s included:
+                        {plan.key === "pro"
+                          ? "Everything in Basic, and also:"
+                          : "What's included:"}
                       </p>
                       <ul className="space-y-2">
-                        <li className="flex items-center gap-2 text-xs text-foreground">
-                          <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                          {isYearly
-                            ? (plan.videosPerMonth * 12).toLocaleString()
-                            : plan.videosPerMonth}{" "}
-                          videos / {isYearly ? "year" : "month"}
-                        </li>
-                        <li className="flex items-center gap-2 text-xs text-foreground">
-                          <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                          {credits.toLocaleString()} Credits /{" "}
-                          {isYearly ? "year" : "month"}
-                        </li>
-                        {FEATURES.map((f) => (
-                          <li
-                            key={f.label}
-                            className="flex items-center gap-2 text-xs text-foreground"
-                          >
-                            <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                            {f.label}
-                          </li>
-                        ))}
+                        {plan.key === "pro" ? (
+                          <>
+                            <li className="flex items-center gap-2 text-xs text-foreground">
+                              <Zap className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                              {credits.toLocaleString()} Credits /{" "}
+                              {isYearly ? "year" : "month"}
+                            </li>
+                            <li className="flex items-center gap-2 text-xs text-foreground">
+                              <Video className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                              {isYearly ? "1,200" : "100"} videos /{" "}
+                              {isYearly ? "year" : "month"}
+                            </li>
+                            <li className="flex items-center gap-2 text-xs text-foreground">
+                              <User className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                              Custom avatar and background media upload
+                            </li>
+                            <li className="flex items-center gap-2 text-xs text-foreground">
+                              <Hourglass className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                              Faster Rendering Queue
+                            </li>
+                            <li className="flex items-center gap-2 text-xs text-foreground">
+                              <ArrowUpCircle className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                              High resolution Output
+                            </li>
+                            <li className="flex items-center gap-2 text-xs text-foreground">
+                              <Headset className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                              Priority Support
+                            </li>
+                          </>
+                        ) : (
+                          <>
+                            <li className="flex items-center gap-2 text-xs text-foreground">
+                              <Video className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                              {isYearly
+                                ? (plan.videosPerMonth * 12).toLocaleString()
+                                : plan.videosPerMonth}{" "}
+                              videos / {isYearly ? "year" : "month"}
+                            </li>
+                            <li className="flex items-center gap-2 text-xs text-foreground">
+                              <Zap className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                              {credits.toLocaleString()} Credits /{" "}
+                              {isYearly ? "year" : "month"}
+                            </li>
+                            {FEATURES.map((f) => (
+                              <li
+                                key={f.label}
+                                className="flex items-center gap-2 text-xs text-foreground"
+                              >
+                                <f.icon className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                                {f.label}
+                              </li>
+                            ))}
+                          </>
+                        )}
                       </ul>
+                    </div>
+
+                    <div className="mt-auto pt-5 text-center">
+                      <p className="text-[10px] text-muted-foreground">
+                        Cancel at anytime.
+                      </p>
                     </div>
                   </div>
                 </Card>
