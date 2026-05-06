@@ -15,9 +15,7 @@ const AvatarCircles = ({
   avatarUrls,
 }: AvatarCirclesProps) => {
   return (
-    <div
-      className={cn("z-10 flex -space-x-3.5 rtl:space-x-reverse", className)}
-    >
+    <div className={cn("z-10 flex -space-x-3 rtl:space-x-reverse", className)}>
       {avatarUrls.map((url, index) => (
         <Image
           key={index}
@@ -30,12 +28,12 @@ const AvatarCircles = ({
           alt={`Avatar ${index + 1}`}
         />
       ))}
-      <a
+      {/* <a
         className="flex sm:h-12 sm:w-12 w-10 h-10 items-center justify-center rounded-full border-2 border-white bg-black text-center text-xs font-medium text-white hover:bg-gray-600 dark:border-gray-800 dark:bg-white dark:text-black"
         href=""
       >
         +{numPeople}
-      </a>
+      </a> */}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import logo from "@/public/shortsvid-light-icon.webp";
+import logo from "@/public/shortsvid-icon.webp";
 import buildfastIcon from "@/public/buildfast-icon.webp";
 
 const NAV_LINKS = [
@@ -41,20 +41,19 @@ const RESOURCES = [
 
 export function Footer() {
   return (
-    <footer className="w-full bg-neutral-900 sm:mt-16 mt-12">
-      <div className="w-full max-w-6xl mx-auto px-5 py-12">
+    <footer className="w-full sm:mt-8 mt-6">
+      <div className="max-w-6xl mx-auto px-5 py-12 border-t border-border">
         {/* Brand row */}
         <div className="flex flex-col gap-2 mb-12">
           <Link href="/" className="flex items-center gap-1 w-fit">
             <Image src={logo} alt="ShortsVid" className="w-8 rotate-[-5deg]" />
-            <span className="text-xl font-semibold tracking-tighter text-primary-foreground">
+            <span className="text-xl font-semibold tracking-tighter text-neutral-900">
               ShortsVid
             </span>
           </Link>
 
-          <p className="text-sm text-muted-foreground max-w-md mt-1">
-            Get ready to post shorts in seconds. Script · Visuals · Voiceover ·
-            Captions — all done by AI.
+          <p className="text-sm text-foreground mt-1">
+            Automate viral Faceless shorts
           </p>
 
           <a
@@ -73,14 +72,14 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
           {/* Links */}
           <div className="flex flex-col gap-3">
-            <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+            <span className="text-xs font-medium uppercase text-muted-foreground">
               Links
             </span>
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-sm text-primary-foreground hover:opacity-70 transition-opacity w-fit"
+                className="text-sm text-foreground hover:opacity-70 transition-opacity w-fit"
               >
                 {link.label}
               </Link>
@@ -89,14 +88,14 @@ export function Footer() {
 
           {/* Legal */}
           <div className="flex flex-col gap-3">
-            <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+            <span className="text-xs font-medium uppercase text-muted-foreground">
               Legal
             </span>
             {LEGAL_LINKS.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-sm text-primary-foreground hover:opacity-70 transition-opacity w-fit"
+                className="text-sm text-foreground hover:opacity-70 transition-opacity w-fit"
               >
                 {link.label}
               </Link>
@@ -105,14 +104,14 @@ export function Footer() {
 
           {/* Free Tools */}
           <div className="flex flex-col gap-3">
-            <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+            <span className="text-xs font-medium uppercase text-muted-foreground">
               Free Tools
             </span>
             {FREE_TOOLS.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-sm text-primary-foreground hover:opacity-70 transition-opacity w-fit"
+                className="text-sm text-foreground hover:opacity-70 transition-opacity w-fit"
               >
                 {link.label}
               </Link>
@@ -121,14 +120,14 @@ export function Footer() {
 
           {/* Resources */}
           <div className="flex flex-col gap-3">
-            <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+            <span className="text-xs font-medium uppercase text-muted-foreground">
               Resources
             </span>
             {RESOURCES.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-sm text-primary-foreground hover:opacity-70 transition-opacity w-fit"
+                className="text-sm text-foreground hover:opacity-70 transition-opacity w-fit"
               >
                 {link.label}
               </Link>
@@ -138,7 +137,7 @@ export function Footer() {
 
         {/* Featured On */}
         <div className="mt-5 pt-8">
-          <span className="text-sm uppercase font-medium text-muted-foreground">
+          <span className="text-xs uppercase font-medium text-muted-foreground">
             Featured On
           </span>
           <div className="mt-4 flex flex-wrap items-center gap-3">
