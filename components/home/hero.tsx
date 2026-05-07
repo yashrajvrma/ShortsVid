@@ -45,22 +45,19 @@ export function Hero() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
-        className="flex flex-col items-center text-3xl sm:text-5xl font-serif tracking-tighter font-semibold leading-[1.05] max-w-2xl mx-auto"
+        className="text-center text-3xl sm:text-5xl font-serif tracking-tighter font-semibold leading-[1.2] max-w-2xl mx-auto"
       >
-        <div className="flex">
-          Automate viral Faceless shorts
-          {/* <Image
-            src={socialImg}
-            alt="social Icons"
-            className="inline-block sm:w-40 w-24 mx-2"
-            draggable={false}
-            priority
-          /> */}
-        </div>{" "}
-        {/* <div>shorts in seconds</div> */}
-        <div>and earn passive income</div>
-        {/* <div>&#35; 1 AI shorts</div>
-        <div>generator</div> */}
+        {/* Desktop: 2 lines */}
+        <span className="hidden sm:block">Automate viral Faceless shorts</span>
+        <span className="hidden sm:block">and earn passive income</span>
+        {/* Mobile: 3 lines */}
+        <span className="sm:hidden">
+          Automate viral Faceless
+          <br />
+          shorts and earn passive
+          <br />
+          income
+        </span>
       </motion.h1>
 
       <motion.div

@@ -1,33 +1,20 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Volume2, VolumeOff } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Volume2, VolumeX } from "lucide-react";
 
-interface DemoVideo {
-  id: number;
-  src: string;
-}
+const VIDEOS = Array.from({ length: 7 }, (_, i) => ({
+  src: `https://cdn.shortsvid.pro/videos/video_${i + 1}.webm`,
+  poster: `/images/video_${i + 1}.webp`,
+  alt: `ShortsVid short video example ${i + 1}`,
+}));
 
-const DEMO_VIDEOS: DemoVideo[] = [
-  { id: 1, src: "https://cdn.shortsvid.pro/videos/landing-4.webm" },
-  { id: 2, src: "https://cdn.shortsvid.pro/videos/landing-2.webm" },
-  { id: 3, src: "https://cdn.shortsvid.pro/videos/landing-1.webm" },
-];
+const TRACK = [...VIDEOS, ...VIDEOS];
 
-function VideoCard({
-  video,
-  index,
-  mobileLayout,
-}: {
-  video: DemoVideo;
-  index: number;
-  mobileLayout?: boolean;
-}) {
+function VideoCard({ src, poster, alt }: { src: string; poster: string; alt: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
+  const [hovered, setHovered] = useState(false);
 
   const toggleMute = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -38,112 +25,68 @@ function VideoCard({
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{
-        duration: 0.5,
-        delay: index * 0.1,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-      whileHover={{ y: -6, scale: 1.02 }}
-      className={cn(
-        "relative overflow-hidden sm:rounded-4xl rounded-3xl shadow-xl flex-shrink-0 border-stone-400/80 border-4 border-double bg-muted",
-        !mobileLayout && video.id !== 2 && "mt-28",
-      )}
+    <div
+      className="relative flex-shrink-0 w-[140px] sm:w-[220px] rounded-2xl overflow-hidden border border-border/60 bg-neutral-900 shadow-md cursor-pointer"
+      style={{ aspectRatio: "9/16" }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
-      {/* Loading spinner overlay */}
-      <AnimatePresence>
-        {isLoading && (
-          <motion.div
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="absolute inset-0 z-10 flex items-center justify-center bg-muted"
-          >
-            <div className="w-8 h-8 rounded-full border-2 border-primary/20 border-t-primary animate-spin" />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       <video
         ref={videoRef}
-        className={cn(
-          "aspect-9/16 object-cover block",
-          mobileLayout ? "w-[44vw]" : "w-[300px]",
-          isLoading && "invisible", // hide until ready to avoid flash
-        )}
-        playsInline
+        className="w-full h-full object-cover"
+        src={src}
+        poster={poster}
+        autoPlay
         muted
         loop
-        autoPlay
-        preload="auto"
-        onCanPlay={() => setIsLoading(false)}
-      >
-        <source src={video.src} type="video/mp4" />
-      </video>
+        playsInline
+        preload="none"
+      />
 
-      {/* Bottom gradient */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10" />
-
-      {/* Mute toggle button */}
-      <motion.button
-        onClick={toggleMute}
-        whileTap={{ scale: 0.85 }}
-        className={cn(
-          "absolute right-3 bottom-3 flex h-7 w-7 items-center justify-center",
-          "rounded-full bg-black/50 backdrop-blur-sm",
-          "text-white/80 hover:text-white hover:bg-black/70 transition-colors",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer",
-        )}
-        aria-label={muted ? "Unmute" : "Mute"}
-      >
-        <AnimatePresence mode="wait" initial={false}>
+      {/* Mute / unmute button — visible on hover */}
+      {hovered && (
+        <button
+          onClick={toggleMute}
+          className="absolute bottom-3 right-3 flex items-center justify-center w-7 h-7 rounded-full bg-black/60 backdrop-blur-sm text-white hover:bg-black/80 transition-colors"
+          aria-label={muted ? "Unmute" : "Mute"}
+        >
           {muted ? (
-            <motion.span
-              key="muted"
-              initial={{ opacity: 0, scale: 0.6 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.6 }}
-              transition={{ duration: 0.15 }}
-            >
-              <VolumeOff className="h-3.5 w-3.5" />
-            </motion.span>
+            <VolumeX className="w-3.5 h-3.5" />
           ) : (
-            <motion.span
-              key="unmuted"
-              initial={{ opacity: 0, scale: 0.6 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.6 }}
-              transition={{ duration: 0.15 }}
-            >
-              <Volume2 className="h-3.5 w-3.5" />
-            </motion.span>
+            <Volume2 className="w-3.5 h-3.5" />
           )}
-        </AnimatePresence>
-      </motion.button>
-    </motion.div>
+        </button>
+      )}
+    </div>
   );
 }
 
 export function VideoShowcase() {
   return (
-    <>
-      {/* Mobile: horizontal scroll, no offsets */}
-      <div className="sm:hidden flex gap-2 overflow-x-auto px-4 mt-12 pb-2 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        {DEMO_VIDEOS.map((video, index) => (
-          <div key={index} className="snap-center flex-shrink-0">
-            <VideoCard video={video} index={index} mobileLayout />
-          </div>
+    <div className="relative w-full overflow-hidden mt-10 sm:mt-14 max-w-6xl mx-auto">
+      {/* Left edge fade */}
+      <div className="pointer-events-none absolute left-0 top-0 h-full w-16 sm:w-20 z-10 bg-gradient-to-r from-background to-transparent" />
+      {/* Right edge fade */}
+      <div className="pointer-events-none absolute right-0 top-0 h-full w-16 sm:w-20 z-10 bg-gradient-to-l from-background to-transparent" />
+
+      <div className="flex gap-3 sm:gap-4 w-max animate-video-marquee pb-4">
+        {TRACK.map((video, i) => (
+          <VideoCard key={i} src={video.src} poster={video.poster} alt={video.alt} />
         ))}
       </div>
 
-      {/* Desktop: centered with vertical offsets */}
-      <div className="hidden sm:flex items-center justify-center gap-3 cursor-pointer mt-3">
-        {DEMO_VIDEOS.map((video, index) => (
-          <VideoCard key={index} video={video} index={index} />
-        ))}
-      </div>
-    </>
+      <style>{`
+        @keyframes video-marquee {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-video-marquee {
+          animation: video-marquee 80s linear infinite;
+        }
+        .animate-video-marquee:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
+    </div>
   );
 }

@@ -9,6 +9,7 @@ import { ViewsShowcase } from "@/components/home/views-showcase";
 import { JsonLd } from "@/components/seo/json-ld";
 import Testimonials from "@/components/home/testimonial";
 import WhyChooseUs from "@/components/home/why-choose-us";
+import { AutomateShowcase } from "@/components/home/automate-showcase";
 import { env } from "@/lib/env";
 import CallToAction from "@/components/ctx";
 
@@ -185,11 +186,13 @@ export default async function Home() {
       <JsonLd data={faqSchema} />
       <Navbar />
       <Hero />
+      <AutomateShowcase />
       <ProductFeatures />
-      <ViewsShowcase />
       <WhyChooseUs />
       <Testimonials />
       {/* <SocialProofSection /> */}
+      <ViewsShowcase />
+
       <PricingSection />
       <FAQ />
       <CallToAction />
