@@ -10,6 +10,10 @@ import captionsImg from "@/public/images/captions.webp";
 import voiceImg from "@/public/images/voices.webp";
 import exportImg from "@/public/images/export.webp";
 import gameplayImg from "@/public/images/gameplay-shorts.webp";
+import avatarsImg from "@/public/images/avatars.webp";
+import languageImg from "@/public/images/languages.webp";
+import musicImg from "@/public/images/music.webp";
+import stockImg from "@/public/images/stock.webp";
 
 const FEATURES = [
   {
@@ -37,10 +41,30 @@ const FEATURES = [
     title: "Preview & Download",
     desc: "Preview your finished short before downloading. Export in full HD, ready to post anywhere.",
   },
+  // {
+  //   img: gameplayImg,
+  //   title: "Gameplay Videos",
+  //   desc: "Turn gameplay footage into engaging shorts with auto captions, voiceover and highlights.",
+  // },
   {
-    img: gameplayImg,
-    title: "Gameplay Videos",
-    desc: "Turn gameplay footage into engaging shorts with auto captions, voiceover and highlights.",
+    img: avatarsImg,
+    title: "AI Avatar Presenters",
+    desc: "Add a realistic AI avatar to present your content. No camera, no face reveal — fully automated.",
+  },
+  {
+    img: languageImg,
+    title: "Multi-Language Support",
+    desc: "Generate shorts in 20+ languages. Reach global audiences with AI voiceovers in their native tongue.",
+  },
+  {
+    img: musicImg,
+    title: "Background Music",
+    desc: "Pick from a curated library of royalty-free tracks. Set the mood and make your shorts stand out.",
+  },
+  {
+    img: stockImg,
+    title: "Stock Footage Library",
+    desc: "Access thousands of premium stock clips. AI picks the best matching visuals for every scene automatically.",
   },
 ];
 
@@ -74,12 +98,12 @@ export function ProductFeatures() {
           transition={{ duration: 0.5 }}
           className="flex flex-col justify-center mb-12 text-center"
         >
-          <h2 className="text-3xl sm:text-5xl font-medium tracking-tighter text-foreground">
-            Create viral Faceless videos in few clicks
+          <h2 className="text-3xl sm:text-5xl font-semibold tracking-tighter text-foreground font-serif leading-[1.2]">
+            Product Features
           </h2>
-          <p className="mt-4 sm:text-xl text-base text-muted-foreground text-center mx-auto max-w-2xl">
-            No Need of switching tools and manual editing. ShortsVid gives you
-            everything you need to create viral shorts with AI.{" "}
+          <p className="mt-4 sm:text-xl text-base text-muted-foreground max-w-2xl mx-auto">
+            No Need of switching tools and manual editing. Everything you need
+            to create viral shorts with AI is inside ShortsVid
           </p>
         </motion.div>
 

@@ -12,7 +12,7 @@ const FAQS = [
   {
     category: "General",
     q: "What is ShortsVid?",
-    a: "ShortsVid is an AI-powered faceless short video generator. You pick a topic and a visual style, and the app writes the script, generates the voiceover, creates the visuals, adds captions, and puts it all together into a finished video ready to post. No editing skills, no camera, no microphone needed.",
+    a: "ShortsVid is an AI-powered faceless short video generator. You pick a topic and a visual style, and the app writes the script, generates the voiceover, creates the visuals, adds captions, and puts it all together into a finished video ready to post. No editing skills needed.",
   },
   {
     category: "General",
@@ -96,7 +96,7 @@ const FAQS = [
 export function FAQ() {
   return (
     <section id="faq" className="w-full sm:py-24 py-12 px-4">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center sm:mb-20 mb-12">
           <h2 className="text-3xl sm:text-4xl font-semibold tracking-tighter text-foreground">
