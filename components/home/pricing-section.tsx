@@ -139,14 +139,14 @@ export function PricingSection() {
       <div className="mx-auto max-w-6xl">
         {/* Header */}
         <div className="text-center sm:mb-20 mb-16">
-          <p className="text-4xl tracking-tight font-semibold font-serif">
+          <h2 className="text-3xl sm:text-5xl font-semibold tracking-tighter text-foreground font-serif leading-[1.2]">
             Plans that works best for your
-          </p>
-          <p className="text-xl text-muted-foreground py-2">
+          </h2>
+          <p className="mt-4 sm:text-xl text-base text-muted-foreground max-w-2xl mx-auto">
             Replace 8+ tools with a simple AI workflow
           </p>
 
-          <div className="flex justify-center items-center mt-3">
+          <div className="flex justify-center items-center mt-6">
             <div className="bg-muted/50 p-1 rounded-[12px] flex items-center border border-border">
               <button
                 onClick={() => setPeriod("monthly")}

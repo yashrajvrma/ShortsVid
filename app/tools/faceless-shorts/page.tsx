@@ -23,9 +23,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { HydrateClient, prefetch, trpc } from "@/trpc/server";
-import { LANGUAGES } from "@/lib/constants";
+import { LANGUAGES, TOOLS } from "@/lib/constants";
 import { JsonLd } from "@/components/seo/json-ld";
-import { TOOLS } from "@/config/tools";
 import FacelessShortsToolUi from "@/components/tools/faceless-shorts/faceless-shorts-tool-ui";
 
 export const metadata: Metadata = {

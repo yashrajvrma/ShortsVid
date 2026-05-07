@@ -2,16 +2,13 @@
 
 import { useState, useTransition } from "react";
 import {
-  Check,
   Zap,
   Video,
   Mic,
   Film,
-  Gamepad2,
   Captions,
   Clapperboard,
   UsersRound,
-  Sparkles,
   User,
   ArrowUpCircle,
   Headset,
@@ -19,9 +16,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { cn } from "@/lib/utils";
 import { createCheckout } from "@/actions/billing/create-checkout";
+import { cn } from "@/lib/utils";
 
 type Period = "monthly" | "yearly";
 type PlanKey = "BASIC_MONTHLY" | "BASIC_YEARLY" | "PRO_MONTHLY" | "PRO_YEARLY";

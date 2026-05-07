@@ -1,13 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
-import logo from "@/public/shortsvid-icon.webp";
-import buildfastIcon from "@/public/buildfast-icon.webp";
+import logo from "@/public/images/shortsvid-icon.webp";
+import buildfastIcon from "@/public/images/buildfast-icon.webp";
 
 const NAV_LINKS = [
   { label: "Features", href: "/#features" },
   { label: "Pricing", href: "/pricing" },
   { label: "FAQ", href: "/faq" },
-  { label: "Blogs", href: "/blog" },
+  { label: "Guides", href: "/blog" },
+  { label: "Free Tools", href: "/tools" },
 ];
 
 const LEGAL_LINKS = [
@@ -159,6 +160,7 @@ export function Footer() {
                 width={145}
                 height={50}
                 loading="eager"
+                className="opacity-60 hover:opacity-100"
               />
             </a>
 
@@ -174,6 +176,7 @@ export function Footer() {
                 width={195}
                 height={54}
                 loading="eager"
+                className="opacity-60 hover:opacity-100"
               />
             </a>
 
@@ -189,6 +192,7 @@ export function Footer() {
                 width={140}
                 height={48}
                 loading="eager"
+                className="opacity-60 hover:opacity-100"
               />
             </a>
 
@@ -204,6 +208,7 @@ export function Footer() {
                 width={180}
                 height={50}
                 loading="eager"
+                className="opacity-60 hover:opacity-100"
               />
             </a>
 
@@ -219,6 +224,7 @@ export function Footer() {
                 width={150}
                 height={45}
                 loading="eager"
+                className="opacity-60 hover:opacity-100"
               />
             </a>
 
@@ -228,22 +234,19 @@ export function Footer() {
                 alt="Featured on Wired Business"
                 width="145"
                 height="54"
+                className="opacity-60 hover:opacity-100"
               />
             </a>
 
-            {/* <a
-              href="https://www.scrolllaunch.com/products/shortsvid?utm_source=badge&utm_medium=embed&utm_campaign=shortsvid&ref=scrolllaunch"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="https://toolfio.com" target="_blank" rel="dofollow">
               <img
-                src="https://www.scrolllaunch.com/api/badge/shortsvid"
-                alt="Featured on ScrollLaunch"
-                width="195"
+                src="https://toolfio.com/toolfio-light-badge.png"
+                alt="Featured on Toolfio"
+                width="150"
                 height="54"
-                loading="lazy"
+                className="opacity-60 hover:opacity-100"
               />
-            </a> */}
+            </a>
 
             <a
               href="https://www.scrolllaunch.com/products/shortsvid?ref=badge"
@@ -256,17 +259,9 @@ export function Footer() {
                 width="195"
                 height="54"
                 loading="lazy"
+                className="opacity-60 hover:opacity-100"
               />
             </a>
-
-            {/* <a href="https://toolfio.com" target="_blank" rel="dofollow">
-              <img
-                src="https://toolfio.com/toolfio-light-badge.png"
-                alt="Featured on Toolfio"
-                width="150"
-                height="54"
-              />
-            </a> */}
           </div>
         </div>
 

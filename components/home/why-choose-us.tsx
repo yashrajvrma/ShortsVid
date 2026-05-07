@@ -58,10 +58,10 @@ const WhyChooseUs = () => {
             <Zap className="w-3.5 h-3.5" />
             Why ShortsVid
           </div> */}
-          <h2 className="text-3xl sm:text-5xl font-medium tracking-tighter">
+          <h2 className="text-3xl sm:text-5xl font-semibold tracking-tighter text-foreground font-serif leading-[1.2]">
             Why creators choose us
           </h2>
-          <p className="mt-3 text-muted-foreground sm:text-lg text-base">
+          <p className="mt-4 sm:text-xl text-base text-muted-foreground max-w-2xl mx-auto">
             See how ShortsVid compares to traditional content creation methods.
           </p>
         </motion.div>

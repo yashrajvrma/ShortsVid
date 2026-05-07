@@ -15,7 +15,7 @@ import {
   Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logo from "@/public/shortsvid-icon.webp";
+import logo from "@/public/images/shortsvid-icon.webp";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

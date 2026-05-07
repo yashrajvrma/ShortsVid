@@ -12,10 +12,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { navProjects, navShorts } from "@/config/nav";
+import { navProjects, navShorts } from "@/components/dashboard-nav";
 import { useSession } from "@/lib/auth/client";
 import Image from "next/image";
-import ShortsVidLogo from "@/public/shortsvid-icon.webp";
+import ShortsVidLogo from "@/public/images/shortsvid-icon.webp";
 import Link from "next/link";
 import { NavShorts } from "./nav-shorts";
 import { Button } from "./ui/button";

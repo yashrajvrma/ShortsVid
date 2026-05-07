@@ -1,6 +1,7 @@
 import { AppRouter } from "@/trpc/routers/_app";
 import { Prisma } from "@prisma/client";
 import { inferRouterOutputs } from "@trpc/server";
+import type { LucideIcon } from "lucide-react";
 
 type RouterOutputs = inferRouterOutputs<AppRouter>;
 
@@ -194,3 +195,17 @@ export type BlogMeta = {
 };
 
 export type Blog = BlogMeta & { content: string };
+
+// tools page type
+export type Tool = {
+  slug: string;
+  title: string;
+  shortTitle: string;
+  description: string;
+  icon: LucideIcon;
+  live: boolean;
+  badge?: string;
+  href: string;
+  iconColor: string;
+  iconBg: string;
+};

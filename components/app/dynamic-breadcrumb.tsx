@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { BreadcrumbPage } from "@/components/ui/breadcrumb";
-import { allNavItems } from "@/config/nav";
+import { allNavItems } from "@/components/dashboard-nav";
 
 export function DynamicBreadcrumb() {
   const pathname = usePathname();

@@ -8,7 +8,18 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { JsonLd } from "@/components/seo/json-ld";
-import { TOOLS } from "@/config/tools";
+import CallToAction from "@/components/ctx";
+import {
+  Video,
+  Flame,
+  Gamepad2,
+  FileText,
+  MessageSquare,
+  Calculator,
+  Globe,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { TOOLS } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Free AI Video Tools",
@@ -169,7 +180,7 @@ const faqSchema = {
   ],
 };
 
-export default function ToolsHubPage() {
+export default function ToolsPage() {
   return (
     <>
       <JsonLd data={itemListSchema} />
@@ -263,12 +274,12 @@ export default function ToolsHubPage() {
       </section>
 
       {/* ── FAQ ── */}
-      <section className="max-w-3xl mx-auto px-4 py-14">
+      <section className="max-w-5xl mx-auto px-4 py-14">
         <div className="text-center mb-10">
-          <h2 className="text-2xl sm:text-4xl font-medium tracking-tight mb-3">
+          <h2 className="text-3xl sm:text-5xl font-semibold tracking-tighter text-foreground font-serif leading-[1.2]">
             Frequently asked questions
           </h2>
-          <p className="text-muted-foreground">
+          <p className="mt-4 sm:text-xl text-base text-muted-foreground max-w-2xl mx-auto">
             Everything you need to know about our AI video tools.
           </p>
         </div>
@@ -292,33 +303,7 @@ export default function ToolsHubPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="max-w-5xl mx-auto px-4 py-6">
-        <div className="relative overflow-hidden bg-neutral-900 rounded-3xl px-8 py-12 text-center text-primary-foreground">
-          {/* Decorative glow blobs */}
-          <div className="absolute -top-12 -left-12 w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none" />
-
-          <div className="relative z-10">
-            <h2 className="text-3xl sm:text-4xl font-medium tracking-tight mb-3">
-              Ready to go viral?
-            </h2>
-            <p className="text-primary-foreground/80 text-base mb-8 max-w-xl mx-auto tracking-tight">
-              Join 100K+ creators making viral short-form content every day.
-              Start for free — no credit card required.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link
-                href="/app"
-                id="tools-hub-cta-btn"
-                className="inline-flex items-center justify-center gap-2 bg-primary text-secondary-foreground font-medium px-7 py-3 rounded-xl transition-colors text-base tracking-tight"
-              >
-                Start creating for Free
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CallToAction link="/tools" />
     </>
   );
 }

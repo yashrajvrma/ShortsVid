@@ -107,11 +107,11 @@ const Testimonials = () => {
             </div>
           </div> */}
 
-          <h2 className="text-3xl sm:text-5xl font-medium tracking-tighter text-center mt-2">
+          <h2 className="text-3xl sm:text-5xl font-semibold tracking-tighter text-foreground font-serif leading-[1.2]">
             Hear what creators say about us
           </h2>
 
-          <p className="text-center mt-2 text-muted-foreground text-lg leading-relaxed">
+          <p className="mt-4 sm:text-xl text-base text-muted-foreground max-w-2xl mx-auto">
             See what our users have to say about ShortsVid.
           </p>
 

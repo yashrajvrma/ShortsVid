@@ -12,7 +12,6 @@ import img4 from "@/public/images/testimonials/avatar_8.webp";
 import img5 from "@/public/images/testimonials/avatar_7.webp";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import socialImg from "@/public/images/social-icons.webp";
 
 const avatarUrls = [img1, img2, img5, img3, img4];
 
@@ -31,7 +30,7 @@ export function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.45, ease: "easeOut" }}
+          transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
           className="flex items-center gap-3 my-1"
         >
           <AvatarCircles numPeople={99} avatarUrls={avatarUrls} />
@@ -115,7 +114,7 @@ export function Hero() {
         </p>
         <div className="flex justify-center items-center gap-6 sm:gap-8">
           <Image
-            src="/images/yt-full.svg"
+            src="/images/social-icons/yt-full.svg"
             alt="YouTube"
             width={120}
             height={40}
@@ -124,7 +123,7 @@ export function Hero() {
           />
           <div className="flex items-center gap-1.5">
             <Image
-              src="/images/ig.svg"
+              src="/images/social-icons/ig.svg"
               alt="Instagram"
               width={32}
               height={32}
@@ -132,7 +131,7 @@ export function Hero() {
               draggable={false}
             />
             <Image
-              src="/images/instagram-text.svg"
+              src="/images/social-icons/instagram-text.svg"
               alt="Instagram Text"
               width={100}
               height={30}
@@ -141,7 +140,7 @@ export function Hero() {
             />
           </div>
           <Image
-            src="/images/tik-tok-full.svg"
+            src="/images/social-icons/tik-tok-full.svg"
             alt="TikTok"
             width={100}
             height={40}
@@ -152,7 +151,14 @@ export function Hero() {
       </motion.div>
 
       {/* videos */}
-      <VideoShowcase />
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+        // className="text-center text-3xl sm:text-5xl font-serif tracking-tighter font-semibold leading-[1.2] max-w-2xl mx-auto"
+      >
+        <VideoShowcase />
+      </motion.div>
     </section>
   );
 }

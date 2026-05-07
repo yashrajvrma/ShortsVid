@@ -96,15 +96,18 @@ const FAQS = [
 export function FAQ() {
   return (
     <section id="faq" className="w-full sm:py-24 py-12 px-4">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center sm:mb-20 mb-12">
-          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tighter text-foreground">
+          <h2 className="text-3xl sm:text-5xl font-semibold tracking-tighter text-foreground font-serif leading-[1.2]">
             Frequently Asked Questions
           </h2>
           {/* <p className="mt-3 text-base text-muted-foreground">
             Questions We Get Asked
           </p> */}
+          <p className="mt-4 sm:text-xl text-base text-muted-foreground max-w-2xl mx-auto">
+            Everything you need to know about our AI video tools.
+          </p>
         </div>
 
         {/* Accordion grouped by category */}
@@ -112,17 +115,17 @@ export function FAQ() {
           {[...new Set(FAQS.map((f) => f.category))].map((category) => (
             <div key={category}>
               {/* Category label */}
-              <p className="text-base font-medium">{category}</p>
+              <p className="text-base font-medium mb-2 ml-1">{category}</p>
 
               <Accordion
                 type="multiple"
-                className="w-full divide-y divide-border"
+                className="w-full divide-y divide-border space-y-3"
               >
                 {FAQS.filter((f) => f.category === category).map((faq, i) => (
                   <AccordionItem
                     key={i}
                     value={`${category}-${i}`}
-                    className="border-none"
+                    className="bg-card border-border border rounded-2xl px-5"
                   >
                     <AccordionTrigger className="text-left text-lg font-medium text-foreground hover:no-underline py-4">
                       {faq.q}
