@@ -46,7 +46,7 @@ export const TestimonialsColumn = (props: {
                       {Array.from({ length: stars }).map((_, s) => (
                         <Star
                           key={s}
-                          className="w-3.5 h-3.5 fill-primary/70 text-primary"
+                          className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400"
                         />
                       ))}
                     </div>
