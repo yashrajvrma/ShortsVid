@@ -45,10 +45,10 @@ export function Hero() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
-        className="flex flex-col items-center text-3xl sm:text-6xl tracking-tighter font-semibold leading-[1.05] max-w-2xl mx-auto"
+        className="flex flex-col items-center text-3xl sm:text-5xl font-serif tracking-tighter font-semibold leading-[1.05] max-w-2xl mx-auto"
       >
         <div className="flex">
-          Automate viral Faceless
+          Automate viral Faceless shorts
           {/* <Image
             src={socialImg}
             alt="social Icons"
@@ -57,7 +57,8 @@ export function Hero() {
             priority
           /> */}
         </div>{" "}
-        <div>shorts in seconds</div>
+        {/* <div>shorts in seconds</div> */}
+        <div>and earn passive income</div>
         {/* <div>&#35; 1 AI shorts</div>
         <div>generator</div> */}
       </motion.h1>
@@ -66,7 +67,7 @@ export function Hero() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
-        className="sm:mt-4 mt-3 text-base sm:text-xl font-normal text-muted-foreground max-w-xl mx-auto sm:leading-relaxed sm:px-14 px-10"
+        className="sm:mt-4 mt-3 text-base sm:text-xl font-normal text-muted-foreground sm:max-w-2xl max-w-xl mx-auto sm:leading-relaxed sm:px-12 px-10"
       >
         {/* <p>
           Script Visuals Voiceover Captions &mdash; all done by AI. No editing

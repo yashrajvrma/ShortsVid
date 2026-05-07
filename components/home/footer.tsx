@@ -41,26 +41,32 @@ const RESOURCES = [
 
 export function Footer() {
   return (
-    <footer className="w-full sm:mt-8 mt-6">
-      <div className="max-w-6xl mx-auto px-5 py-12 border-t border-border">
+    <footer className="w-full sm:mt-8 mt-6 border-border border-t">
+      <div className="max-w-6xl mx-auto px-5 py-12">
         {/* Brand row */}
-        <div className="flex flex-col gap-2 mb-12">
+        <div className="flex flex-col gap-2 mb-8">
           <Link href="/" className="flex items-center gap-1 w-fit">
-            <Image src={logo} alt="ShortsVid" className="w-8 rotate-[-5deg]" />
+            <Image
+              src={logo}
+              draggable={false}
+              alt="ShortsVid"
+              className="w-8 rotate-[-5deg]"
+            />
             <span className="text-xl font-semibold tracking-tighter text-neutral-900">
               ShortsVid
             </span>
           </Link>
 
           <p className="text-sm text-foreground mt-1">
-            Automate viral Faceless shorts
+            Automate viral Faceless shorts and earn passive income. No editing
+            skills required!
           </p>
 
           <a
             href="https://buildfast.shop/"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-2 flex items-center gap-1.5 w-fit rounded-sm border border-double text-secondary bg-background px-3 py-2 text-xs font-medium transition-colors"
+            className="mt-1 flex items-center gap-1.5 w-fit rounded-sm border border-double text-secondary bg-background px-3 py-2 text-xs font-medium transition-colors"
           >
             Built with
             <Image src={buildfastIcon} alt="buildfast-icon" className="w-3" />
@@ -145,7 +151,6 @@ export function Footer() {
               href="https://startupfa.me/s/shortsvid?utm_source=shortsvid.pro"
               target="_blank"
               rel="noopener noreferrer"
-              className="opacity-80 hover:opacity-100 transition-opacity"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -161,7 +166,6 @@ export function Footer() {
               href="https://fazier.com/launches/shortsvid.pro"
               target="_blank"
               rel="noopener noreferrer"
-              className="opacity-80 hover:opacity-100 transition-opacity"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -177,7 +181,6 @@ export function Footer() {
               href="https://www.foundrlist.com/product/shortsvid?utm_source=badge&utm_medium=embed"
               target="_blank"
               rel="noopener noreferrer"
-              className="opacity-80 hover:opacity-100 transition-opacity"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -193,7 +196,6 @@ export function Footer() {
               href="https://open-launch.com/projects/shortsvid"
               target="_blank"
               rel="noopener noreferrer"
-              className="opacity-80 hover:opacity-100 transition-opacity"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -209,7 +211,6 @@ export function Footer() {
               href="https://earlyhunt.com/project/shortsvid"
               target="_blank"
               rel="noopener noreferrer"
-              className="opacity-80 hover:opacity-100 transition-opacity"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -230,7 +231,7 @@ export function Footer() {
               />
             </a>
 
-            <a
+            {/* <a
               href="https://www.scrolllaunch.com/products/shortsvid?utm_source=badge&utm_medium=embed&utm_campaign=shortsvid&ref=scrolllaunch"
               target="_blank"
               rel="noopener noreferrer"
@@ -238,6 +239,20 @@ export function Footer() {
               <img
                 src="https://www.scrolllaunch.com/api/badge/shortsvid"
                 alt="Featured on ScrollLaunch"
+                width="195"
+                height="54"
+                loading="lazy"
+              />
+            </a> */}
+
+            <a
+              href="https://www.scrolllaunch.com/products/shortsvid?ref=badge"
+              target="_blank"
+              rel="noopener"
+            >
+              <img
+                src="https://www.scrolllaunch.com/api/badge/shortsvid?variant=featured&theme=light"
+                alt="ShortsVid — Featured on ScrollLaunch"
                 width="195"
                 height="54"
                 loading="lazy"
