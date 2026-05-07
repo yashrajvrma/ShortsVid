@@ -1,7 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
-export default function CallToAction() {
+export default function CallToAction({ link }: { link: string }) {
   return (
     <section className="max-w-6xl mx-auto px-4 py-6">
       <div className="relative overflow-hidden bg-neutral-900 rounded-3xl px-8 py-12 text-center text-primary-foreground">
@@ -35,7 +35,7 @@ export default function CallToAction() {
                         <ArrowRight className="w-4 h-4" />
                       </Link> */}
             <a
-              href="#tool"
+              href={link}
               className="inline-flex items-center justify-center gap-2 font-medium px-7 py-3 rounded-xl bg-white/20 transition-colors text-base"
             >
               Try the tool first

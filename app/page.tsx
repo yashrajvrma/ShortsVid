@@ -195,7 +195,7 @@ export default async function Home() {
 
       <PricingSection />
       <FAQ />
-      <CallToAction />
+      <CallToAction link="/tools" />
       <Footer />
     </main>
   );
