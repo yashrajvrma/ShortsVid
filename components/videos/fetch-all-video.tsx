@@ -69,7 +69,7 @@ export default function VideoCard({
     const url = `${window.location.origin}/app/library/${videoType}/${videoData.id}`;
     if (navigator.share) {
       await navigator.share({
-        title: videoData.script?.prompt ?? "ShortsVid",
+        title: videoData.script?.prompt ?? "ShortsVid", 
         url,
       });
     } else {

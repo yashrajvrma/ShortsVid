@@ -2,10 +2,10 @@ import { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "ShortsVid – AI Short Video Generator",
+    name: "ShortsVid – Automate viral Faceless shorts and earn passive income.",
     short_name: "ShortsVid",
     description:
-      "Create viral YouTube Shorts, Instagram Reels, and TikTok videos in minutes with AI. No editing skills required.",
+      "Create viral Faceless Shorts, Brainrot explainer videos and TikToks in minutes with AI. No editing skills required.",
     start_url: "/",
     display: "standalone",
     orientation: "portrait",
@@ -35,10 +35,16 @@ export default function manifest(): MetadataRoute.Manifest {
         description: "Create a new AI-powered faceless short video",
       },
       {
-        name: "Create Brainrot Videos",
-        short_name: "Brainrot Videos",
+        name: "Create Brainrot Explainer",
+        short_name: "Brainrot Explainer",
         url: "/app/shorts/conversation-videos",
-        description: "Create Brainrot Videos",
+        description: "Create a new AI-powered brainrot explainer video",
+      },
+      {
+        name: "Explore AI Tools",
+        short_name: "AI Tools",
+        url: "/tools",
+        description: "Discover all our free AI video creation tools",
       },
       {
         name: "Library",
