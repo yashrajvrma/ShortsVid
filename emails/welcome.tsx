@@ -36,7 +36,7 @@ export default function WelcomeEmail({ name }: WelcomeEmailProps) {
                     <tr>
                       <td valign="middle" className="pr-1">
                         <Img
-                          src="https://cdn.shortsvid.pro/images/shortsvid-logo.webp"
+                          src="https://cdn.shortsvid.pro/images/shortsvid-logo.png"
                           alt="ShortsVid"
                           height="28"
                         />

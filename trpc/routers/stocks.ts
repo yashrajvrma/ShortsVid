@@ -38,14 +38,13 @@ export const stockRouter = createTRPCRouter({
       );
     };
 
-    const systemBackgroundMusic = await convertR2ObjectKeyToSignedUrl(
-      systemUploadedMusic,
-    );
+    const systemBackgroundMusic =
+      await convertR2ObjectKeyToSignedUrl(systemUploadedMusic);
 
     return systemBackgroundMusic;
   }),
 
-  getSystemBackgroundVideos: authProcedure.query(async () => {
+  getSystemBackgroundVideos: baseProcedure.query(async () => {
     const videos = await prisma.stock.findMany({
       where: {
         stockVariant: "SYSTEM",
@@ -126,7 +125,7 @@ export const stockRouter = createTRPCRouter({
       };
     }),
 
-  getSystemAiAvatars: authProcedure.query(async () => {
+  getSystemAiAvatars: baseProcedure.query(async () => {
     const avatar = await prisma.stock.findMany({
       where: {
         stockVariant: "SYSTEM",

@@ -5,8 +5,15 @@ import { useQuery } from "@tanstack/react-query";
 import type { ConversationFormState } from "@/hooks/use-conversation-form";
 import type { CaptionStyle } from "@/types";
 import { CaptionAnimationOverlay } from "../captions/caption-animation-overlay";
+import { HelpCircle } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-const MOCKUP_WIDTH = 240;
+const MOCKUP_WIDTH = 350;
 
 interface ConversationMockupPreviewProps {
   form: ConversationFormState & {
@@ -31,7 +38,31 @@ export function ConversationMockupPreview({
       : null;
 
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-5 py-6">
+    <div className="flex flex-col justify-between items-center h-full gap-5 py-6 px-3">
+      {/* Credits Card */}
+      <div className="bg-card border border-border px-3 py-1 rounded-lg shadow-sm flex flex-col gap-1 text-sm font-medium text-muted-foreground w-full mx-5">
+        <div>Estimated credits:</div>
+        <div className="flex items-center text-primary font-semibold gap-2">
+          5 credits
+          <span>
+            {" "}
+            <TooltipProvider delayDuration={100}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="w-4 h-4 text-muted-foreground hover:text-foreground transition-colors cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent
+                  side="top"
+                  className="text-xs p-2.5 max-w-[250px] shadow-md leading-relaxed"
+                >
+                  <p>5 credits per 1 video</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </span>
+        </div>
+      </div>
+
       {/* Phone shell */}
       <div
         className="relative shrink-0"
@@ -73,10 +104,12 @@ export function ConversationMockupPreview({
 
       {/* Label */}
       <div className="flex flex-col items-center gap-0.5">
-        <p className="text-sm font-semibold text-foreground">Live Preview</p>
-        <p className="text-xs text-muted-foreground text-center max-w-[180px]">
+        {/* <p className="text-sm font-semibold text-foreground">Live Preview</p> */}
+        <p className="text-xs text-muted-foreground text-center">
           {selectedVideo
-            ? `Background: ${selectedVideo.name}`
+            ?
+            // `Background: ${selectedVideo.name}` 
+            `This is only the preview video and not the final one. The final video will be different.`
             : "Select a background video to preview"}
         </p>
       </div>

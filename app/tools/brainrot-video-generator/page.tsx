@@ -6,15 +6,15 @@ import {
   CheckCircle2,
   Globe,
   Mic,
-  Music,
   Captions,
   Film,
   ChevronRight,
   Sparkles,
-  Video,
   Clock3,
   Zap,
   ArrowRight,
+  MessageSquare,
+  Users,
 } from "lucide-react";
 import {
   Accordion,
@@ -25,21 +25,21 @@ import {
 import { HydrateClient, prefetch, trpc } from "@/trpc/server";
 import { LANGUAGES, TOOLS } from "@/lib/constants";
 import { JsonLd } from "@/components/seo/json-ld";
-import FacelessShortsToolUi from "@/components/tools/faceless-shorts/faceless-shorts-tool-ui";
+import BrainrotToolUi from "@/components/tools/brainrot/brainrot-tool-ui";
 
 export const metadata: Metadata = {
-  title: "Free AI Faceless Shorts Generator",
+  title: "Free AI Brainrot Explainer Video Generator",
   description:
-    "Create faceless YouTube Shorts with AI voiceover, custom captions & background music. No face, no camera — generate viral videos in minutes. Free to try.",
+    "Create viral brainrot explainer videos with chaotic scripts, unhinged AI voices, Minecraft parkour backgrounds, and bold captions. Text to brainrot in minutes.",
   openGraph: {
-    title: "Free AI Faceless Shorts Generator — ShortsVid",
+    title: "Free AI Brainrot Explainer Video Generator — ShortsVid",
     description:
-      "Generate scroll-stopping faceless YouTube Shorts with AI. Pick a topic, choose a voice, add captions — done in minutes.",
+      "Generate scroll-stopping brainrot explainer videos with an AI brainrot generator. Pick characters like SpongeBob or Joe Rogan, add Minecraft parkour, and let AI write the script.",
     type: "website",
-    url: "https://shortsvid.pro/tools/faceless-shorts",
+    url: "https://shortsvid.pro/tools/brainrot-video-generator",
   },
   alternates: {
-    canonical: "https://shortsvid.pro/tools/faceless-shorts",
+    canonical: "https://shortsvid.pro/tools/brainrot-video-generator",
   },
 };
 
@@ -49,74 +49,50 @@ const faqSchema = {
   mainEntity: [
     {
       "@type": "Question",
-      name: "What is a faceless YouTube Short?",
+      name: "What is an AI brainrot explainer video?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "A faceless YouTube Short is a short-form video (under 60 seconds) that doesn't show the creator's face. Instead, it uses AI voiceover, stock footage, gameplay clips, or animated visuals paired with on-screen captions. Faceless channels are one of the fastest-growing niches on YouTube in 2025.",
+        text: "An AI brainrot explainer video is a highly engaging, fast-paced short-form video that uses an AI brainrot generator to have AI voices or avatars (like celebrities or meme characters) explain a concept or tell a story over gameplay footage like Minecraft parkour or Subway Surfers.",
       },
     },
     {
       "@type": "Question",
-      name: "Do I need to show my face to create YouTube Shorts?",
+      name: "How does the text to brainrot generator work?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "No. ShortsVid's faceless shorts generator lets you create fully produced videos without ever appearing on camera. Just enter a topic, pick an AI voice, and the tool generates the script, voiceover, and captions automatically.",
+        text: "Our text to brainrot tool lets you enter a topic or paste a script. The brainrot video generator then writes a chaotic dialogue, splits it between two characters, syncs the AI voices to a gameplay background, and adds highly visual captions — all automatically in minutes.",
       },
     },
     {
       "@type": "Question",
-      name: "How long does it take to generate a faceless Short?",
+      name: "Do I need to edit the video myself?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Most faceless Shorts are generated in under 3–5 minutes. The AI writes the script, generates the voiceover audio, syncs captions, and assembles the final video — all automatically.",
+        text: "No! The brainrot video generator handles everything. It perfectly times the back-and-forth dialogue, applies viral caption styles, and renders the final MP4 video ready to upload to TikTok or YouTube Shorts.",
       },
     },
     {
       "@type": "Question",
-      name: "What video background styles are available?",
+      name: "What characters and voices are available?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "ShortsVid offers multiple video styles including Minecraft parkour, satisfying gameplay clips, nature footage, and more. New styles are added regularly. You can preview each style before generating.",
+        text: "You can choose from a library of iconic characters including Joe Rogan, SpongeBob, Peter Griffin, Donald Trump, Elon Musk, and many more. Each character has a distinct AI voice to match their persona.",
       },
     },
     {
       "@type": "Question",
-      name: "Is the faceless shorts generator free to use?",
+      name: "Can I use my own script?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes — you can explore the full tool for free without signing up. Creating and downloading your generated video requires a free account. Paid plans offer higher monthly video credits for power users.",
+        text: "Absolutely. While you can use our AI to write the script, you can also paste your own custom dialogue line-by-line and assign different characters to read each part.",
       },
     },
     {
       "@type": "Question",
-      name: "Can I monetise faceless YouTube Shorts?",
+      name: "Are brainrot videos good for TikTok and YouTube?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. Faceless Shorts are eligible for YouTube Partner Program monetisation as long as the content is original. Since ShortsVid generates unique scripts and voiceovers for each video, your content qualifies as original. Always review YouTube's monetisation policies before applying.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Can I use my own voice instead of AI?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Currently, ShortsVid provides over 50 high-quality AI voices in multiple languages to streamline the process. Custom voice cloning and audio uploads are on our roadmap for future updates.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What happens if I don't like the generated script?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "You have full control over the script before the video is generated. You can let the AI write it, make manual edits, or paste in a completely pre-written script of your own. The video will only use the exact text you approve.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Do I own the rights to the videos?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Yes, you own full commercial rights to any video you generate using ShortsVid. You can post them on YouTube Shorts, TikTok, Instagram Reels, or use them for client work.",
+        text: "Yes! Brainrot content is one of the highest-performing video formats on TikTok and YouTube Shorts due to its high retention rate, engaging gameplay backgrounds, and fast-paced dialogue.",
       },
     },
   ],
@@ -125,74 +101,76 @@ const faqSchema = {
 const softwareSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "ShortsVid Faceless Shorts Generator",
+  name: "ShortsVid Brainrot Explainer Video Generator",
   applicationCategory: "VideoApplication",
   operatingSystem: "Web",
   description:
-    "AI-powered faceless YouTube Shorts generator with voiceover, custom captions, background music, and multiple video styles.",
+    "AI brainrot generator that converts text to brainrot explainer videos featuring AI characters, gameplay footage, and chaotic scripts.",
   offers: {
     "@type": "Offer",
     price: "0",
     priceCurrency: "USD",
     description: "Free tier available",
   },
-  url: "https://shortsvid.pro/tools/faceless-shorts",
+  url: "https://shortsvid.pro/tools/brainrot-video-generator",
 };
 
 const STEPS = [
   {
     step: "01",
     icon: Globe,
-    title: "Pick your language & topic",
+    title: "Enter your topic",
     description:
-      "Choose from 20+ languages and enter your video topic — anything from finance tips to motivational quotes.",
+      "Type a chaotic topic, meme idea, or paste your own unhinged script into the generator.",
   },
   {
     step: "02",
-    icon: Sparkles,
-    title: "Generate or write your script",
+    icon: MessageSquare,
+    title: "Generate dialogue",
     description:
-      "Let the AI write a viral-optimised script for you, or type your own. Edit it until it's exactly right.",
+      "Let our AI write a viral back-and-forth script between two speakers, or write it yourself.",
   },
   {
     step: "03",
-    icon: Mic,
-    title: "Choose a voice & music",
+    icon: Users,
+    title: "Pick characters",
     description:
-      "Select from 50+ AI voices across multiple languages. Add optional background music to set the mood.",
+      "Choose from iconic AI avatars and voices like Joe Rogan, Peter Griffin, or SpongeBob.",
   },
   {
     step: "04",
     icon: Film,
-    title: "Pick a video style",
+    title: "Select gameplay",
     description:
-      "Choose a background video style — Minecraft parkour, satisfying gameplay, nature, and more.",
+      "Pick a high-retention background video like Minecraft parkour or Subway Surfers.",
   },
   {
     step: "05",
-    icon: Captions,
-    title: "Customise captions & generate",
+    icon: Sparkles,
+    title: "Generate video",
     description:
-      "Style your captions with custom fonts, colours, and animations. Hit Generate — your video is ready in minutes.",
+      "Hit generate! The AI syncs the voices, background, and captions into a viral masterpiece.",
   },
 ];
 
 const FEATURES = [
-  { icon: Mic, label: "50+ AI Voices" },
-  { icon: Globe, label: "20+ Languages" },
-  { icon: Music, label: "Background Music" },
-  { icon: Captions, label: "Auto Captions" },
-  { icon: Film, label: "Multiple Video Styles" },
+  { icon: Users, label: "Meme Avatars" },
+  { icon: Mic, label: "Unhinged AI Voices" },
+  { icon: Film, label: "Minecraft Parkour" },
+  { icon: Captions, label: "Viral Captions" },
+  { icon: MessageSquare, label: "Chaotic Scripts" },
   { icon: Clock3, label: "Ready in Minutes" },
   { icon: CheckCircle2, label: "No Watermark" },
   { icon: Zap, label: "Free to Try" },
 ];
 
 // Filter out this tool for the "explore more" section
-const MORE_TOOLS = TOOLS.filter((t) => t.slug !== "faceless-shorts");
+const MORE_TOOLS = TOOLS.filter((t) => t.slug !== "brainrot-video-generator");
 
-export default async function FacelessShortsToolPage() {
+export default async function BrainrotVideoGeneratorPage() {
   prefetch(trpc.stocks.getAllBackgroundMusic.queryOptions());
+  prefetch(trpc.stocks.getSystemBackgroundVideos.queryOptions());
+  prefetch(trpc.stocks.getSystemAiAvatars.queryOptions());
   prefetch(
     trpc.voices.getSystemVoice.queryOptions({
       languageCode: LANGUAGES[0].code,
@@ -207,17 +185,11 @@ export default async function FacelessShortsToolPage() {
       {/* ── Hero ── */}
       <section className="relative overflow-hidden bg-gradient-to-b from-muted/40 to-background px-4 pt-12 pb-10">
         <div className="max-w-4xl mx-auto text-center">
-          {/* <div className="inline-flex items-center gap-1.5 bg-primary/10 text-primary text-xs font-medium px-3 py-1 rounded-full mb-5">
-            <Video className="w-3.5 h-3.5" />
-            Free AI Tool
-          </div> */}
           <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-foreground leading-[1.1] mb-4">
-            AI Faceless Shorts Generator
+            AI Brainrot Explainer Video Generator
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-7">
-            Create scroll-stopping faceless YouTube Shorts with AI voiceover,
-            custom captions, and background music — no face, no camera, no
-            editing skills needed!
+            Turn any text to brainrot in minutes. Use our AI brainrot generator to create viral, highly engaging explainer videos with meme characters arguing over Minecraft parkour and Subway Surfers footage. The ultimate brainrot video generator for TikToks and Shorts.
           </p>
 
           {/* Feature badges */}
@@ -245,7 +217,7 @@ export default async function FacelessShortsToolPage() {
               <div className="h-[780px] rounded-xl border border-border bg-muted/20 animate-pulse" />
             }
           >
-            <FacelessShortsToolUi />
+            <BrainrotToolUi />
           </Suspense>
         </ErrorBoundary>
       </section>
@@ -254,10 +226,10 @@ export default async function FacelessShortsToolPage() {
       <section className="max-w-5xl mx-auto px-4 py-14">
         <div className="text-center mb-10">
           <h2 className="text-2xl sm:text-4xl font-medium tracking-tight mb-3">
-            How to create a faceless Short
+            How to use the Brainrot Explainer Video Generator
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            Five simple steps from blank page to published video.
+            From random idea to viral TikTok in five simple steps.
           </p>
         </div>
 
@@ -361,7 +333,7 @@ export default async function FacelessShortsToolPage() {
             Frequently asked questions
           </h2>
           <p className="mt-4 sm:text-xl text-base text-muted-foreground max-w-2xl mx-auto">
-            Everything you need to know about faceless YouTube Shorts.
+            Everything you need to know about the AI brainrot generator.
           </p>
         </div>
 

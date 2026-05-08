@@ -9,7 +9,7 @@ const BASE_URL =
 // Listing non-existent pages hurts crawl budget and can cause soft-404 penalties.
 const LIVE_TOOL_SLUGS = [
   "faceless-shorts",
-  // "brainrot-video-generator", // 👈 uncomment once page is built
+  "brainrot-video-generator",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

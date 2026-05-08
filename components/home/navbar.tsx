@@ -13,6 +13,7 @@ import {
   Music,
   Sparkles,
   Zap,
+  Flame,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logo from "@/public/images/shortsvid-icon.webp";
@@ -63,10 +64,16 @@ const FREE_TOOLS = [
     href: "/tools/faceless-shorts",
   },
   {
+    icon: Flame,
+    title: "Brainrot Explainer Videos",
+    description: "Create brainrot explainer videos",
+    href: "/tools/brainrot-video-generator",
+  },
+  {
     icon: UsersRound,
     title: "Conversation Videos",
-    description: "Create brainrot explainer videos",
-    href: "/tools/conversation-videos",
+    description: "Create text to conversation videos",
+    href: "/tools/brainrot-video-generator",
   },
 ];
 

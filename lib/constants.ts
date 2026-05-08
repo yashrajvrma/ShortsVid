@@ -508,12 +508,12 @@ export const TOOLS: Tool[] = [
   },
   {
     slug: "brainrot-video-generator",
-    title: "Brainrot Video Generator",
-    shortTitle: "Brainrot Generator",
+    title: "Brainrot Explainer Video Generator",
+    shortTitle: "Brainrot Explainer",
     description:
       "Create viral brainrot content with AI-generated scripts, unhinged voiceovers, and chaotic captions.",
     icon: Flame,
-    live: false,
+    live: true,
     href: "/tools/brainrot-video-generator",
     iconColor: "text-red-500",
     iconBg: "bg-red-500/10",
