@@ -53,7 +53,7 @@ export default function ConversationVideos() {
     onSuccess: () => {
       toast.success("Conversation video generation started!");
       form.reset();
-      router.push("/app/library");
+      router.push("/app/library?videoType=conversation-video");
     },
     onError: (error: TRPCClientErrorLike<AppRouter>) => {
       toast.error(

@@ -22,7 +22,7 @@ export async function getVideoDetailById({
   });
 
   if (!video || video.status === "GENERATING") {
-    redirect("/app/library");
+    redirect("/app/library?videoType=faceless-shorts");
   }
 
   // ── Generate signed URLs for all R2 assets
@@ -66,11 +66,11 @@ export async function getVideoDetailById({
     },
     voice: video.voice
       ? {
-        id: video.voice.id,
-        name: video.voice.name,
-        gender: video.voice.gender,
-        languageCode: video.voice.languageCode,
-      }
+          id: video.voice.id,
+          name: video.voice.name,
+          gender: video.voice.gender,
+          languageCode: video.voice.languageCode,
+        }
       : null,
     // Signed asset URLs — ready for Remotion
     captionConfig: video.captionConfig,

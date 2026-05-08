@@ -57,7 +57,7 @@ export default function FacelessShortsToolUi() {
     onSuccess: () => {
       toast.success("Video generation started successfully!");
       form.reset();
-      router.push("/app/library");
+      router.push("/app/library?videoType=faceless-shorts");
     },
     onError: (error: TRPCClientErrorLike<AppRouter>) => {
       // Insufficient credits — send to pricing page

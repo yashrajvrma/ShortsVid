@@ -26,7 +26,7 @@ export async function getConversationVideoDetailById({
   });
 
   if (!conversationVideo || conversationVideo.status === "GENERATING") {
-    redirect("/app/library");
+    redirect("/app/library?videoType=conversation-video");
   }
 
   // ── Generate signed URLs for all R2 assets

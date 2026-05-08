@@ -52,7 +52,7 @@ export default function FacelessShorts() {
     onSuccess: () => {
       toast.success("Video generation started successfully!");
       form.reset();
-      router.push("/app/library");
+      router.push("/app/library?videoType=faceless-shorts");
     },
     onError: (error: TRPCClientErrorLike<AppRouter>) => {
       toast.error(error.message || "Failed to start video generation");

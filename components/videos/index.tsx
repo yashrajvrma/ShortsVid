@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
 import Header from "../header";
@@ -10,9 +11,32 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function AllVideos() {
   const trpc = useTRPC();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [activeTab, setActiveTab] = useState<
     "facelessShorts" | "conversationVideo"
   >("facelessShorts");
+
+  useEffect(() => {
+    const videoType = searchParams.get("videoType");
+    if (videoType === "conversation-video") {
+      setActiveTab("conversationVideo");
+    } else if (videoType === "faceless-shorts") {
+      setActiveTab("facelessShorts");
+    }
+  }, [searchParams]);
+
+  const handleTabChange = (val: "facelessShorts" | "conversationVideo") => {
+    setActiveTab(val);
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set(
+      "videoType",
+      val === "conversationVideo" ? "conversation-video" : "faceless-shorts"
+    );
+    router.replace(`${pathname}?${newParams.toString()}`);
+  };
 
   const { data: shorts, isLoading: isLoadingShorts } = useQuery(
     trpc.videos.getAllShorts.queryOptions(),
@@ -46,7 +70,7 @@ export default function AllVideos() {
             <Tabs
               value={activeTab}
               onValueChange={(val) =>
-                setActiveTab(val as "facelessShorts" | "conversationVideo")
+                handleTabChange(val as "facelessShorts" | "conversationVideo")
               }
             >
               <TabsList className="bg-transparent border border-border w-full rounded-lg min-h-12 gap-1">
