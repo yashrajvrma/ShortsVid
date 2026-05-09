@@ -43,7 +43,7 @@ export function NavUser() {
         fetchOptions: {
           onSuccess: () => {
             toast.success("Logged out successfully");
-            router.push("login");
+            router.push("/login");
           },
           onError: (ctx) => {
             toast.error(ctx.error.message);

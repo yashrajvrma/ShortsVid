@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+
+export const revalidate = 1800; // Revalidate every 30 mins to refresh presigned URLs before they expire
+
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import Link from "next/link";

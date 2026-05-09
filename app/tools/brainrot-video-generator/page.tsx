@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+
+export const revalidate = 1800; // Revalidate every 30 mins to refresh presigned URLs before they expire
+
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import Link from "next/link";
@@ -189,7 +192,11 @@ export default async function BrainrotVideoGeneratorPage() {
             AI Brainrot Explainer Video Generator
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-7">
-            Turn any text to brainrot in minutes. Use our AI brainrot generator to create viral, highly engaging explainer videos with meme characters arguing over Minecraft parkour and Subway Surfers footage. The ultimate brainrot video generator for TikToks and Shorts.
+            Turn any text to brainrot in minutes. Use our AI brainrot generator
+            to create viral, highly engaging explainer videos with meme
+            characters arguing over Minecraft parkour and Subway Surfers
+            footage. The ultimate brainrot video generator for TikToks and
+            Shorts.
           </p>
 
           {/* Feature badges */}
@@ -275,10 +282,11 @@ export default async function BrainrotVideoGeneratorPage() {
             return (
               <div
                 key={tool.slug}
-                className={`relative flex flex-col gap-3 bg-card border border-border rounded-2xl p-5 transition-all ${tool.live
-                  ? "hover:border-primary/40 hover:shadow-md cursor-pointer"
-                  : "opacity-60 cursor-default"
-                  }`}
+                className={`relative flex flex-col gap-3 bg-card border border-border rounded-2xl p-5 transition-all ${
+                  tool.live
+                    ? "hover:border-primary/40 hover:shadow-md cursor-pointer"
+                    : "opacity-60 cursor-default"
+                }`}
               >
                 {!tool.live && (
                   <span className="absolute top-3 right-3 text-[10px] font-medium bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
@@ -367,8 +375,8 @@ export default async function BrainrotVideoGeneratorPage() {
               Ready to go viral?
             </h2>
             <p className="text-primary-foreground/80 text-lg mb-8 max-w-xl mx-auto tracking-tight">
-              Join 100K+ creators making unhinged brainrot videos every day. Start for
-              free — no credit card required.
+              Join 100K+ creators making unhinged brainrot videos every day.
+              Start for free — no credit card required.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
               <Link

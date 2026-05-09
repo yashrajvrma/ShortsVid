@@ -984,7 +984,7 @@ export default function VideoDetailClient({
                     key={video.id}
                     video={video}
                     isActive={video.id === videoDetail.id}
-                    onClick={() => router.push(`/dashboard/videos/${video.id}`)}
+                    onClick={() => router.push(`/app/videos/${video.id}`)}
                   />
                 ))}
               </div>

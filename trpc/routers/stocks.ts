@@ -21,7 +21,10 @@ export const stockRouter = createTRPCRouter({
         musicList
           .filter((music) => music.r2ObjectKey)
           .map(async (music) => {
-            const musicUrl = await getSignedObjectUrl(music.r2ObjectKey!);
+            const musicUrl = await getSignedObjectUrl(
+              music.r2ObjectKey!,
+              604800,
+            );
 
             return {
               id: music.id,
@@ -62,6 +65,7 @@ export const stockRouter = createTRPCRouter({
           .map(async (video) => {
             const thumbnailUrl = await getSignedObjectUrl(
               video.thumbnailR2ObjectKey!,
+              604800,
             );
 
             return {
@@ -141,7 +145,10 @@ export const stockRouter = createTRPCRouter({
         avatarList
           .filter((avatar) => avatar.r2ObjectKey)
           .map(async (avatar) => {
-            const avatarUrl = await getSignedObjectUrl(avatar.r2ObjectKey!);
+            const avatarUrl = await getSignedObjectUrl(
+              avatar.r2ObjectKey!,
+              604800,
+            );
 
             return {
               id: avatar.id,
