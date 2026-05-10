@@ -197,7 +197,7 @@ export default async function TikTokScriptGeneratorPage() {
         >
           <Suspense
             fallback={
-              <div className="h-[550px] rounded-xl border border-border bg-muted/20 animate-pulse" />
+              <div className="h-[400px] rounded-xl border border-border bg-muted/20 animate-pulse" />
             }
           >
             <ScriptToolUi />
@@ -211,7 +211,7 @@ export default async function TikTokScriptGeneratorPage() {
           <h2 className="text-2xl sm:text-4xl font-medium tracking-tight mb-3">
             How to use the TikTok Script Generator
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-xl mx-auto">
             From idea to recorded video in record time.
           </p>
         </div>

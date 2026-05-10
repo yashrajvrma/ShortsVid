@@ -78,9 +78,9 @@ export const VIDEO_STYLES: {
 ];
 
 export const DURATIONS: Duration[] = [
-  { id: 1, value: 15, label: "10-15s" },
-  { id: 2, value: 30, label: "15-30s" },
-  { id: 3, value: 60, label: "30-60s" },
+  { id: 1, value: 15, label: "10-15sec" },
+  { id: 2, value: 30, label: "15-30sec" },
+  { id: 3, value: 60, label: "30-60sec" },
 ];
 
 // fonts

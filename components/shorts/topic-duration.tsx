@@ -49,10 +49,11 @@ export function TopicDuration({
               type="button"
               // @ts-ignore
               onClick={() => onTopicChange(t.id)}
-              className={`px-3 py-2 text-sm border transition-all duration-200 rouned-lg ${topic === t.id
-                ? "bg-secondary text-secondary-foreground shadow-sm hover:text-secondary-foreground hover:bg-secondary"
-                : "bg-card text-muted-foreground border-border hover:bg-secondary hover:text-secondary-foreground"
-                }`}
+              className={`px-3 py-2 text-sm border transition-all duration-200 rouned-lg ${
+                topic === t.id
+                  ? "bg-secondary text-secondary-foreground shadow-sm hover:text-secondary-foreground hover:bg-secondary"
+                  : "bg-card text-muted-foreground border-border hover:bg-transparent"
+              }`}
             >
               {t.label}
             </Button>
@@ -72,10 +73,11 @@ export function TopicDuration({
               key={d.id}
               type="button"
               onClick={() => onDurationChange(d.value)}
-              className={`flex-1 px-3 py-2 text-sm font-medium border transition-all duration-200 rounded-lg ${duration === d.value
-                ? "bg-secondary text-secondary-foreground shadow-sm hover:text-secondary-foreground hover:bg-secondary"
-                : "bg-card text-muted-foreground border-border hover:bg-secondary hover:text-secondary-foreground"
-                }`}
+              className={`flex-1 px-3 py-2 text-sm font-medium border transition-all duration-200 rounded-lg ${
+                duration === d.value
+                  ? "bg-secondary text-secondary-foreground shadow-sm hover:text-secondary-foreground hover:bg-secondary"
+                  : "bg-card text-muted-foreground border-border hover:bg-transparent"
+              }`}
             >
               {d.label}
             </Button>

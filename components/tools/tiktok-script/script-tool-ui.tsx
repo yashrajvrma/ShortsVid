@@ -2,7 +2,6 @@
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Loader2, Wand2, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
@@ -13,35 +12,10 @@ import type { AppRouter } from "@/trpc/routers/_app";
 import { useSession } from "@/lib/auth/client";
 import { useRouter, usePathname } from "next/navigation";
 import AuthModal from "@/components/tools/auth-modal";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-
-const TOPICS = [
-  { value: "MOTIVATIONAL", label: "Motivational" },
-  { value: "HORROR_STORY", label: "Horror Story" },
-  { value: "HISTORY_FACTS", label: "History Facts" },
-  { value: "PHILOSOPHY", label: "Philosophy" },
-  { value: "STORYTELLING", label: "Storytelling" },
-  { value: "MYSTERY_STORY", label: "Mystery Story" },
-  { value: "LIFE_HACKS", label: "Life Hacks" },
-  { value: "ANY_TOPIC", label: "Any Topic" },
-];
-
-const DURATIONS = [
-  { value: 15, label: "15 seconds" },
-  { value: 30, label: "30 seconds" },
-  { value: 45, label: "45 seconds" },
-  { value: 60, label: "60 seconds" },
-  { value: 90, label: "90 seconds" },
-  { value: 120, label: "120 seconds" },
-];
+import { TopicDuration } from "@/components/shorts/topic-duration";
+import { Topic } from "@prisma/client";
 
 export default function ScriptToolUi() {
   const router = useRouter();
@@ -49,8 +23,8 @@ export default function ScriptToolUi() {
   const trpc = useTRPC();
   const { data: session } = useSession();
 
-  const [topic, setTopic] = useState<string>("MOTIVATIONAL");
-  const [duration, setDuration] = useState<number>(60);
+  const [topic, setTopic] = useState<string>("ANY_TOPIC");
+  const [duration, setDuration] = useState<number>(30);
   const [prompt, setPrompt] = useState<string>("");
   const [generatedScript, setGeneratedScript] = useState<string[]>([]);
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -91,7 +65,7 @@ export default function ScriptToolUi() {
 
   const copyToClipboard = () => {
     if (!generatedScript.length) return;
-    const text = generatedScript.join("\n\n");
+    const text = generatedScript.join(" ");
     navigator.clipboard.writeText(text);
     setCopied(true);
     toast.success("Copied to clipboard!");
@@ -99,152 +73,76 @@ export default function ScriptToolUi() {
   };
 
   return (
-    <div className="w-full flex flex-col font-sans" style={{ height: "550px" }}>
-      <Card
-        className="flex-1 min-h-0 overflow-hidden p-0"
-        style={{ display: "flex", flexDirection: "row" }}
-      >
-        {/* ── LEFT CONFIG ──────────────────────────────────────────────────── */}
-        <div className="flex flex-col min-h-0 border-r border-border lg:w-[45%] w-full min-w-0 overflow-hidden">
-          <ScrollArea className="[&>div>div[style]]:!block flex-1 p-6 h-full overflow-y-auto overflow-x-hidden">
-            <div className="space-y-6">
-              <div className="space-y-3">
-                <Label>Video Topic</Label>
-                <Select value={topic} onValueChange={setTopic}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a topic" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {TOPICS.map((t) => (
-                      <SelectItem key={t.value} value={t.value}>
-                        {t.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+    <div className="w-full flex flex-col font-sans max-w-3xl mx-auto">
+      <Card className="p-6 sm:p-8 space-y-4 overflow-hidden">
+        {/* ── Topic & Duration ── */}
+        <TopicDuration
+          topic={topic}
+          duration={duration}
+          onTopicChange={(v: Topic) => setTopic(v)}
+          onDurationChange={(v) => setDuration(v)}
+        />
 
-              <div className="space-y-3">
-                <Label>Target Duration</Label>
-                <Select
-                  value={duration.toString()}
-                  onValueChange={(v) => setDuration(parseInt(v))}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select duration" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {DURATIONS.map((d) => (
-                      <SelectItem key={d.value} value={d.value.toString()}>
-                        {d.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-3">
-                <Label>Prompt</Label>
-                <Textarea
-                  placeholder="E.g., Make it super controversial, add a hook about making money, talk about the Roman Empire..."
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  rows={4}
-                  className="resize-none"
-                />
-              </div>
-            </div>
-          </ScrollArea>
-
-          <div className="shrink-0 p-5 border-t border-border bg-card">
-            <Button
-              className="w-full h-11 font-semibold gap-2 text-sm"
-              disabled={isPending}
-              onClick={handleGenerate}
-            >
-              {isPending ? (
-                <>
-                  <Loader2 className="size-4 animate-spin" />
-                  Generating…
-                </>
-              ) : (
-                <>
-                  <Wand2 className="size-4" />
-                  Generate Script {session?.user ? "(1 Credit)" : "(Free)"}
-                </>
-              )}
-            </Button>
-          </div>
+        {/* ── Prompt Input ── */}
+        <div className="space-y-2">
+          <Label className="text-sm font-medium">Prompt (Optional)</Label>
+          <Textarea
+            placeholder="POV of a 16 year old content creator"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            rows={4}
+            className="h-16 bg-muted/20 rounded-lg placeholder:text-sm"
+          />
         </div>
 
-        {/* ── RIGHT OUTPUT ─────────────────────────────────────────────────── */}
-        <div className="hidden lg:flex flex-col min-h-0 w-[55%] bg-muted/30">
-          <div className="flex items-center justify-between p-4 border-b border-border bg-card">
-            <h3 className="font-semibold text-sm">Generated Script</h3>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={copyToClipboard}
-              disabled={generatedScript.length === 0}
-            >
-              {copied ? (
-                <Check className="size-4 mr-2" />
-              ) : (
-                <Copy className="size-4 mr-2" />
-              )}
-              {copied ? "Copied!" : "Copy"}
-            </Button>
-          </div>
-          <ScrollArea className="flex-1 p-6">
-            {generatedScript.length > 0 ? (
-              <div className="space-y-4 max-h-[400px]">
-                {generatedScript.map((paragraph, i) => (
-                  <p
-                    key={i}
-                    className="text-foreground/90 leading-relaxed bg-muted/50 p-3 rounded-lg border border-border/50"
-                  >
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
+        {/* ── Generate Button ── */}
+        <div className="pt-0">
+          <Button
+            className="w-full h-12 font-medium gap-2 text-sm rounded-lg transition-all"
+            disabled={isPending}
+            onClick={handleGenerate}
+          >
+            {isPending ? (
+              <>
+                <Loader2 className="size-5 animate-spin" />
+                Generating Script…
+              </>
             ) : (
-              <div className="h-full flex items-center justify-center text-muted-foreground text-sm flex-col gap-2 opacity-60">
-                <Wand2 className="size-8 mb-2" />
-                <p>Your viral script will appear here</p>
-              </div>
+              <>
+                <Wand2 className="size-4" />
+                Generate Script {session?.user ? "(1 Credit)" : ""}
+              </>
             )}
-          </ScrollArea>
+          </Button>
         </div>
-      </Card>
 
-      {/* Mobile Output View */}
-      {generatedScript.length > 0 && (
-        <div className="lg:hidden mt-4">
-          <Card className="p-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-sm">Generated Script</h3>
-              <Button variant="outline" size="sm" onClick={copyToClipboard}>
+        {/* ── Output Section ── */}
+        {generatedScript.length > 0 && (
+          <div className="mt-8 space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
+            <div className="flex items-center justify-between">
+              <h3 className="font-medium text-sm">Your Script</h3>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={copyToClipboard}
+                className="gap-2 rounded-lg"
+              >
                 {copied ? (
-                  <Check className="size-4 mr-2" />
+                  <Check className="size-4" />
                 ) : (
-                  <Copy className="size-4 mr-2" />
+                  <Copy className="size-4" />
                 )}
-                {copied ? "Copied!" : "Copy"}
+                {copied ? "Copied!" : "Copy Script"}
               </Button>
             </div>
-            <div className="space-y-4">
-              {generatedScript.map((paragraph, i) => (
-                <p
-                  key={i}
-                  className="text-foreground/90 text-sm leading-relaxed"
-                >
-                  {paragraph}
-                </p>
-              ))}
+            <div className="bg-muted/40 border border-border/50 rounded-lg p-6 relative group">
+              <p className="text-foreground/90 leading-relaxed text-sm">
+                {generatedScript.join(" ")}
+              </p>
             </div>
-          </Card>
-        </div>
-      )}
+          </div>
+        )}
+      </Card>
 
       <AuthModal
         open={showAuthModal}
