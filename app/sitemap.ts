@@ -1,16 +1,12 @@
 import { getAllBlogs } from "@/lib/blog";
 import { MetadataRoute } from "next";
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL || "https://shortsvid.pro";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://shortsvid.pro";
 
 // ─── Live tool pages ──────────────────────────────────────────────────────────
 // Only add a slug here when its /tools/[slug]/page.tsx is actually built.
 // Listing non-existent pages hurts crawl budget and can cause soft-404 penalties.
-const LIVE_TOOL_SLUGS = [
-  "faceless-shorts",
-  "brainrot-video-generator",
-];
+const LIVE_TOOL_SLUGS = ["faceless-shorts", "brainrot-video-generator", "tiktok-script-generator"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -121,4 +117,3 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...blogs,
   ];
 }
-

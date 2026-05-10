@@ -87,7 +87,7 @@ export const videoRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       // return if user dont have sufficent credits
-      if (ctx.credit < CREDITS_PER_VIDEO) {
+      if (ctx.user.credit < CREDITS_PER_VIDEO) {
         throw new TRPCError({
           code: "PAYMENT_REQUIRED",
           message: "Insufficient credits, Please upgrade your plan",
@@ -140,7 +140,7 @@ export const videoRouter = createTRPCRouter({
         // Create script
         const script = await tx.script.create({
           data: {
-            userId: ctx.userId,
+            userId: ctx.user.id,
             prompt: input.prompt ?? null,
             languageCode: input.languageCode,
             topic: input.topic,
@@ -193,7 +193,7 @@ export const videoRouter = createTRPCRouter({
         // Create video — captionConfigId is null when captions are disabled
         return tx.video.create({
           data: {
-            userId: ctx.userId,
+            userId: ctx.user.id,
             videoStyle: input.videoStyle,
             status: "GENERATING",
             scriptId: script.id,
@@ -206,7 +206,7 @@ export const videoRouter = createTRPCRouter({
 
       try {
         Sentry.logger.info("Pushing video in queue", {
-          userId: ctx.userId,
+          userId: ctx.user.id,
           videoId: video.id,
         });
 
@@ -214,16 +214,16 @@ export const videoRouter = createTRPCRouter({
         await inngest.send({
           name: "shorts/generate",
           data: {
-            userId: ctx.userId,
+            userId: ctx.user.id,
             videoId: video.id,
           },
         });
 
         // deduct five credits and check if there are active credits
-        await deductVideoCredits(ctx.userId, video.id);
+        await deductVideoCredits(ctx.user.id, video.id);
       } catch (error) {
         Sentry.logger.error("Failed to enqueue video generation in inngest", {
-          userId: ctx.userId,
+          userId: ctx.user.id,
           videoId: video.id,
           error: (error as Error).message,
         });
@@ -301,7 +301,7 @@ export const videoRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       // return if user dont have sufficent credits
-      if (ctx.credit < CREDITS_PER_VIDEO) {
+      if (ctx.user.credit < CREDITS_PER_VIDEO) {
         throw new TRPCError({
           code: "PAYMENT_REQUIRED",
           message: "Insufficient credits, Please upgrade your plan",
@@ -394,7 +394,7 @@ export const videoRouter = createTRPCRouter({
 
         const script = await tx.script.create({
           data: {
-            userId: ctx.userId,
+            userId: ctx.user.id,
             prompt: input.prompt ?? null,
             languageCode: input.languageCode,
             topic: input.topic,
@@ -447,7 +447,7 @@ export const videoRouter = createTRPCRouter({
         // Create video — captionConfigId is null when captions are disabled
         return tx.conversationVideo.create({
           data: {
-            userId: ctx.userId,
+            userId: ctx.user.id,
             status: "GENERATING",
             scriptId: script.id,
             speaker1AvatarId: input.speaker1AvatarId,
@@ -463,7 +463,7 @@ export const videoRouter = createTRPCRouter({
 
       try {
         Sentry.logger.info("Pushing video in queue", {
-          userId: ctx.userId,
+          userId: ctx.user.id,
           videoId: conversationVideo.id,
         });
 
@@ -471,16 +471,16 @@ export const videoRouter = createTRPCRouter({
         await inngest.send({
           name: "conversationVideo/generate",
           data: {
-            userId: ctx.userId,
+            userId: ctx.user.id,
             videoId: conversationVideo.id,
           },
         });
 
         // deduct five credits and check if there are active credits
-        await deductVideoCredits(ctx.userId, conversationVideo.id);
+        await deductVideoCredits(ctx.user.id, conversationVideo.id);
       } catch (error) {
         Sentry.logger.error("Failed to enqueue video generation in inngest", {
-          userId: ctx.userId,
+          userId: ctx.user.id,
           videoId: conversationVideo.id,
           error: (error as Error).message,
         });
@@ -494,7 +494,7 @@ export const videoRouter = createTRPCRouter({
     }),
 
   getAllShorts: authProcedure.query(async ({ ctx }) => {
-    const { userId } = ctx;
+    const userId = ctx.user.id;
 
     const videos = await prisma.video.findMany({
       where: { userId },
@@ -571,11 +571,11 @@ export const videoRouter = createTRPCRouter({
           },
           voice: video.voice
             ? {
-              id: video.voice.id,
-              name: video.voice.name,
-              gender: video.voice.gender,
-              languageCode: video.voice.languageCode,
-            }
+                id: video.voice.id,
+                name: video.voice.name,
+                gender: video.voice.gender,
+                languageCode: video.voice.languageCode,
+              }
             : null,
           // No asset URLs yet
           imagesUrl: [] as string[],
@@ -630,11 +630,11 @@ export const videoRouter = createTRPCRouter({
         },
         voice: video.voice
           ? {
-            id: video.voice.id,
-            name: video.voice.name,
-            gender: video.voice.gender,
-            languageCode: video.voice.languageCode,
-          }
+              id: video.voice.id,
+              name: video.voice.name,
+              gender: video.voice.gender,
+              languageCode: video.voice.languageCode,
+            }
           : null,
         // Signed asset URLs — ready for Remotion
         captionConfig: video.captionConfig,
@@ -649,7 +649,7 @@ export const videoRouter = createTRPCRouter({
     }),
 
   getAllConversationVideos: authProcedure.query(async ({ ctx }) => {
-    const { userId } = ctx;
+    const userId = ctx.user.id;
 
     const coversationVideos = await prisma.conversationVideo.findMany({
       where: { userId },
@@ -756,17 +756,16 @@ export const videoRouter = createTRPCRouter({
       // Background music
       const backgroundMusicUrl = conversationVideo.backgroundMusic?.r2ObjectKey
         ? await getSignedObjectUrl(
-          conversationVideo.backgroundMusic.r2ObjectKey,
-        )
+            conversationVideo.backgroundMusic.r2ObjectKey,
+          )
         : null;
 
       // Background video
-      const backgroundVideoUrl =
-        conversationVideo.backgroundVideo.r2ObjectKey
-          ? await getSignedObjectUrl(
+      const backgroundVideoUrl = conversationVideo.backgroundVideo.r2ObjectKey
+        ? await getSignedObjectUrl(
             conversationVideo.backgroundVideo.r2ObjectKey,
           )
-          : null;
+        : null;
 
       return {
         id: conversationVideo.id,
@@ -800,7 +799,7 @@ export const videoRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { userId } = ctx;
+      const userId = ctx.user.id;
 
       // get the video details
       const video = await prisma.video.findUnique({
@@ -888,7 +887,7 @@ export const videoRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { userId } = ctx;
+      const userId = ctx.user.id;
 
       const conversationVideo = await prisma.conversationVideo.findUnique({
         where: { id: input.videoId, userId },
@@ -972,11 +971,13 @@ export const videoRouter = createTRPCRouter({
     .input(
       z.object({
         videoId: z.string(),
-        type: z.enum(["faceless-shorts", "conversation-video"]).default("faceless-shorts"),
+        type: z
+          .enum(["faceless-shorts", "conversation-video"])
+          .default("faceless-shorts"),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const { userId } = ctx;
+      const userId = ctx.user.id;
 
       if (input.type === "conversation-video") {
         // get the status for conversation video
@@ -1065,7 +1066,7 @@ export const videoRouter = createTRPCRouter({
   deleteVideo: authProcedure
     .input(z.object({ videoId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const { userId } = ctx;
+      const userId = ctx.user.id;
 
       const video = await prisma.video.findUnique({
         where: { id: input.videoId, userId },

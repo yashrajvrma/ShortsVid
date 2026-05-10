@@ -246,3 +246,50 @@ export async function generateImageBuffer(
   const b64 = response.data[0].b64_json;
   return Buffer.from(b64, "base64");
 }
+
+const ScriptSchema = z.object({
+  paragraphs: z
+    .array(z.string())
+    .describe("The spoken paragraphs of the script"),
+});
+
+export async function generateTikTokScript(
+  topic: Topic,
+  duration: number,
+  prompt?: string,
+): Promise<string[]> {
+  // Approximate word count: 150 words per 60 seconds
+  const wordCount = Math.floor((duration / 60) * 150);
+
+  const systemPrompt = `You are an expert viral TikTok scriptwriter.
+Your goal is to write a highly engaging, fast-paced script for a ${duration}-second TikTok video.
+
+Topic: ${topic}
+${prompt ? `User Prompt: ${prompt}` : ""}
+Target Word Count: ~${wordCount} words.
+
+RULES:
+1. Start with a viral, attention-grabbing HOOK (first 3 seconds).
+2. Keep the pacing extremely fast. Use short, punchy sentences.
+3. No fluff. Get straight to the point.
+4. End with a strong Call to Action (CTA).
+5. DO NOT include any camera directions, speaker labels, or non-spoken text. ONLY the words to be spoken.
+6. Return the script as an array of paragraphs. Each item in the array should be a distinct spoken block. Don't use short sentences.`;
+
+  const response = await openAI.responses.parse({
+    model: "gpt-4o-mini",
+    input: [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: "Write the script now." },
+    ],
+    text: {
+      format: zodTextFormat(ScriptSchema, "script"),
+    },
+  });
+
+  if (!response.output_parsed) {
+    throw new Error("Failed to parse script from OpenAI");
+  }
+
+  return response.output_parsed.paragraphs;
+}
