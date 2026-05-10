@@ -20,13 +20,16 @@ const LEGAL_LINKS = [
 
 const FREE_TOOLS = [
   { label: "Faceless Shorts Generator", href: "/tools/faceless-shorts" },
-  { label: "AI Tiktok Shorts", href: "/tools/faceless-shorts" },
+  { label: "Brainrot Video Generator", href: "/tools/brainrot-video-generator" },
   { label: "Italian Brainrot Videos", href: "/app/shorts/conversation-videos" },
   { label: "Conversation Videos", href: "/app/shorts/conversation-videos" },
   {
     label: "Gameplay Background Videos",
     href: "/app/shorts/conversation-videos",
   },
+  { label: "TikTok Script Generator", href: "/tools/tiktok-script-generator" },
+  { label: "TikTok Money Calculator", href: "/tools/tiktok-money-calculator" },
+  { label: "TikTok Engagement Calculator", href: "/tools/tiktok-engagement-rate-calculator" },
 ];
 
 const RESOURCES = [

@@ -193,9 +193,7 @@ export default function ToolsPage() {
             All Tools — Free to Try
           </div> */}
           <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-foreground leading-[1.1] mb-4">
-            Free AI Video
-            <br />
-            Creation Tools
+            Free AI Video Creation Tools
           </h1>
           <p className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
             Everything you need to create viral short-form content — faceless

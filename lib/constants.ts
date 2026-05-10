@@ -494,6 +494,7 @@ export const SYSTEM_AI_AVATAR = [
 
 // tools page constant
 export const TOOLS: Tool[] = [
+  // ── Live Tools ──
   {
     slug: "faceless-shorts",
     title: "Faceless Shorts Generator",
@@ -520,18 +521,6 @@ export const TOOLS: Tool[] = [
     iconBg: "bg-red-500/10",
   },
   {
-    slug: "minecraft-parkour-generator",
-    title: "Minecraft Parkour Video Generator",
-    shortTitle: "Minecraft Parkour",
-    description:
-      "Auto-generate satisfying Minecraft parkour background clips for your Shorts and TikToks.",
-    icon: Gamepad2,
-    live: false,
-    href: "/tools/minecraft-parkour-generator",
-    iconColor: "text-green-500",
-    iconBg: "bg-green-500/10",
-  },
-  {
     slug: "tiktok-script-generator",
     title: "TikTok Script Generator",
     shortTitle: "TikTok Script",
@@ -542,18 +531,6 @@ export const TOOLS: Tool[] = [
     href: "/tools/tiktok-script-generator",
     iconColor: "text-pink-500",
     iconBg: "bg-pink-500/10",
-  },
-  {
-    slug: "fake-imessage-generator",
-    title: "Fake iMessage Generator",
-    shortTitle: "iMessage Generator",
-    description:
-      "Create realistic fake iPhone iMessage conversations for entertainment content and story videos.",
-    icon: MessageSquare,
-    live: false,
-    href: "/tools/fake-imessage-generator",
-    iconColor: "text-blue-500",
-    iconBg: "bg-blue-500/10",
   },
   {
     slug: "tiktok-money-calculator",
@@ -568,18 +545,6 @@ export const TOOLS: Tool[] = [
     iconBg: "bg-purple-500/10",
   },
   {
-    slug: "italian-brainrot-generator",
-    title: "Italian Brainrot Generator",
-    shortTitle: "Italian Brainrot",
-    description:
-      "Generate Italian brainrot videos with authentic Italian AI voices, chaotic energy, and meme-worthy scripts.",
-    icon: Globe,
-    live: false,
-    href: "/tools/italian-brainrot-generator",
-    iconColor: "text-emerald-500",
-    iconBg: "bg-emerald-500/10",
-  },
-  {
     slug: "tiktok-engagement-rate-calculator",
     title: "TikTok Engagement Rate Calculator",
     shortTitle: "Engagement Calculator",
@@ -590,5 +555,43 @@ export const TOOLS: Tool[] = [
     href: "/tools/tiktok-engagement-rate-calculator",
     iconColor: "text-blue-500",
     iconBg: "bg-blue-500/10",
+  },
+
+  // ── Coming Soon Tools ──
+  {
+    slug: "minecraft-parkour-generator",
+    title: "Minecraft Parkour Video Generator",
+    shortTitle: "Minecraft Parkour",
+    description:
+      "Auto-generate satisfying Minecraft parkour background clips for your Shorts and TikToks.",
+    icon: Gamepad2,
+    live: false,
+    href: "/tools/minecraft-parkour-generator",
+    iconColor: "text-green-500",
+    iconBg: "bg-green-500/10",
+  },
+  {
+    slug: "fake-imessage-generator",
+    title: "Fake iMessage Generator",
+    shortTitle: "iMessage Generator",
+    description:
+      "Create realistic fake iPhone iMessage conversations for entertainment content and story videos.",
+    icon: MessageSquare,
+    live: false,
+    href: "/tools/fake-imessage-generator",
+    iconColor: "text-blue-500",
+    iconBg: "bg-blue-500/10",
+  },
+  {
+    slug: "italian-brainrot-generator",
+    title: "Italian Brainrot Generator",
+    shortTitle: "Italian Brainrot",
+    description:
+      "Generate Italian brainrot videos with authentic Italian AI voices, chaotic energy, and meme-worthy scripts.",
+    icon: Globe,
+    live: false,
+    href: "/tools/italian-brainrot-generator",
+    iconColor: "text-emerald-500",
+    iconBg: "bg-emerald-500/10",
   },
 ];
