@@ -40,42 +40,42 @@ export const VIDEO_STYLES: {
   label: string;
   thumbnail: string;
 }[] = [
-  {
-    id: "ANIME",
-    label: "Anime",
-    thumbnail: "/images/stocks/anime.webp",
-  },
-  {
-    id: "CARTOON",
-    label: "Cartoon",
-    thumbnail: "/images/stocks/cartoon.webp",
-  },
-  {
-    id: "CINEMATIC",
-    label: "Cinematic",
-    thumbnail: "/images/stocks/cinematic.webp",
-  },
-  {
-    id: "COLORFUL_COMICS",
-    label: "Colorful Comics",
-    thumbnail: "/images/stocks/colorful_comics.webp",
-  },
-  {
-    id: "CYBERPUNK",
-    label: "Cyberpunk",
-    thumbnail: "/images/stocks/cyberpunk.webp",
-  },
-  {
-    id: "PIXEL_ART",
-    label: "Pixel Art",
-    thumbnail: "/images/stocks/pixel_art.webp",
-  },
-  {
-    id: "PHOTO_REALISTIC",
-    label: "Photo Realistic",
-    thumbnail: "/images/stocks/realistic.webp",
-  },
-];
+    {
+      id: "ANIME",
+      label: "Anime",
+      thumbnail: "/images/stocks/anime.webp",
+    },
+    {
+      id: "CARTOON",
+      label: "Cartoon",
+      thumbnail: "/images/stocks/cartoon.webp",
+    },
+    {
+      id: "CINEMATIC",
+      label: "Cinematic",
+      thumbnail: "/images/stocks/cinematic.webp",
+    },
+    {
+      id: "COLORFUL_COMICS",
+      label: "Colorful Comics",
+      thumbnail: "/images/stocks/colorful_comics.webp",
+    },
+    {
+      id: "CYBERPUNK",
+      label: "Cyberpunk",
+      thumbnail: "/images/stocks/cyberpunk.webp",
+    },
+    {
+      id: "PIXEL_ART",
+      label: "Pixel Art",
+      thumbnail: "/images/stocks/pixel_art.webp",
+    },
+    {
+      id: "PHOTO_REALISTIC",
+      label: "Photo Realistic",
+      thumbnail: "/images/stocks/realistic.webp",
+    },
+  ];
 
 export const DURATIONS: Duration[] = [
   { id: 1, value: 15, label: "10-15sec" },
@@ -561,7 +561,7 @@ export const TOOLS: Tool[] = [
     description:
       "Calculate your estimated TikTok earnings based on followers, views, and engagement rate.",
     icon: Calculator,
-    live: false,
+    live: true,
     href: "/tools/tiktok-money-calculator",
     iconColor: "text-purple-500",
     iconBg: "bg-purple-500/10",

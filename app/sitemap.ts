@@ -110,10 +110,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.4,
     },
 
-    // ── Tool pages (live only) ──────────────────────────────────────────────
     ...tools,
 
-    // ── Blog posts ──────────────────────────────────────────────────────────
     ...blogs,
   ];
 }

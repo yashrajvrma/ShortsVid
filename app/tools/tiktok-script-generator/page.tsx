@@ -267,6 +267,75 @@ export default async function TikTokScriptGeneratorPage() {
         </Accordion>
       </section>
 
+      {/* ── Explore More Tools ── */}
+      <section className="max-w-5xl mx-auto px-4 py-14">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl sm:text-4xl font-medium tracking-tight mb-3">
+            Explore more AI tools
+          </h2>
+          <p className="text-muted-foreground">
+            More free tools to supercharge your content creation.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {MORE_TOOLS.map((tool) => {
+            const Icon = tool.icon;
+            return (
+              <div
+                key={tool.slug}
+                className={`relative flex flex-col gap-3 bg-card border border-border rounded-2xl p-5 transition-all ${
+                  tool.live
+                    ? "hover:border-primary/40 hover:shadow-md cursor-pointer"
+                    : "opacity-60 cursor-default"
+                }`}
+              >
+                {!tool.live && (
+                  <span className="absolute top-3 right-3 text-[10px] font-medium bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
+                    Coming Soon
+                  </span>
+                )}
+                {tool.badge && tool.live && (
+                  <span className="absolute top-3 right-3 text-[10px] font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                    {tool.badge}
+                  </span>
+                )}
+                <div
+                  className={`w-9 h-9 rounded-xl flex items-center justify-center ${tool.iconBg}`}
+                >
+                  <Icon className={`w-4.5 h-4.5 ${tool.iconColor}`} />
+                </div>
+                <div>
+                  <h3 className="font-medium text-lg text-foreground mb-0.5">
+                    {tool.shortTitle}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
+                    {tool.description}
+                  </p>
+                </div>
+                {tool.live && (
+                  <Link
+                    href={tool.href}
+                    className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline mt-auto"
+                  >
+                    Open tool <ChevronRight className="w-3 h-3" />
+                  </Link>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="text-center mt-6">
+          <Link
+            href="/tools"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+          >
+            View all tools <ChevronRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </section>
+
       {/* ── CTA ── */}
       <section className="max-w-6xl mx-auto px-4 py-6">
         <div className="relative overflow-hidden bg-neutral-900 rounded-3xl px-8 py-12 text-center text-primary-foreground">
