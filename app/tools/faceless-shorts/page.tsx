@@ -306,10 +306,11 @@ export default async function FacelessShortsToolPage() {
             return (
               <div
                 key={tool.slug}
-                className={`relative flex flex-col gap-3 bg-card border border-border rounded-2xl p-5 transition-all ${tool.live
-                  ? "hover:border-primary/40 hover:shadow-md cursor-pointer"
-                  : "opacity-60 cursor-default"
-                  }`}
+                className={`relative flex flex-col gap-3 bg-card border border-border rounded-2xl p-5 transition-all ${
+                  tool.live
+                    ? "hover:border-primary/40 hover:shadow-md cursor-pointer"
+                    : "opacity-60 cursor-default"
+                }`}
               >
                 {!tool.live && (
                   <span className="absolute top-3 right-3 text-[10px] font-medium bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
@@ -398,8 +399,8 @@ export default async function FacelessShortsToolPage() {
               Ready to go viral?
             </h2>
             <p className="text-primary-foreground/80 text-lg mb-8 max-w-xl mx-auto tracking-tight">
-              Join 100K+ creators making unhinged brainrot videos every day. Start for
-              free — no credit card required.
+              Join 100K+ creators making unhinged brainrot videos every day.
+              Start for free — no credit card required.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
               <Link

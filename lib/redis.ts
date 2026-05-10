@@ -8,7 +8,7 @@ export const redis = new Redis({
 });
 
 // Allow 2 requests per 24 hours per IP for unauthenticated script generation
-export const scriptRateLimit = new Ratelimit({
+export const freeToolRateLimit = new Ratelimit({
   redis,
   limiter: Ratelimit.slidingWindow(2, "24 h"),
   analytics: true,
