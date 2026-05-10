@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, Wand2, Copy, Check } from "lucide-react";
+import { Loader2, Copy, Check, WandSparkles } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -109,8 +109,8 @@ export default function ScriptToolUi() {
               </>
             ) : (
               <>
-                <Wand2 className="size-4" />
-                Generate Script {session?.user ? "(1 Credit)" : ""}
+                <WandSparkles className="size-4" />
+                Generate script {session?.user ? "(1 credit)" : ""}
               </>
             )}
           </Button>
@@ -132,7 +132,7 @@ export default function ScriptToolUi() {
                 ) : (
                   <Copy className="size-4" />
                 )}
-                {copied ? "Copied!" : "Copy Script"}
+                {copied ? "Copied!" : "Copy"}
               </Button>
             </div>
             <div className="bg-muted/40 border border-border/50 rounded-lg p-6 relative group">

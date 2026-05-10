@@ -151,10 +151,8 @@ export default function AuthModal({
               className="w-full bg-card rounded-2xl shadow-sm px-8 pb-8 flex flex-col items-center gap-5 text-center"
               style={{ paddingTop: "80px", marginTop: "-60px" }}
             >
-              <h2 className="text-2xl font-semibold tracking-tight text-foreground leading-snug">
-                Sign in to generate
-                <br />
-                your video
+              <h2 className="text-2xl font-medium tracking-tight text-foreground leading-snug">
+                Sign in to get Free credits
               </h2>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Free to start — join{" "}
@@ -171,7 +169,7 @@ export default function AuthModal({
                 {loading ? (
                   <>
                     <Spinner />
-                    Signing in...
+                    Sign in with Google
                   </>
                 ) : (
                   <>

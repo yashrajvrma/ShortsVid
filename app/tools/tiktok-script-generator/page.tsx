@@ -268,7 +268,7 @@ export default async function TikTokScriptGeneratorPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="max-w-5xl mx-auto px-4 py-6">
+      <section className="max-w-6xl mx-auto px-4 py-6">
         <div className="relative overflow-hidden bg-neutral-900 rounded-3xl px-8 py-12 text-center text-primary-foreground">
           <div className="absolute -top-12 -left-12 w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none" />

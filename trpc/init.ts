@@ -108,7 +108,7 @@ const rateLimitMiddleware = t.middleware(async ({ ctx, next }) => {
       const resetsInHours = Math.ceil((reset - Date.now()) / 1000 / 60 / 60);
       throw new TRPCError({
         code: "TOO_MANY_REQUESTS",
-        message: `Free limit reached. Sign in to generate more. Resets in ${resetsInHours} ${resetsInHours === 1 ? "hour" : "hours"}.`,
+        message: `Free limit reached. Resets in ${resetsInHours} ${resetsInHours === 1 ? "hour" : "hours"}.`,
       });
     }
 
