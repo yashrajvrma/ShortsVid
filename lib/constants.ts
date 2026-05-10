@@ -14,6 +14,7 @@ import {
   MessageSquare,
   Calculator,
   Globe,
+  TrendingUp,
 } from "lucide-react";
 
 export const LANGUAGES: Language[] = [
@@ -577,5 +578,17 @@ export const TOOLS: Tool[] = [
     href: "/tools/italian-brainrot-generator",
     iconColor: "text-emerald-500",
     iconBg: "bg-emerald-500/10",
+  },
+  {
+    slug: "tiktok-engagement-rate-calculator",
+    title: "TikTok Engagement Rate Calculator",
+    shortTitle: "Engagement Calculator",
+    description:
+      "Calculate your TikTok engagement rate accurately based on views, likes, comments, and shares.",
+    icon: TrendingUp,
+    live: true,
+    href: "/tools/tiktok-engagement-rate-calculator",
+    iconColor: "text-blue-500",
+    iconBg: "bg-blue-500/10",
   },
 ];

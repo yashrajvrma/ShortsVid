@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useMemo } from "react";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
@@ -105,6 +106,15 @@ export default function TikTokCalculatorUi() {
                   }}
                   className="py-3"
                 />
+                <p className="text-xs text-muted-foreground">
+                  Don't know your engagement rate?{" "}
+                  <Link
+                    href="/tools/tiktok-engagement-rate-calculator"
+                    className="text-secondary underline"
+                  >
+                    Use our free calculator
+                  </Link>
+                </p>
               </div>
             </div>
 
