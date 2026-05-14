@@ -108,11 +108,18 @@ enum Topic {
 enum VideoStyle {
   PHOTO_REALISTIC
   CARTOON
+  PIXEL_ART
+  COLORFUL_COMICS
+
+  // newly added enum
+  COMIC
+  PIXAR
   ANIME
   CYBERPUNK
   CINEMATIC
-  PIXEL_ART
-  COLORFUL_COMICS
+  MANGA
+  ILLUSTRATION
+  CARTOON_3D
 }
 
 enum StockVariant {
@@ -313,6 +320,8 @@ model Video {
 
   scriptId String @unique
   script   Script @relation(fields: [scriptId], references: [id], onDelete: Cascade)
+
+  imagePrompt String[]
 
   voiceId String? // TODO : dont make it optional
   voice   Voice?  @relation("VideoVoice", fields: [voiceId], references: [id], onDelete: SetNull)

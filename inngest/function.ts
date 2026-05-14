@@ -5,7 +5,8 @@ import { FishAudioClient } from "fish-audio";
 import {
   generateImagePrompts,
   generateImageBuffer,
-  type ImagePromptResult,
+  type ImageSceneResult,
+  buildFinalPrompt,
 } from "@/lib/openai";
 import {
   getSignedAudioUrl,
@@ -24,7 +25,7 @@ import {
 } from "@remotion/lambda/client";
 import { getServices, renderMediaOnCloudrun } from "@remotion/cloudrun/client";
 import { CaptionData, generateCaptions } from "@/lib/captions";
-import { Topic, VideoStyle } from "@/types";
+import { Topic, VIDEO_STYLE_CONFIG, VideoStyle } from "@/types";
 import { env } from "@/lib/env";
 
 const fishAudio = new FishAudioClient({
@@ -73,6 +74,7 @@ export const generateShort = inngest.createFunction(
 
       return {
         id: video.id,
+        prompt: video.script.prompt,
         videoStyle: video.videoStyle as VideoStyle,
         scriptParagraphs: video.script.content as string[],
         scriptTopic: video.script.topic as Topic,
@@ -82,30 +84,44 @@ export const generateShort = inngest.createFunction(
       };
     });
 
-    // // ── STEP 3: Generate per-scene image prompts (GPT-4o structured output) ──
+    // ── STEP 3: Generate scene descriptions + build final prompts ─────────────────
 
-    const { characters, scenes } = await step.run(
+    const { scenes, imagePrompts } = await step.run(
       "generate-image-prompts",
       async (): Promise<{
-        characters: { name: string; description: string }[];
-        scenes: ImagePromptResult[];
+        scenes: ImageSceneResult[];
+        imagePrompts: string[]; // index-aligned with scenes, final FLUX prompts
       }> => {
-        const result = await generateImagePrompts(
+        const scenes = await generateImagePrompts(
           videoData.scriptParagraphs,
           videoData.videoStyle,
           videoData.scriptTopic,
+          videoData.prompt ?? null,
         );
 
-        return result;
+        // Build final prompts in code — style suffix appended here, not by AI
+        const imagePrompts = scenes.map(
+          (scene) =>
+            buildFinalPrompt(scene.sceneDescription, videoData.videoStyle)
+              .prompt,
+        );
+
+        // Persist prompts to DB immediately — before image generation starts
+        await prisma.video.update({
+          where: { id: videoId },
+          data: { imagePrompt: imagePrompts },
+        });
+
+        return { scenes, imagePrompts };
       },
     );
 
-    Sentry.logger.info("Image prompt generated", { videoId });
+    Sentry.logger.info("Image prompts generated", {
+      videoId,
+      sceneCount: scenes.length,
+    });
 
-    // ── STEP 4: Generate images with gpt-image-1 (medium) + upload to R2 ────
-
-    // Saves R2 object keys (NOT URLs) ordered by sceneIndex.
-    // URLs are generated on-demand at render time via presigned URLs.
+    // ── STEP 4: Generate images with FLUX Dev + upload to R2 ─────────────────────
 
     const imageR2Keys = await step.run(
       "generate-and-upload-images",
@@ -115,26 +131,18 @@ export const generateShort = inngest.createFunction(
         );
 
         const keys: string[] = new Array(sortedScenes.length);
-
-        // ✅ Minimal character context (clean, not noisy)
-        const characterContext = characters.length
-          ? characters.map((c) => `${c.name}: ${c.description}`).join("\n")
-          : "";
+        const styleConfig = VIDEO_STYLE_CONFIG[videoData.videoStyle];
 
         for (const scene of sortedScenes) {
-          const enrichedPrompt = characterContext
-            ? `${scene.prompt}\n\nCharacters:\n${characterContext}`
-            : scene.prompt;
+          // prompt already built and saved in Step 3 — just read it
+          const prompt = imagePrompts[scene.sceneIndex];
+          const negativePrompt = styleConfig.negativePrompt;
 
-          const buffer = await generateImageBuffer(enrichedPrompt, scene.mood);
+          const buffer = await generateImageBuffer(prompt, negativePrompt);
 
-          const key = `shorts/${videoId}/images/scene_${scene.sceneIndex}.webp`;
+          const key = `shorts/${videoId}/images/scene_${scene.sceneIndex}.png`;
 
-          await uploadImageToR2({
-            buffer,
-            key,
-            contentType: "image/png",
-          });
+          await uploadImageToR2({ buffer, key, contentType: "image/png" });
 
           keys[scene.sceneIndex] = key;
         }
@@ -142,8 +150,7 @@ export const generateShort = inngest.createFunction(
         return keys;
       },
     );
-
-    // ── STEP 5: Persist image R2 keys to DB ──────────────────────────────────
+    // ── STEP 5: Persist image R2 keys to DB ──────────────────────────────────────
 
     await step.run("save-images-to-db", async () => {
       await prisma.video.update({
