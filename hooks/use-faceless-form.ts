@@ -59,7 +59,7 @@ export const useFacelessForm = create<FacelessFormStore>((set) => ({
   selectedVoiceId: null,
   voiceSearchQuery: "",
   selectedMusicId: null,
-  videoStyle: "PHOTO_REALISTIC",
+  videoStyle: "COMIC",
   captionConfig: DEFAULT_CAPTION_STYLE,
   captionsEnabled: true,
 
@@ -90,7 +90,7 @@ export const useFacelessForm = create<FacelessFormStore>((set) => ({
       selectedVoiceId: null,
       voiceSearchQuery: "",
       selectedMusicId: null,
-      videoStyle: "PHOTO_REALISTIC",
+      videoStyle: "",
       captionConfig: DEFAULT_CAPTION_STYLE,
       captionsEnabled: true,
     }),

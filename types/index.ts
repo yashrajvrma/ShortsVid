@@ -172,10 +172,10 @@ export type Topic =
   | "ANY_TOPIC";
 
 export type VideoStyle =
-  | "PHOTO_REALISTIC"
-  | "CARTOON"
-  | "PIXEL_ART"
-  | "COLORFUL_COMICS"
+  // | "PHOTO_REALISTIC"
+  // | "CARTOON"
+  // | "PIXEL_ART"
+  // | "COLORFUL_COMICS"
   // TODO: remove and format this newly added styles
   | "COMIC"
   | "PIXAR"
@@ -195,26 +195,26 @@ export interface StyleConfig {
 }
 
 export const VIDEO_STYLE_CONFIG: Record<VideoStyle, StyleConfig> = {
-  PHOTO_REALISTIC: {
-    label: "",
-    mainPrompt: "",
-    negativePrompt: "",
-  },
-  CARTOON: {
-    label: "",
-    mainPrompt: "",
-    negativePrompt: "",
-  },
-  PIXEL_ART: {
-    label: "",
-    mainPrompt: "",
-    negativePrompt: "",
-  },
-  COLORFUL_COMICS: {
-    label: "",
-    mainPrompt: "",
-    negativePrompt: "",
-  },
+  // PHOTO_REALISTIC: {
+  //   label: "",
+  //   mainPrompt: "",
+  //   negativePrompt: "",
+  // },
+  // CARTOON: {
+  //   label: "",
+  //   mainPrompt: "",
+  //   negativePrompt: "",
+  // },
+  // PIXEL_ART: {
+  //   label: "",
+  //   mainPrompt: "",
+  //   negativePrompt: "",
+  // },
+  // COLORFUL_COMICS: {
+  //   label: "",
+  //   mainPrompt: "",
+  //   negativePrompt: "",
+  // },
   COMIC: {
     label: "Comic",
     mainPrompt:
