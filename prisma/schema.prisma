@@ -151,23 +151,6 @@ enum Status {
   FAILED
 }
 
-enum SubscriptionPlan {
-  FREE
-  BASIC
-  PRO
-}
-
-enum SubscriptionPeriod {
-  MONTHLY
-  YEARLY
-}
-
-enum SubscriptionStatus {
-  ACTIVE
-  CANCELLED
-  PAST_DUE
-}
-
 enum TextTransform {
   uppercase
   lowercase
@@ -182,18 +165,52 @@ enum AnimationPreset {
   none
 }
 
+enum SubscriptionPlan {
+  FREE
+  BASIC
+  PRO
+}
+
+enum SubscriptionPeriod {
+  MONTHLY
+  YEARLY
+}
+
+enum SubscriptionStatus {
+  ACTIVE // paying, all good
+  PAST_DUE // payment failed, grace period
+  CANCELLED // user cancelled, but still has access till period end
+  EXPIRED // subscription.revoked fired — truly over, access removed
+}
+
+enum CreditHistoryType {
+  SUBSCRIPTION_CREDIT
+  ONE_TIME_CREDIT
+  DEDUCTION
+  REFUND
+  MANUAL_GRANT
+}
+
 model Subscription {
   id String @id @default(uuid())
 
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  // new fields
+  polarProductId String
+  polarPriceId   String
+  amount         Int // in cents e.g 1900 = $19.00
+  currency       String    @default("usd")
+  startedAt      DateTime
+  endsAt         DateTime?
+
   polarSubscriptionId String @unique
   polarCustomerId     String
 
   plan   SubscriptionPlan
   period SubscriptionPeriod
-  status SubscriptionStatus @default(ACTIVE)
+  status SubscriptionStatus
 
   currentPeriodStart DateTime
   currentPeriodEnd   DateTime
@@ -212,9 +229,13 @@ model CreditHistory {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   amount        Int // positive = credit added, negative = deducted
-  description   String
+  description   String?
   balanceBefore Int
   balanceAfter  Int
+
+  // new fields
+  type         CreditHistoryType @default(DEDUCTION)
+  polarOrderId String?           @unique // ADD THIS — idempotency key
 
   videoId             String?
   polarSubscriptionId String?

@@ -131,6 +131,7 @@ export const videoRouter = createTRPCRouter({
       // 5. Transaction — create script, optionally caption config, then video
       const video = await prisma.$transaction(async (tx) => {
         // Create script
+        // TODO : create or update script
         const script = await tx.script.create({
           data: {
             userId: ctx.user.id,
