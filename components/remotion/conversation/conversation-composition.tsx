@@ -1,6 +1,6 @@
 // components/remotion/conversation/conversation-composition.tsx
 import React, { useMemo } from "react";
-import { AbsoluteFill, Audio, useVideoConfig } from "remotion";
+import { AbsoluteFill, Html5Audio, useVideoConfig } from "remotion";
 import { ConversationVideo } from "../../../types";
 import { CaptionData, CaptionsLayer } from "../captions-layer";
 import { CAPTION_PRESETS, DEFAULT_CAPTION_STYLE } from "../../../lib/constants";
@@ -128,11 +128,11 @@ export default function ConversationVideoComposition({
       )}
 
       {/* ── 4. Combined dialogue audio ── */}
-      {videoData.audioUrl && <Audio src={videoData.audioUrl} />}
+      {videoData.audioUrl && <Html5Audio src={videoData.audioUrl} />}
 
       {/* ── 5. Background music (lower volume) ── */}
       {videoData.backgroundMusicUrl && (
-        <Audio volume={0.25} src={videoData.backgroundMusicUrl} />
+        <Html5Audio volume={0.25} src={videoData.backgroundMusicUrl} />
       )}
     </AbsoluteFill>
   );
