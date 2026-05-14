@@ -12,6 +12,7 @@ import {
 } from "@/lib/r2-bucket";
 import { deductVideoCredits } from "@/lib/credit";
 import { CREDITS_PER_VIDEO } from "@/lib/polar";
+import { VIDEO_STYLE_VALUES } from "@/lib/constants";
 
 export const videoRouter = createTRPCRouter({
   generateFacelessVideo: authProcedure
@@ -36,15 +37,7 @@ export const videoRouter = createTRPCRouter({
           .max(1200, "Script must be under 1200 characters..."),
         voiceId: z.string(),
         musicId: z.string().nullable(),
-        videoStyle: z.enum([
-          "PHOTO_REALISTIC",
-          "CARTOON",
-          "ANIME",
-          "CYBERPUNK",
-          "CINEMATIC",
-          "PIXEL_ART",
-          "COLORFUL_COMICS",
-        ]),
+        videoStyle: z.enum(VIDEO_STYLE_VALUES),
 
         // ── Caption ──────────────────────────────────────────────────────────
         captionsEnabled: z.boolean().default(true),

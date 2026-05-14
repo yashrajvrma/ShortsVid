@@ -2,7 +2,6 @@
 import React from "react";
 import {
   AbsoluteFill,
-  Audio,
   Html5Audio,
   Img,
   Sequence,

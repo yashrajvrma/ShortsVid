@@ -1,7 +1,7 @@
 // components\remotion\remotion-composition.tsx
 import { CaptionStyle, ShortsVideo } from "../../types/index";
 import { useMemo } from "react";
-import { AbsoluteFill, Html5Audio, Audio, useVideoConfig } from "remotion";
+import { AbsoluteFill, Html5Audio, useVideoConfig } from "remotion";
 
 import { CaptionData, CaptionsLayer } from "./captions-layer";
 import { ImagesLayer } from "./images-layer";
@@ -118,11 +118,11 @@ export default function RemotionComposition({
       )}
 
       {/* ── Voiceover audio ── */}
-      {videoData?.audioUrl && <Audio src={videoData.audioUrl} />}
+      {videoData?.audioUrl && <Html5Audio src={videoData.audioUrl} />}
 
       {/* ── Background Music ── */}
       {videoData?.backgroundMusicUrl && (
-        <Audio volume={0.3} src={videoData.backgroundMusicUrl} />
+        <Html5Audio volume={0.2} src={videoData.backgroundMusicUrl} />
       )}
     </AbsoluteFill>
   );

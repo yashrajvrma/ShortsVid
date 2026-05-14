@@ -35,48 +35,89 @@ export const LANGUAGE_MAP: Record<string, string> = {
   zh: "Chinese",
 };
 
+export const VIDEO_STYLE_VALUES = [
+  "PHOTO_REALISTIC",
+  "CARTOON",
+  "PIXEL_ART",
+  "COLORFUL_COMICS",
+  // TODO: remove this
+  "COMIC",
+  "PIXAR",
+  "ANIME",
+  "CYBERPUNK",
+  "CINEMATIC",
+  "MANGA",
+  "ILLUSTRATION",
+  "CARTOON_3D",
+] as const;
+
 export const VIDEO_STYLES: {
   id: number | string;
   name?: string;
   label: string;
   thumbnail: string;
 }[] = [
-    {
-      id: "ANIME",
-      label: "Anime",
-      thumbnail: "/images/stocks/anime.webp",
-    },
-    {
-      id: "CARTOON",
-      label: "Cartoon",
-      thumbnail: "/images/stocks/cartoon.webp",
-    },
-    {
-      id: "CINEMATIC",
-      label: "Cinematic",
-      thumbnail: "/images/stocks/cinematic.webp",
-    },
-    {
-      id: "COLORFUL_COMICS",
-      label: "Colorful Comics",
-      thumbnail: "/images/stocks/colorful_comics.webp",
-    },
-    {
-      id: "CYBERPUNK",
-      label: "Cyberpunk",
-      thumbnail: "/images/stocks/cyberpunk.webp",
-    },
-    {
-      id: "PIXEL_ART",
-      label: "Pixel Art",
-      thumbnail: "/images/stocks/pixel_art.webp",
-    },
-    {
-      id: "PHOTO_REALISTIC",
-      label: "Photo Realistic",
-      thumbnail: "/images/stocks/realistic.webp",
-    },
-  ];
+  {
+    id: "ANIME",
+    label: "Anime",
+    thumbnail: "/images/stocks/anime.webp",
+  },
+  {
+    id: "CARTOON",
+    label: "Cartoon",
+    thumbnail: "/images/stocks/cartoon.webp",
+  },
+  {
+    id: "CINEMATIC",
+    label: "Cinematic",
+    thumbnail: "/images/stocks/cinematic.jpeg",
+  },
+  {
+    id: "COLORFUL_COMICS",
+    label: "Colorful Comics",
+    thumbnail: "/images/stocks/colorful_comics.webp",
+  },
+  {
+    id: "CARTOON_3D",
+    label: "3D Cartoon",
+    thumbnail: "/images/stocks/cartoon_3d.avif",
+  },
+  {
+    id: "CYBERPUNK",
+    label: "Cyberpunk",
+    thumbnail: "/images/stocks/cyberpunk.webp",
+  },
+  {
+    id: "ILLUSTRATION",
+    label: "Illustration",
+    thumbnail: "/images/stocks/illustration.png",
+  },
+  {
+    id: "COMIC",
+    label: "Comic",
+    thumbnail: "/images/stocks/comic.jpg",
+  },
+  {
+    id: "PIXAR",
+    label: "Pixar",
+    thumbnail: "/images/stocks/pixar.webp",
+  },
+  {
+    id: "MANGA",
+    label: "Manga Comic",
+    thumbnail: "/images/stocks/manga.jpeg",
+  },
+  {
+    id: "PIXEL_ART",
+    label: "Pixel Art",
+    thumbnail: "/images/stocks/pixel_art.webp",
+  },
+  {
+    id: "PHOTO_REALISTIC",
+    label: "Photo Realistic",
+    thumbnail: "/images/stocks/realistic.webp",
+  },
+];
 
 export const DURATIONS: Duration[] = [
   { id: 1, value: 15, label: "10-15sec" },

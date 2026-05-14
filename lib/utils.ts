@@ -752,7 +752,7 @@ Correct output:
   {
     "sceneIndex": 4,
     "scriptSegment": "The city watches as he rises above the wreckage. Not because he was the strongest. Because he was the last one standing.",
-    "sceneDescription": "young man with glowing white eyes, short dark hair, torn black jacket, lean athletic build, floating above a destroyed city district, massive glowing aura radiating from his body, ruins and smoke below, crowd watching from the streets, bold white text reading \"THEY UNDERESTIMATED HIM\" overlaid on the scene"
+    "sceneDescription": "young man with glowing white eyes, short dark hair, torn black jacket, lean athletic build, floating above a destroyed city district, massive glowing aura radiating from his body, ruins and smoke below, crowd watching from the streets, bold white text reading "THEY UNDERESTIMATED HIM" overlaid on the scene"
   }
 ]
  
