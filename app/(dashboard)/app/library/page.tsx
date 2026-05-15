@@ -3,6 +3,7 @@ import AllVideos from "@/components/videos";
 import { HydrateClient, prefetch, trpc } from "@/trpc/server";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import Loading from "./loading";
 
 export const metadata: Metadata = {
   title: "Videos",
@@ -18,12 +19,13 @@ export default async function Videos() {
     <HydrateClient>
       <ErrorBoundary
         fallback={
-          <div className="flex items-center min-h-screen justify-center text-base my-5">
+          <div className="flex items-center min-h-screen justify-center text-base">
             Something went wrong
           </div>
         }
       >
-        <Suspense fallback={<div>Loading...</div>}>
+        {/* ✅ Suspense now uses the same Loading skeleton, not plain text */}
+        <Suspense fallback={<Loading />}>
           <AllVideos />
         </Suspense>
       </ErrorBoundary>
