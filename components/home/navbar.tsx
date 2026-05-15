@@ -281,24 +281,22 @@ const Navbar = () => {
           <Button
             variant="ghost"
             className="text-foreground hover:text-muted-foreground tracking-tight text-base font-medium transition-colors hover:bg-transparent cursor-pointer"
-            onClick={() => {
-              router.push("/login");
-              setOpen(false);
-            }}
+            asChild
           >
-            Login
+            <Link href="/login" onClick={() => setOpen(false)}>
+              Login
+            </Link>
           </Button>
         )}
       </div>
 
       <Button
-        className="rounded-lg font-serif text-base px-4 cursor-pointer"
-        onClick={() => {
-          router.push("/app");
-          setOpen(false);
-        }}
+        className="rounded-lg text-base font-medium px-4 cursor-pointer"
+        asChild
       >
-        Open App
+        <Link href="/app" onClick={() => setOpen(false)}>
+          Open App
+        </Link>
       </Button>
     </div>
   );
