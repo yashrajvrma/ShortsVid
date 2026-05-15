@@ -89,7 +89,7 @@ export const metadata: Metadata = {
     description: APP_DESCRIPTION,
     images: [
       {
-        url: "/opengraph-image.webp",
+        url: "/opengraph-image.png",
         width: 1200,
         height: 630,
         alt: `ShortsVid - Automate viral faceless shorts for Tiktok, Instagram and Youtube in seconds`,
@@ -102,7 +102,7 @@ export const metadata: Metadata = {
     creator: "@shortsvid",
     title: `ShortsVid - Automate viral faceless shorts for Tiktok, Instagram and Youtube in seconds`,
     description: APP_DESCRIPTION,
-    images: ["/opengraph-image.webp"],
+    images: ["/opengraph-image.png"],
   },
   manifest: "/manifest.webmanifest",
   icons: {
