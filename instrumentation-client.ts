@@ -1,9 +1,8 @@
-// This file configures the initialization of Sentry on the client.
-// The added config here will be used whenever a users loads a page in their browser.
-// https://docs.sentry.io/platforms/javascript/guides/nextjs/
-
 import * as Sentry from "@sentry/nextjs";
+import posthog from "posthog-js";
+import { env } from "./lib/env";
 
+// Sentry
 Sentry.init({
   dsn: "https://7d8c525295d4717c5f91fbd03cfbe218@o4511116136742912.ingest.us.sentry.io/4511116146442240",
 
@@ -27,7 +26,23 @@ Sentry.init({
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/#sendDefaultPii
   sendDefaultPii: true,
 
-  enabled: !!process.env.NEXT_PUBLIC_SENTRY_ENABLED,
+  enabled: env.NEXT_PUBLIC_SENTRY_ENABLED === "TRUE",
 });
 
 export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
+
+// Posthog
+
+posthog.init(env.NEXT_PUBLIC_POSTHOG_TOKEN, {
+  api_host: env.NEXT_PUBLIC_POSTHOG_HOST,
+  defaults: "2026-01-30",
+  person_profiles: "identified_only",
+  opt_out_capturing_by_default: process.env.NODE_ENV !== "production",
+  rageclick: true,
+  session_recording: {
+    maskAllInputs: false,
+    maskInputOptions: {
+      password: true,
+    },
+  },
+});

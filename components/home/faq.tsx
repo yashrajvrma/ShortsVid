@@ -52,7 +52,7 @@ const FAQS = [
   {
     category: "General",
     q: "Do you offer support?",
-    a: "Yes, you can reach out anytime. We usually get back within 24 hours.",
+    a: "Yes, you can reach out anytime at hello@shortsvid.pro. We usually get back within 24 hours.",
   },
 
   // Strategy & Content

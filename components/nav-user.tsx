@@ -30,6 +30,7 @@ import {
 import { useRouter } from "next/navigation";
 import { Skeleton } from "./ui/skeleton";
 import { toast } from "sonner";
+import posthog from "posthog-js";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -42,6 +43,9 @@ export function NavUser() {
       const { data, error } = await signOut({
         fetchOptions: {
           onSuccess: () => {
+            // reset posthog user identity
+            posthog.reset();
+
             toast.success("Logged out successfully");
             router.push("/login");
           },

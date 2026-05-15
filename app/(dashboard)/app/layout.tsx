@@ -12,6 +12,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { PricingModal } from "@/components/app/pricing-modal";
 import { Separator } from "@/components/ui/separator";
+import PostHogIdentify from "@/components/posthog/posthog-identify";
 
 export const dynamic = "force-dynamic";
 
@@ -62,6 +63,9 @@ export default async function Layout({
             <SidebarTrigger className="-ml-1" />
           </div>
         </header> */}
+        {/* posthog identify provider  */}
+        <PostHogIdentify user={session.user} />
+
         <header className="flex sm:h-16 h-14 shrink-0 items-center align-middle gap-2 border-b sticky top-0 bg-background z-50">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />

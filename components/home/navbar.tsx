@@ -22,6 +22,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession } from "@/lib/auth/client";
+import posthog from "posthog-js";
 
 const FEATURES = [
   {
@@ -291,10 +292,17 @@ const Navbar = () => {
       </div>
 
       <Button
-        className="rounded-lg text-base font-medium px-4 cursor-pointer"
+        className="rounded-lg  text-base font-medium px-4 cursor-pointer"
         asChild
       >
-        <Link href="/app" onClick={() => setOpen(false)}>
+        <Link
+          href="/app"
+          //  onClick={() => setOpen(false)}
+          onClick={() => {
+            posthog.capture("test_event", { test: true });
+            setOpen(false);
+          }}
+        >
           Open App
         </Link>
       </Button>

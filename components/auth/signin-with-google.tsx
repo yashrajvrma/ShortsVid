@@ -10,6 +10,7 @@ import loginImg2 from "@/public/images/kdkdkdkdkeo30303.webp";
 import loginImg3 from "@/public/images/maxresdefault.webp";
 import { Spinner } from "../ui/spinner";
 import { useSearchParams } from "next/navigation";
+import posthog from "posthog-js";
 
 function GoogleIcon() {
   return (
@@ -55,7 +56,7 @@ export default function LoginCard() {
         callbackURL: redirect ? `${redirect}` : "/app",
         errorCallbackURL: "/error",
         fetchOptions: {
-          onSuccess: () => {
+          onSuccess: (ctx) => {
             console.log("signin successful");
             toast.success("Signed in successfully");
           },

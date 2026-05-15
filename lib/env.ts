@@ -64,10 +64,14 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_BASE_URL: z.string().min(1),
     NEXT_PUBLIC_SENTRY_ENABLED: z.enum(["TRUE", "FALSE"]).default("FALSE"),
+    NEXT_PUBLIC_POSTHOG_TOKEN: z.string().min(1),
+    NEXT_PUBLIC_POSTHOG_HOST: z.string().min(1),
   },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     NEXT_PUBLIC_SENTRY_ENABLED: process.env.NEXT_PUBLIC_SENTRY_ENABLED,
+    NEXT_PUBLIC_POSTHOG_TOKEN: process.env.NEXT_PUBLIC_POSTHOG_TOKEN,
+    NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
   },
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 });
