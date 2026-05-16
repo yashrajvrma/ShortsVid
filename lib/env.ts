@@ -51,6 +51,7 @@ export const env = createEnv({
     POLAR_SERVER_ENVIRONMENT: z
       .enum(["sandbox", "production"])
       .default("sandbox"),
+    POLAR_STARTER_WEEKLY_PRODUCT_ID: z.string().min(1),
     POLAR_BASIC_MONTHLY_PRODUCT_ID: z.string().min(1),
     POLAR_BASIC_YEARLY_PRODUCT_ID: z.string().min(1),
     POLAR_PRO_MONTHLY_PRODUCT_ID: z.string().min(1),

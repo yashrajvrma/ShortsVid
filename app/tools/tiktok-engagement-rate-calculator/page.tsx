@@ -175,10 +175,11 @@ export default async function TikTokEngagementPage() {
             return (
               <div
                 key={tool.slug}
-                className={`relative flex flex-col gap-3 bg-card border border-border rounded-2xl p-5 transition-all ${tool.live
-                  ? "hover:border-primary/40 hover:shadow-md cursor-pointer"
-                  : "opacity-60 cursor-default"
-                  }`}
+                className={`relative flex flex-col gap-3 bg-card border border-border rounded-2xl p-5 transition-all ${
+                  tool.live
+                    ? "hover:border-primary/40 hover:shadow-md cursor-pointer"
+                    : "opacity-60 cursor-default"
+                }`}
               >
                 {!tool.live && (
                   <span className="absolute top-3 right-3 text-[10px] font-medium bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
@@ -249,8 +250,17 @@ export default async function TikTokEngagementPage() {
               <AccordionContent className="text-base text-muted-foreground leading-relaxed pb-4 pt-1">
                 {faq.name === "How can I improve my TikTok engagement rate?" ? (
                   <>
-                    Post consistently (at least 3 to 5 times per week), use strong hooks in the first 1 to 2 seconds, ask questions or include calls to action in your captions, reply to comments to boost comment counts, post when your audience is most active, and create content that encourages shares and saves. Using trending sounds and hashtags also helps initial distribution. For consistent, high quality content, try{" "}
-                    <Link href="/app" className="text-primary font-medium hover:underline">
+                    Post consistently (at least 3 to 5 times per week), use
+                    strong hooks in the first 1 to 2 seconds, ask questions or
+                    include calls to action in your captions, reply to comments
+                    to boost comment counts, post when your audience is most
+                    active, and create content that encourages shares and saves.
+                    Using trending sounds and hashtags also helps initial
+                    distribution. For consistent, high quality content, try{" "}
+                    <Link
+                      href="/app"
+                      className="text-primary font-medium hover:underline"
+                    >
                       ShortsVid's AI video generator
                     </Link>{" "}
                     to automate your TikTok content creation.
@@ -282,7 +292,7 @@ export default async function TikTokEngagementPage() {
                 href="/app"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-secondary-foreground font-medium px-7 py-3 rounded-xl transition-colors text-base tracking-tight"
               >
-                Start creating for Free
+                Start creating
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <a

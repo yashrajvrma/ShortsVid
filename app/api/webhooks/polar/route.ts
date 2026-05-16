@@ -20,9 +20,9 @@ import { env } from "@/lib/env";
  * Maps Polar's recurringInterval string to your SubscriptionPeriod enum.
  */
 function mapPeriod(recurringInterval: string): SubscriptionPeriod {
-  return recurringInterval === "year"
-    ? SubscriptionPeriod.YEARLY
-    : SubscriptionPeriod.MONTHLY;
+  if (recurringInterval === "year") return SubscriptionPeriod.YEARLY;
+  if (recurringInterval === "week") return SubscriptionPeriod.WEEKLY;
+  return SubscriptionPeriod.MONTHLY;
 }
 
 /**
@@ -206,6 +206,14 @@ async function handleOrderPaid(data: any) {
     throw new Error(
       `[Polar Webhook] order.paid — userId not found in metadata, orderId: ${data.id}`,
     );
+  }
+
+  if (!data.productId) {
+    console.warn(
+      "[Polar Webhook] order.paid — missing productId in order:",
+      data.id,
+    );
+    return;
   }
 
   const planConfig = getSubscriptionPlanConfigByProductId(data.productId);
@@ -438,7 +446,8 @@ async function handleSubscriptionRevoked(data: any) {
       where: { polarSubscriptionId: data.id },
       data: {
         status: SubscriptionStatus.EXPIRED,
-        endsAt: data.endsAt ?? data.currentPeriodEnd ?? new Date(),
+        endsAt:
+          data.endedAt ?? data.endsAt ?? data.currentPeriodEnd ?? new Date(),
       },
     });
 

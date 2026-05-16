@@ -400,7 +400,6 @@ export default async function FacelessShortsToolPage() {
             </h2>
             <p className="text-primary-foreground/80 text-lg mb-8 max-w-xl mx-auto tracking-tight">
               Join 100K+ creators making unhinged brainrot videos every day.
-              Start for free — no credit card required.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
               <Link
@@ -408,7 +407,7 @@ export default async function FacelessShortsToolPage() {
                 id="brainrot-cta-signup-btn"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-secondary-foreground font-medium px-7 py-3 rounded-xl transition-colors text-base tracking-tight"
               >
-                Start creating for Free
+                Start creating
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <a

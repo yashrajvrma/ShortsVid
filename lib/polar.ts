@@ -4,7 +4,6 @@ import { SubscriptionPeriod, SubscriptionPlan } from "@prisma/client";
 import { env } from "@/lib/env";
 
 export const polar = new Polar({
-  // TODO : add all env in env.ts file
   accessToken: env.POLAR_ACCESS_TOKEN,
   server: env.POLAR_SERVER_ENVIRONMENT, // use "sandbox" for testing
 });
@@ -12,29 +11,36 @@ export const polar = new Polar({
 export const CREDITS_PER_VIDEO = 5;
 
 export const SUBSCRIPTION_PLAN_CONFIG = {
+  STARTER_WEEKLY: {
+    productId: env.POLAR_STARTER_WEEKLY_PRODUCT_ID,
+    plan: SubscriptionPlan.STARTER,
+    period: SubscriptionPeriod.WEEKLY,
+    credits: 50,
+    label: "Starter Weekly",
+  },
   BASIC_MONTHLY: {
-    productId: env.POLAR_BASIC_MONTHLY_PRODUCT_ID!,
+    productId: env.POLAR_BASIC_MONTHLY_PRODUCT_ID,
     plan: SubscriptionPlan.BASIC,
     period: SubscriptionPeriod.MONTHLY,
     credits: 150,
     label: "Basic Monthly",
   },
   BASIC_YEARLY: {
-    productId: env.POLAR_BASIC_YEARLY_PRODUCT_ID!,
+    productId: env.POLAR_BASIC_YEARLY_PRODUCT_ID,
     plan: SubscriptionPlan.BASIC,
     period: SubscriptionPeriod.YEARLY,
     credits: 1800, // 150 × 12 — credited upfront
     label: "Basic Yearly",
   },
   PRO_MONTHLY: {
-    productId: env.POLAR_PRO_MONTHLY_PRODUCT_ID!,
+    productId: env.POLAR_PRO_MONTHLY_PRODUCT_ID,
     plan: SubscriptionPlan.PRO,
     period: SubscriptionPeriod.MONTHLY,
     credits: 500,
     label: "Pro Monthly",
   },
   PRO_YEARLY: {
-    productId: env.POLAR_PRO_YEARLY_PRODUCT_ID!,
+    productId: env.POLAR_PRO_YEARLY_PRODUCT_ID,
     plan: SubscriptionPlan.PRO,
     period: SubscriptionPeriod.YEARLY,
     credits: 6000, // 500 × 12 — credited upfront

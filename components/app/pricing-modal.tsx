@@ -20,7 +20,12 @@ import { createCheckout } from "@/actions/billing/create-checkout";
 import { cn } from "@/lib/utils";
 
 type Period = "monthly" | "yearly";
-type PlanKey = "BASIC_MONTHLY" | "BASIC_YEARLY" | "PRO_MONTHLY" | "PRO_YEARLY";
+type PlanKey =
+  | "STARTER_WEEKLY"
+  | "BASIC_MONTHLY"
+  | "BASIC_YEARLY"
+  | "PRO_MONTHLY"
+  | "PRO_YEARLY";
 
 const FEATURES = [
   { icon: Zap, label: "Optimized for YouTube Shorts" },
@@ -52,15 +57,32 @@ interface Plan {
 
 function getPlanKey(planKey: string, period: Period): PlanKey {
   const map: Record<string, PlanKey> = {
+    starter_weekly: "STARTER_WEEKLY",
     basic_monthly: "BASIC_MONTHLY",
     basic_yearly: "BASIC_YEARLY",
     pro_monthly: "PRO_MONTHLY",
     pro_yearly: "PRO_YEARLY",
   };
+  // Starter is always weekly regardless of toggle
+  if (planKey === "starter") return "STARTER_WEEKLY";
   return map[`${planKey}_${period}`];
 }
 
 const PLANS: Plan[] = [
+  {
+    key: "starter",
+    name: "Starter",
+    tagline: "Try it this week",
+    description: "Get a quick glance of the platform",
+    monthlyPrice: 9,
+    monthlyOldPrice: 0,
+    yearlyPrice: 9,
+    yearlyOldPrice: 0,
+    monthlyCredits: 50,
+    yearlyCredits: 50,
+    videosPerMonth: 10,
+    badge: "WEEKLY",
+  },
   {
     key: "basic",
     name: "Basic",
@@ -100,10 +122,6 @@ export function PricingModal() {
 
   // ← Replace the entire checkoutMutation block with this:
   const handleSubscribe = (planKey: string) => {
-    if (planKey === "free") {
-      window.location.href = "/sign-up";
-      return;
-    }
     const resolvedPlanKey = getPlanKey(planKey, period);
     setPendingPlanKey(resolvedPlanKey);
     startTransition(async () => {
@@ -114,51 +132,56 @@ export function PricingModal() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 backdrop-blur-4xl px-4 h-screen">
-      <div className="w-full max-w-4xl max-h-[95vh] overflow-hidden rounded-2xl border border-border bg-card shadow-2xl">
+      <div className="w-full max-w-5xl max-h-[95vh] overflow-hidden rounded-2xl border border-border bg-card shadow-2xl">
         <div className="sticky top-0 z-10 bg-card border-border px-6 py-8 flex flex-col items-center gap-1 text-center rounded-2xl">
           <h2 className="text-2xl font-semibold tracking-tight text-foreground">
             Subscribe to unlock more features
           </h2>
-          <div className="flex justify-center items-center mt-3 mb-2">
-            <div className="bg-muted/50 p-1 rounded-[12px] flex items-center border border-border">
-              <button
-                onClick={() => setPeriod("monthly")}
+          <div className="flex justify-center items-center gap-3 mt-3 mb-2">
+            <span
+              className={cn(
+                "text-sm font-medium transition-colors",
+                !isYearly ? "text-foreground" : "text-muted-foreground",
+              )}
+            >
+              Monthly
+            </span>
+
+            {/* Toggle */}
+            <button
+              role="switch"
+              aria-checked={isYearly}
+              onClick={() => setPeriod(isYearly ? "monthly" : "yearly")}
+              className={cn(
+                "relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                isYearly ? "bg-[#FF5A00]" : "bg-muted-foreground/40",
+              )}
+            >
+              <span
                 className={cn(
-                  "px-4 py-2 rounded-[8px] text-sm font-medium transition-all",
-                  !isYearly
-                    ? "bg-[#FF5A00] text-white shadow-sm"
-                    : "text-muted-foreground hover:text-foreground",
+                  "pointer-events-none block h-4 w-4 rounded-full bg-white shadow-lg ring-0 transition-transform",
+                  isYearly ? "translate-x-5" : "translate-x-0.5",
                 )}
-              >
-                Monthly Billing
-              </button>
-              <button
-                onClick={() => setPeriod("yearly")}
-                className={cn(
-                  "px-6 py-2 rounded-[8px] text-sm font-medium transition-all flex items-center gap-2",
-                  isYearly
-                    ? "bg-[#FF5A00] text-white shadow-sm"
-                    : "text-muted-foreground hover:text-foreground",
-                )}
-              >
-                Yearly Billing
-                <span
-                  className={cn(
-                    "text-[10px] px-2 py-0.5 rounded-sm font-semibold",
-                    isYearly
-                      ? "bg-white text-foreground"
-                      : "bg-primary text-secondary-foreground",
-                  )}
-                >
-                  Save 40%
-                </span>
-              </button>
-            </div>
+              />
+            </button>
+
+            <span
+              className={cn(
+                "text-sm font-medium transition-colors",
+                isYearly ? "text-foreground" : "text-muted-foreground",
+              )}
+            >
+              Yearly
+            </span>
+
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-orange-50 text-orange-500 border border-orange-200 dark:bg-orange-500/10 dark:border-orange-500/20 dark:text-orange-400">
+              save up to 40%
+            </span>
           </div>
         </div>
 
         <div className="p-10 max-h-[70vh] overflow-y-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-4 gap-y-6">
             {PLANS.map((plan) => {
               const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
               const oldPrice = isYearly
@@ -168,8 +191,11 @@ export function PricingModal() {
                 ? plan.yearlyCredits
                 : plan.monthlyCredits;
 
-              // ← Replace the old isLoading check with this:
-              const resolvedPlanKey = getPlanKey(plan.key, period);
+              // Starter is always weekly regardless of the monthly/yearly toggle
+              const resolvedPlanKey =
+                plan.key === "starter"
+                  ? "STARTER_WEEKLY"
+                  : getPlanKey(plan.key, period);
               const isLoading = isPending && pendingPlanKey === resolvedPlanKey;
 
               return (
@@ -220,7 +246,11 @@ export function PricingModal() {
                         </span>
                       </div>
                     </div>
-                    {price > 0 ? (
+                    {plan.key === "starter" ? (
+                      <p className="text-xs text-muted-foreground -mt-2">
+                        Billed weekly · cancel anytime
+                      </p>
+                    ) : price > 0 ? (
                       <p className="text-xs text-muted-foreground -mt-2">
                         Billed today: ${isYearly ? price * 12 : price}
                       </p>
@@ -237,7 +267,7 @@ export function PricingModal() {
                       onClick={() => handleSubscribe(plan.key)}
                     >
                       {isLoading
-                        ? "Redirecting..."
+                        ? "Subscribing..."
                         : plan.key === "free"
                           ? "Start for Free"
                           : "Subscribe →"}
@@ -245,10 +275,12 @@ export function PricingModal() {
 
                     <div className="flex items-center gap-1.5 rounded-full border border-border bg-muted/50 px-3 py-1 text-xs font-medium text-foreground w-fit">
                       <Video className="w-3.5 h-3.5" />
-                      {isYearly
-                        ? (plan.videosPerMonth * 12).toLocaleString()
-                        : plan.videosPerMonth}{" "}
-                      videos / {isYearly ? "year" : "month"}
+                      {plan.key === "starter"
+                        ? "10 videos / week"
+                        : isYearly
+                          ? (plan.videosPerMonth * 12).toLocaleString() +
+                            " videos / year"
+                          : plan.videosPerMonth + " videos / month"}
                     </div>
 
                     <div>
@@ -297,6 +329,33 @@ export function PricingModal() {
                             <li className="flex items-center gap-2 text-xs text-foreground">
                               <Headset className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                               Priority Support
+                            </li>
+                          </>
+                        ) : plan.key === "starter" ? (
+                          <>
+                            <li className="flex items-center gap-2 text-xs text-foreground">
+                              <Video className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                              10 Short Videos / week
+                            </li>
+                            <li className="flex items-center gap-2 text-xs text-foreground">
+                              <Zap className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                              50 Credits
+                            </li>
+                            <li className="flex items-center gap-2 text-xs text-foreground">
+                              <Captions className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                              Faceless Shorts, Fake Text, Split Screen
+                            </li>
+                            <li className="flex items-center gap-2 text-xs text-foreground">
+                              <Mic className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                              10+ languages
+                            </li>
+                            <li className="flex items-center gap-2 text-xs text-foreground">
+                              <Mic className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                              40+ AI Voices from Eleven labs
+                            </li>
+                            <li className="flex items-center gap-2 text-xs text-foreground">
+                              <Headset className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                              Limited support
                             </li>
                           </>
                         ) : (

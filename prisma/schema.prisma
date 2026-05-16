@@ -167,11 +167,13 @@ enum AnimationPreset {
 
 enum SubscriptionPlan {
   FREE
+  STARTER
   BASIC
   PRO
 }
 
 enum SubscriptionPeriod {
+  WEEKLY
   MONTHLY
   YEARLY
 }
