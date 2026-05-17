@@ -1123,7 +1123,7 @@ export default function ConversationVideoDetailClient({
                     video={video}
                     isActive={video.id === videoDetail.id}
                     onClick={() =>
-                      router.push(`/dashboard/conversation-videos/${video.id}`)
+                      router.push(`/app/library/conversation-video/${video.id}`)
                     }
                   />
                 ))}
