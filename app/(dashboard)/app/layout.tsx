@@ -8,7 +8,7 @@ import {
 import React from "react";
 import { auth } from "@/lib/auth/server";
 import { prisma } from "@/db";
-import { headers } from "next/headers";
+import { headers, cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { PricingModal } from "@/components/app/pricing-modal";
 import { Separator } from "@/components/ui/separator";
@@ -29,6 +29,9 @@ export default async function Layout({
     redirect("/login");
   }
 
+  const cookieStore = await cookies();
+  const defaultOpen = cookieStore.get("sidebar_state")?.value !== "false";
+
   // const user = await prisma.user.findUnique({
   //   where: { id: session.user.id },
   //   include: { subscription: true },
@@ -38,7 +41,7 @@ export default async function Layout({
   // const isNoCredit = user?.credit === 0;
 
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
       <SidebarInset>
         {/* <header className="flex h-16 shrink-0 sticky top-0 items-center gap-2 visible md:hidden bg-background/60 backdrop-blur-sm w-full">
@@ -66,7 +69,7 @@ export default async function Layout({
         {/* posthog identify provider  */}
         <PostHogIdentify user={session.user} />
 
-        <header className="flex sm:h-16 h-14 shrink-0 items-center align-middle gap-2 border-b sticky top-0 bg-background z-50">
+        <header className="flex sm:h-15 h-14 shrink-0 items-center align-middle gap-2 border-b sticky top-0 bg-background z-50">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <div className="flex items-center">

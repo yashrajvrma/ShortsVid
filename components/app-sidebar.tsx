@@ -13,7 +13,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { navProjects, navShorts } from "@/components/dashboard-nav";
-import { useSession } from "@/lib/auth/client";
 import Image from "next/image";
 import ShortsVidLogo from "@/public/images/shortsvid-icon.webp";
 import Link from "next/link";
@@ -25,7 +24,7 @@ import CreditUsageCard from "./credit-usage-card";
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar variant="sidebar" {...props}>
-      <SidebarHeader>
+      <SidebarHeader className="border-b">
         <SidebarMenu>
           <SidebarMenuItem>
             <div
@@ -45,7 +44,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <span className="truncate font-medium">Acme Inc</span>
                   <span className="truncate text-xs">Enterprise</span>
                 </div> */}
-                <div className="flex items-center text-xl font-semibold tracking-tighter leading-tight gap-1">
+                <div className="flex items-center text-xl font-semibold tracking-tighter leading-tight gap-x-1">
                   <Image
                     src={ShortsVidLogo}
                     alt="shortsVid-logo"
