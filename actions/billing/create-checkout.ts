@@ -6,13 +6,18 @@ import { auth } from "@/lib/auth/server"; // adjust to your auth import
 import { headers } from "next/headers";
 import { env } from "@/lib/env";
 
-type PlanKey = "STARTER_WEEKLY" | "BASIC_MONTHLY" | "BASIC_YEARLY" | "PRO_MONTHLY" | "PRO_YEARLY";
+type PlanKey =
+  | "STARTER_WEEKLY"
+  | "BASIC_MONTHLY"
+  | "BASIC_YEARLY"
+  | "PRO_MONTHLY"
+  | "PRO_YEARLY";
 
 export async function createCheckout(planKey: PlanKey) {
   const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session?.user) {
-    redirect("/login");
+    redirect("/login?redirect=/pricing");
   }
 
   const config = SUBSCRIPTION_PLAN_CONFIG[planKey];

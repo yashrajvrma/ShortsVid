@@ -13,6 +13,7 @@ import {
   ArrowUpCircle,
   Headset,
   Hourglass,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -114,7 +115,7 @@ const PLANS: Plan[] = [
   },
 ];
 
-export function PricingModal() {
+export function PricingModal({ onClose }: { onClose?: () => void } = {}) {
   const [period, setPeriod] = useState<Period>("monthly");
   const [pendingPlanKey, setPendingPlanKey] = useState<PlanKey | null>(null); // ← add
   const [isPending, startTransition] = useTransition(); // ← add
@@ -131,11 +132,19 @@ export function PricingModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 backdrop-blur-4xl px-4 h-screen">
-      <div className="w-full max-w-5xl max-h-[95vh] overflow-hidden rounded-2xl border border-border bg-card shadow-2xl">
-        <div className="sticky top-0 z-10 bg-card border-border px-6 py-8 flex flex-col items-center gap-1 text-center rounded-2xl">
+    <div className="fixed inset-0 z-100 flex items-center justify-center bg-background/70 backdrop-blur-4xl px-4 py-8 h-screen">
+      <div className="w-full max-w-6xl h-full relative overflow-hidden rounded-2xl border border-border bg-card shadow-xl">
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 z-20 p-2 text-muted-foreground hover:bg-muted rounded-full transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        )}
+        <div className="sticky top-0 z-10 bg-card border-border px-6 py-5 flex flex-col items-center gap-1 text-center rounded-2xl">
           <h2 className="text-2xl font-semibold tracking-tight text-foreground">
-            Subscribe to unlock more features
+            Subscribe to unlock more credits
           </h2>
           <div className="flex justify-center items-center gap-3 mt-3 mb-2">
             <span
@@ -180,7 +189,7 @@ export function PricingModal() {
           </div>
         </div>
 
-        <div className="p-10 max-h-[70vh] overflow-y-auto">
+        <div className="px-10 py-10 max-h-[85vh] overflow-y-auto">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-4 gap-y-6">
             {PLANS.map((plan) => {
               const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;

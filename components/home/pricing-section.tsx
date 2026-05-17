@@ -283,7 +283,7 @@ export function PricingSection() {
                     disabled={isLoading}
                     onClick={() => handleSubscribe(plan.key)}
                   >
-                    {isLoading ? "Redirecting..." : "Subscribe →"}
+                    {isLoading ? "Subscribing..." : "Subscribe →"}
                   </Button>
 
                   {/* Videos per month/year pill */}

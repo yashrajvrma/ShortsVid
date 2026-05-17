@@ -158,7 +158,7 @@ export const creditCheckMiddleware = t.middleware(async ({ ctx, next }) => {
 
   if (!freshUser || freshUser.credit < 1) {
     throw new TRPCError({
-      code: "FORBIDDEN",
+      code: "PAYMENT_REQUIRED",
       message: "Insufficient credits. Please upgrade your plan.",
     });
   }

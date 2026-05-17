@@ -38,12 +38,18 @@ import type { AppRouter } from "@/trpc/routers/_app";
 import Header from "@/components/header";
 import { CaptionStyle } from "@/types";
 import { toast } from "sonner";
+import { PricingModal } from "@/components/app/pricing-modal";
+import { useSession } from "@/lib/auth/client";
 
 export default function FacelessShorts() {
   const router = useRouter();
   const trpc = useTRPC();
   const form = useFacelessForm();
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showPricingModal, setShowPricingModal] = useState(false);
+
+  const { data: session } = useSession();
+  console.log(session?.user); // Check browser console - if fields exist here but TS complains, it's #2
 
   const mutationOptions = trpc.videos.generateFacelessVideo.mutationOptions();
 
@@ -55,7 +61,12 @@ export default function FacelessShorts() {
       router.push("/app/library?videoType=faceless-shorts");
     },
     onError: (error: TRPCClientErrorLike<AppRouter>) => {
-      toast.error(error.message || "Failed to start video generation");
+      if (error.data?.code === "PAYMENT_REQUIRED") {
+        toast.error("Not enough credits to generate video.");
+        setShowPricingModal(true);
+      } else {
+        toast.error(error.message || "Failed to start video generation");
+      }
     },
   });
 
@@ -84,11 +95,20 @@ export default function FacelessShorts() {
       return;
     }
 
-    setShowConfirm(true); // ← show dialog instead of firing mutation directly
+    setShowConfirm(true);
   };
 
   const onConfirmGenerate = () => {
     setShowConfirm(false);
+
+    // ← show dialog instead of firing mutation directly
+
+    if (session) {
+      if (session.user.credit < 5) {
+        setShowPricingModal(true);
+        return;
+      }
+    }
 
     const { captionConfig } = form;
 
@@ -163,7 +183,7 @@ export default function FacelessShorts() {
       >
         {/* LEFT 65% */}
         <div className="flex flex-col min-h-0 border-r border-border lg:w-[65%] w-full min-w-0 overflow-hidden">
-          <ScrollArea className="[&>div>div[style]]:!block flex-1 min-h-0 h-full overflow-y-auto overflow-x-hidden">
+          <ScrollArea className="[&>div>div[style]]:block! flex-1 min-h-0 h-full overflow-y-auto overflow-x-hidden">
             <div className="sm:p-6 p-4 space-y-4 min-w-0 overflow-hidden w-full">
               <LanguageSelector
                 value={form.languageCode}
@@ -265,6 +285,10 @@ export default function FacelessShorts() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {showPricingModal && (
+        <PricingModal onClose={() => setShowPricingModal(false)} />
+      )}
     </div>
   );
 }

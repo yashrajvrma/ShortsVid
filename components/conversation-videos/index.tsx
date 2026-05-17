@@ -38,12 +38,17 @@ import { BackgroundVideoSelector } from "./background-video-selector";
 import { SpeakerVoiceSelector } from "./speaker-voice-selector";
 import { ConversationMockupPreview } from "./conversation-mockup-preview";
 import { Topic } from "@prisma/client";
+import { PricingModal } from "@/components/app/pricing-modal";
+import { useSession } from "@/lib/auth/client";
 
 export default function ConversationVideos() {
   const router = useRouter();
   const trpc = useTRPC();
   const form = useConversationForm();
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showPricingModal, setShowPricingModal] = useState(false);
+
+  const { data: session } = useSession();
 
   const mutationOptions =
     trpc.videos.generateConversationVideo.mutationOptions();
@@ -56,9 +61,14 @@ export default function ConversationVideos() {
       router.push("/app/library?videoType=conversation-video");
     },
     onError: (error: TRPCClientErrorLike<AppRouter>) => {
-      toast.error(
-        error.message || "Failed to start conversation video generation",
-      );
+      if (error.data?.code === "PAYMENT_REQUIRED") {
+        toast.error("Not enough credits to generate video.");
+        setShowPricingModal(true);
+      } else {
+        toast.error(
+          error.message || "Failed to start conversation video generation",
+        );
+      }
     },
   });
 
@@ -105,6 +115,13 @@ export default function ConversationVideos() {
 
   const onConfirmGenerate = () => {
     setShowConfirm(false);
+
+    if (session) {
+      if (session.user.credit < 5) {
+        setShowPricingModal(true);
+        return;
+      }
+    }
 
     const { captionConfig } = form;
 
@@ -190,7 +207,7 @@ export default function ConversationVideos() {
       >
         {/* ── LEFT 65% ──────────────────────────────────────────────────── */}
         <div className="flex flex-col min-h-0 border-r border-border lg:w-[65%] w-full min-w-0 overflow-hidden">
-          <ScrollArea className="[&>div>div[style]]:!block flex-1 min-h-0 h-full overflow-y-auto overflow-x-hidden">
+          <ScrollArea className="[&>div>div[style]]:block! flex-1 min-h-0 h-full overflow-y-auto overflow-x-hidden">
             <div className="sm:p-6 p-4 space-y-4 min-w-0 overflow-hidden w-full">
               {/* 1. Language */}
               <LanguageSelector
@@ -317,6 +334,10 @@ export default function ConversationVideos() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {showPricingModal && (
+        <PricingModal onClose={() => setShowPricingModal(false)} />
+      )}
     </div>
   );
 }

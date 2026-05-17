@@ -96,15 +96,14 @@ export function Hero() {
         {/* <div className="pt-1 sm:text-sm text-xs text-muted-foreground">
           Get your generated video in less than 5 minutes.
         </div> */}
-        <div className="pt-1 sm:text-sm text-xs text-muted-foreground font-normal">
-          {/* More than <span className="font-medium">10K+</span> shorts have been
-          created. */}
+        {/* <div className="pt-1 sm:text-sm text-xs text-muted-foreground font-normal">
+       
           No credit card required
-        </div>
+        </div> */}
       </motion.div>
 
       <motion.div
-        className="mt-10 sm:mt-14 mb-8"
+        className="mt-10 mb-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}
